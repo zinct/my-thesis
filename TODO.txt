@@ -1,3 +1,9 @@
 BAB 1:
     1. Pendahuluan
     - Daftar Pustaka belum di cek
+BAB 2:
+    - Figure 1: Architectural overview for multi-tenancy
+    Tapi aku belum akan pakai sekarang.
+    karena gambar itu lebih cocok saat masuk ke:
+    2.3 Arsitektur Multitenant
+    bukan di Studi Terkait.

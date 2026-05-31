@@ -2,123 +2,129 @@
 
 \section{Studi Terkait}
 
-Penelitian mengenai arsitektur \textit{multitenant} pada aplikasi \textit{Software as a Service} (\textit{SaaS}) telah banyak dilakukan untuk mendukung kebutuhan penggunaan aplikasi oleh banyak \textit{tenant} dalam satu sistem yang sama. Salah satu penelitian awal dilakukan oleh Aulbach et al. \cite{ref11} yang mengusulkan beberapa model penyimpanan data \textit{multitenant} melalui pendekatan \textit{schema-mapping techniques}. Penelitian tersebut membandingkan beberapa model penyimpanan \textit{tenant}, seperti \textit{separate database}, \textit{private table}, \textit{extension table}, dan \textit{universal table}. Hasil penelitian menunjukkan bahwa setiap model memiliki \textit{trade-off} yang berbeda pada aspek isolasi data, skalabilitas, dan penggunaan \textit{resource}. Pendekatan \textit{separate database} memberikan tingkat isolasi data yang tinggi, namun memerlukan pengelolaan basis data yang lebih kompleks ketika jumlah \textit{tenant} terus bertambah \cite{ref11}.
+Penelitian mengenai arsitektur \textit{multitenant} berkembang seiring meningkatnya adopsi model layanan \textit{Software as a Service} (SaaS). Bezemer dan Zaidman \cite{ref3} menjelaskan bahwa \textit{multitenancy} merupakan pendekatan yang memungkinkan banyak \textit{tenant} menggunakan satu aplikasi dan satu basis data yang sama secara bersama. Pendekatan ini memberikan keuntungan berupa peningkatan utilisasi sumber daya perangkat keras, kemudahan pemeliharaan aplikasi, serta penurunan biaya operasional karena proses pembaruan sistem cukup dilakukan pada satu \textit{instance} aplikasi. Selain itu, \textit{tenant} tetap dapat menggunakan aplikasi sesuai kebutuhan masing masing melalui mekanisme konfigurasi tanpa harus memiliki \textit{instance} aplikasi yang terpisah. Untuk mendukung kebutuhan tersebut, arsitektur \textit{multitenant} memerlukan beberapa komponen utama yang mengatur proses autentikasi \textit{tenant}, konfigurasi aplikasi, dan pengelolaan data \textit{tenant}. Bezemer dan Zaidman \cite{ref3} menjelaskan bahwa komponen tersebut berperan dalam menjaga pemisahan konfigurasi dan data antar \textit{tenant} pada lingkungan \textit{multitenant}.
 
-Penelitian selanjutnya dilakukan oleh Mietzner et al. \cite{ref12} yang mengembangkan pola \textit{multitenancy} untuk mendukung konfigurasi dan \textit{provisioning} \textit{tenant} pada aplikasi \textit{SaaS}. Penelitian tersebut menunjukkan bahwa proses \textit{onboarding} \textit{tenant} merupakan salah satu aspek penting dalam pengelolaan aplikasi \textit{multitenant} karena setiap \textit{tenant} dapat memiliki konfigurasi dan kebutuhan layanan yang berbeda. Hasil penelitian menunjukkan bahwa penerapan pola \textit{multitenancy} dapat membantu proses \textit{provisioning} \textit{tenant} dilakukan secara lebih fleksibel tanpa perlu melakukan perubahan besar pada aplikasi \cite{ref12}.
+Implementasi \textit{multitenancy} tidak hanya berfokus pada penggunaan aplikasi secara bersama, tetapi juga membutuhkan mekanisme yang mampu memisahkan data dan konfigurasi antar \textit{tenant}. Bezemer dan Zaidman \cite{ref3} menunjukkan bahwa proses autentikasi \textit{tenant}, pengelolaan konfigurasi, serta penyesuaian \textit{query} pada basis data menjadi komponen penting dalam menjaga isolasi data pada lingkungan \textit{multitenant}. Seiring berkembangnya implementasi \textit{multitenancy} pada berbagai \textit{platform} \textit{SaaS}, fokus penelitian tidak lagi hanya pada aspek efisiensi penggunaan sumber daya. Krebs et al. \cite{ref4} menunjukkan bahwa penggunaan satu \textit{instance} aplikasi untuk melayani banyak \textit{tenant} memunculkan sejumlah perhatian arsitektural baru, seperti \textit{performance isolation}, \textit{customization}, \textit{data management}, dan \textit{tenant isolation}. Tantangan tersebut muncul karena setiap \textit{tenant} memiliki kebutuhan, konfigurasi, dan volume penggunaan yang berbeda, sementara seluruh \textit{tenant} tetap berbagi sumber daya yang sama. Oleh karena itu, implementasi \textit{multitenancy} tidak hanya menuntut efisiensi infrastruktur, tetapi juga memerlukan mekanisme yang mampu menjaga konsistensi layanan, keamanan data, serta isolasi antar \textit{tenant}.
 
-Bezemer dan Zaidman \cite{ref13} melakukan penelitian mengenai karakteristik aplikasi \textit{SaaS} \textit{multitenant} serta tantangan yang muncul pada proses \textit{maintenance} aplikasi. Penelitian tersebut menunjukkan bahwa pendekatan \textit{multitenancy} memberikan keuntungan dalam pengelolaan aplikasi karena satu \textit{instance} aplikasi dapat digunakan oleh banyak \textit{tenant} secara bersamaan. Namun, kompleksitas pengelolaan \textit{tenant} juga meningkat seiring bertambahnya jumlah \textit{tenant} yang menggunakan sistem \cite{ref13}.
+Penelitian mengenai penyimpanan data pada sistem \textit{multitenant} berkembang untuk mengatasi permasalahan konsolidasi \textit{tenant} dalam satu basis data. Aulbach et al. \cite{ref6} meneliti berbagai teknik \textit{schema mapping} yang digunakan pada basis data \textit{multitenant}, seperti \textit{Private Table Layout}, \textit{Extension Table Layout}, \textit{Universal Table Layout}, \textit{Pivot Table Layout}, dan \textit{Chunk Folding}. Setiap pendekatan menawarkan karakteristik yang berbeda dalam aspek fleksibilitas skema, tingkat konsolidasi \textit{tenant}, serta penggunaan sumber daya basis data. Perbandingan beberapa teknik pemetaan skema tersebut ditunjukkan pada Gambar \ref{fig:schema_mapping_aulbach}.
 
-Selanjutnya, Krebs et al. \cite{ref14} mengidentifikasi berbagai tantangan arsitektural pada aplikasi \textit{SaaS} \textit{multitenant}. Penelitian tersebut menunjukkan bahwa \textit{tenant isolation}, \textit{scalability}, \textit{configurability}, dan \textit{security} merupakan aspek yang perlu diperhatikan dalam pengembangan aplikasi \textit{multitenant}. Di antara berbagai tantangan tersebut, \textit{tenant isolation} menjadi salah satu aspek penting karena berkaitan langsung dengan pemisahan data antar \textit{tenant} pada lingkungan yang menggunakan \textit{resource} secara bersama \cite{ref14}.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/bab2/2.png}
+  \caption{Perbandingan Teknik \textit{Schema Mapping} (Sumber: Aulbach et al. \cite{ref6})}
+  \label{fig:schema_mapping_aulbach}
+\end{figure}
 
-Pippal et al. \cite{ref15} mengusulkan arsitektur basis data \textit{multitenant} yang mendukung penggunaan \textit{resource} secara lebih efisien dengan tetap mempertahankan kemampuan pengelolaan \textit{tenant}. Hasil penelitian menunjukkan bahwa pendekatan \textit{multitenant} dapat mengurangi kebutuhan \textit{resource} dibandingkan pendekatan yang menggunakan lingkungan penyimpanan data terpisah untuk setiap \textit{tenant}. Namun, penggunaan basis data secara bersama menyebabkan kebutuhan mekanisme isolasi \textit{tenant} menjadi semakin penting untuk mencegah terjadinya akses data lintas \textit{tenant} \cite{ref15}.
+Berdasarkan Gambar \ref{fig:schema_mapping_aulbach}, pendekatan \textit{Private Table Layout} memberikan fleksibilitas yang tinggi karena setiap \textit{tenant} dapat memiliki struktur tabel yang berbeda. Namun, jumlah tabel yang harus dikelola akan meningkat seiring bertambahnya \textit{tenant}. Aulbach et al. \cite{ref6} menjelaskan bahwa peningkatan jumlah tabel dapat memengaruhi skalabilitas basis data karena kebutuhan memori dan metadata akan terus bertambah. Pada eksperimen yang dilakukan, peningkatan jumlah tabel hingga 100.000 tabel menyebabkan penurunan \textit{throughput} dan meningkatnya waktu respons sistem dibandingkan kondisi ketika \textit{tenant} menggunakan struktur penyimpanan yang lebih terpusat.
 
-Selain penelitian akademik, berbagai penyedia layanan \textit{cloud} juga telah mengembangkan pola implementasi \textit{multitenancy} pada aplikasi \textit{SaaS}. Microsoft Azure Architecture Center \cite{ref7} menjelaskan bahwa pendekatan \textit{database-per-tenant} memberikan tingkat isolasi data yang tinggi, namun meningkatkan kompleksitas operasional karena setiap \textit{tenant} memerlukan basis data yang dikelola secara terpisah. Sebaliknya, pendekatan \textit{shared database} memungkinkan pengelolaan \textit{tenant} dilakukan secara lebih terpusat dan lebih sesuai untuk aplikasi dengan jumlah \textit{tenant} yang besar. Namun, pendekatan tersebut memerlukan mekanisme \textit{tenant isolation} yang baik untuk menjaga keamanan dan konsistensi data antar \textit{tenant} \cite{ref7}.
+Penelitian selanjutnya dilakukan oleh Pippal et al. \cite{ref9} yang mengembangkan arsitektur basis data \textit{multitenant} menggunakan pendekatan penyimpanan bersama untuk mendukung jumlah \textit{tenant} yang besar. Dalam arsitektur yang diusulkan, \textit{tenant} dibedakan menggunakan identitas \textit{tenant} pada setiap data sehingga seluruh \textit{tenant} dapat menggunakan basis data dan struktur penyimpanan yang sama. Pendekatan tersebut memungkinkan penggunaan sumber daya perangkat keras, perangkat lunak, basis data, skema, dan tabel secara bersama sehingga lebih sesuai untuk lingkungan dengan jumlah \textit{tenant} yang banyak dan volume data yang relatif kecil pada setiap \textit{tenant}. Hasil penelitian menunjukkan bahwa penggunaan penyimpanan bersama mampu meningkatkan efisiensi pengelolaan sistem dibandingkan pendekatan yang menyediakan struktur penyimpanan terpisah untuk setiap \textit{tenant} \cite{ref9}.
 
-Berdasarkan berbagai penelitian yang telah dilakukan, dapat diketahui bahwa pendekatan \textit{shared database} dan \textit{shared schema} memiliki keunggulan dalam mendukung pengelolaan \textit{tenant} secara terpusat serta mendukung proses \textit{provisioning} \textit{tenant} yang lebih sederhana. Akan tetapi, penggunaan struktur penyimpanan data yang sama menyebabkan implementasi \textit{tenant isolation} menjadi lebih menantang dibandingkan pendekatan \textit{separate database}. Oleh karena itu, diperlukan mekanisme \textit{tenant identification} dan \textit{tenant scoping} yang mampu memastikan setiap \textit{tenant} hanya dapat mengakses data yang sesuai dengan konteks \textit{tenant} masing-masing.
+Selain aspek penyimpanan data, penelitian mengenai \textit{multitenancy} juga berkembang pada proses konfigurasi dan \textit{provisioning} \textit{tenant}. Mietzner et al. \cite{ref8} mengusulkan pendekatan untuk membangun aplikasi \textit{SaaS} yang dapat dikonfigurasi sesuai kebutuhan masing masing \textit{tenant} melalui penggunaan \textit{variability descriptor} dan \textit{multi-tenancy pattern}. Dalam pendekatan tersebut, aplikasi dibagi menjadi komponen yang bersifat tetap untuk seluruh \textit{tenant} dan komponen yang dapat dikonfigurasi secara spesifik pada setiap \textit{tenant}. Pemisahan tersebut bertujuan untuk mempermudah proses \textit{deployment} \textit{tenant} baru tanpa harus melakukan duplikasi keseluruhan aplikasi. Konsep transformasi komponen tetap dan komponen spesifik \textit{tenant} yang diusulkan oleh Mietzner et al. \cite{ref8} ditunjukkan pada Gambar \ref{fig:transformasi_komponen_mietzner}.
 
-Pada penelitian ini, fokus utama diberikan pada perancangan arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} pada modul \textit{Asset Management}, \textit{Inventory}, dan \textit{Rental} yang terintegrasi dengan \textit{platform} RTPintar. Penelitian mencakup perancangan \textit{tenant identification} berbasis \textit{middleware}, implementasi \textit{tenant scoping} pada lapisan aplikasi, serta proses \textit{provisioning} \textit{tenant} otomatis untuk mendukung pengelolaan \textit{tenant} dalam satu sistem terpusat.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/bab2/3.png}
+  \caption{Transformasi Komponen Tetap dan Spesifik \textit{Tenant} (Sumber: Mietzner et al. \cite{ref8})}
+  \label{fig:transformasi_komponen_mietzner}
+\end{figure}
 
-\section{Sistem Informasi Manajemen Aset dan Inventori}
+Berdasarkan Gambar \ref{fig:transformasi_komponen_mietzner}, komponen yang digunakan bersama oleh seluruh \textit{tenant} ditempatkan pada \textit{fixed contribution}, sedangkan komponen yang memerlukan konfigurasi khusus ditempatkan pada \textit{tenant-specific contribution}. Dengan pendekatan tersebut, proses \textit{onboarding} \textit{tenant} baru dapat dilakukan dengan menambahkan komponen spesifik \textit{tenant} tanpa perlu melakukan \textit{deployment} ulang terhadap keseluruhan aplikasi. Penelitian ini juga memperkenalkan beberapa pola \textit{multitenancy}, seperti \textit{single instance component}, \textit{single configurable instance component}, dan \textit{multiple instance component} yang digunakan untuk menentukan bagaimana suatu komponen dibagikan antar \textit{tenant}. Hasil penelitian menunjukkan bahwa pemisahan antara komponen tetap dan komponen spesifik \textit{tenant} dapat meningkatkan fleksibilitas konfigurasi sekaligus mengurangi kompleksitas pengelolaan aplikasi \textit{SaaS} \cite{ref8}. Pendekatan tersebut menjadi salah satu dasar dalam perancangan mekanisme \textit{provisioning} \textit{tenant} pada penelitian ini karena memungkinkan proses penambahan \textit{tenant} dilakukan secara lebih terstruktur dan konsisten.
 
-Sistem informasi manajemen aset dan inventori merupakan perangkat lunak yang digunakan untuk
-melakukan pencatatan, pemantauan, pengendalian, dan pelaporan aset serta barang milik organisasi
-secara terstruktur. Penerapan sistem informasi pada pengelolaan aset terbukti mampu meningkatkan
-akurasi data, transparansi operasional, serta efisiensi pemanfaatan sumber daya dibandingkan
-pendekatan manual atau pencatatan terpisah \cite{ref1,ref3}. Dalam sistem yang terintegrasi,
-informasi mengenai kepemilikan aset, kondisi barang, serta riwayat penggunaan dapat diakses
-secara konsisten dan \textit{real time}.
+Berdasarkan penelitian yang telah dilakukan, perkembangan arsitektur \textit{multitenant} pada aplikasi \textit{SaaS} mencakup berbagai aspek, mulai dari karakteristik dan tantangan implementasi \textit{multitenancy} \cite{ref3,ref4}, model penyimpanan data \textit{tenant} \cite{ref6,ref9}, hingga mekanisme konfigurasi dan \textit{provisioning} \textit{tenant} \cite{ref8}. Berbagai penelitian tersebut menunjukkan bahwa implementasi \textit{multitenancy} memerlukan pengelolaan \textit{tenant} yang baik agar sistem tetap mampu menjaga isolasi data serta mendukung pertumbuhan jumlah \textit{tenant} secara efisien.
 
-Pada platform yang digunakan oleh banyak organisasi secara bersamaan, sistem manajemen aset dan
-inventori menghadapi kompleksitas tambahan dibandingkan sistem satu organisasi. Setiap organisasi
-memiliki struktur data, pengguna, dan alur operasional yang berbeda, sehingga pengelolaan data
-aset tidak hanya berkaitan dengan fungsi pencatatan, tetapi juga dengan mekanisme pemisahan data
-dan pengendalian akses. Tanpa dukungan arsitektur yang tepat, pengelolaan aset pada platform multi
-organisasi berpotensi menimbulkan duplikasi data, inkonsistensi informasi, serta kesulitan dalam
-pengelolaan sistem secara terpusat.
+Meskipun demikian, sebagian besar penelitian berfokus pada aspek tertentu dari arsitektur \textit{multitenant}, seperti model basis data, konfigurasi aplikasi, atau mekanisme \textit{deployment} \textit{tenant}. Integrasi antara mekanisme \textit{tenant identification}, \textit{tenant scoping} pada lapisan aplikasi, serta \textit{provisioning} \textit{tenant} otomatis pada lingkungan \textit{shared database} dan \textit{shared schema} masih memerlukan perhatian lebih karena seluruh \textit{tenant} menggunakan struktur penyimpanan data yang sama. Kondisi tersebut menuntut adanya mekanisme yang mampu menjaga konsistensi identitas \textit{tenant} pada setiap proses akses data tanpa mengurangi efisiensi penggunaan sumber daya.
 
-Oleh karena itu, integrasi sistem manajemen aset, inventori, dan layanan rental pada platform
-multi organisasi tidak dapat dipisahkan dari perancangan arsitektur perangkat lunak yang mampu
-mendukung pengelolaan data lintas organisasi secara efisien dan terisolasi. Aspek ini menjadikan
-sistem manajemen aset dan inventori relevan untuk dikaji tidak hanya dari sisi fungsional, tetapi
-juga dari perspektif arsitektur sistem.
+Berdasarkan kondisi tersebut, penelitian ini berfokus pada perancangan arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} yang mengintegrasikan \textit{tenant identification} berbasis \textit{middleware}, \textit{tenant scoping} pada lapisan aplikasi, serta \textit{provisioning} \textit{tenant} otomatis dalam satu \textit{platform} terpusat. Arsitektur yang diusulkan diterapkan pada modul \textit{Asset Management}, \textit{Inventory}, dan \textit{Rental} berbasis \textit{web} yang terintegrasi dengan \textit{platform} RTPintar.
 
-\section{Konsep \textit{Cloud Computing} dan SaaS}
+Berdasarkan uraian penelitian sebelumnya, dapat dilihat bahwa setiap penelitian memiliki fokus yang berbeda, mulai dari karakteristik arsitektur \textit{multitenant}, pengelolaan basis data \textit{tenant}, hingga mekanisme \textit{provisioning} \textit{tenant}. Perbandingan fokus dan kontribusi masing masing penelitian dapat dilihat pada Tabel \ref{tab:studi_terkait}.
 
-\textit{Cloud computing} menyediakan infrastruktur komputasi yang elastis, terdistribusi, dan
-dapat diakses secara \textit{on demand}, sehingga memungkinkan pengembangan dan pengelolaan
-aplikasi berskala besar dengan efisiensi sumber daya yang lebih baik \cite{ref2}. Dalam konteks
-\textit{Software as a Service}, aplikasi disediakan sebagai layanan yang dapat diakses melalui
-jaringan tanpa memerlukan instalasi lokal, dengan model penggunaan yang mendukung banyak pengguna
-dan organisasi secara bersamaan.
+\begin{longtable}{|c|p{2cm}|p{2.5cm}|p{3.5cm}|p{3.2cm}|}
+  \caption{Perbandingan Studi Terkait}
+  \label{tab:studi_terkait} \\
+  \hline
+  \rowcolor[HTML]{EFEFEF}
+  \textbf{No} & \textbf{Penelitian} & \textbf{Fokus Penelitian} & \textbf{Kontribusi Penelitian} & \textbf{Keterbatasan} \\
+  \hline
+  \endfirsthead
 
-Arsitektur SaaS memungkinkan satu aplikasi digunakan oleh banyak organisasi melalui satu sistem
-terpusat, sehingga mengurangi biaya operasional, menyederhanakan proses pemeliharaan, dan
-mempermudah pembaruan sistem \cite{ref5}. Namun, implementasi SaaS tidak selalu identik dengan
-arsitektur multitenant. Banyak sistem SaaS masih dibangun menggunakan pendekatan non multitenant
-atau \textit{single tenant}, di mana setiap organisasi memiliki konfigurasi atau \textit{instance}
-sistem tersendiri. Pendekatan tersebut berpotensi menimbulkan keterbatasan skalabilitas dan
-efisiensi ketika jumlah organisasi pengguna meningkat.
+  \multicolumn{5}{c}%
+  {{\bfseries \tablename\ \thetable{} -- Lanjutan dari halaman sebelumnya}} \\
+  \hline
+  \rowcolor[HTML]{EFEFEF}
+  \textbf{No} & \textbf{Penelitian} & \textbf{Fokus Penelitian} & \textbf{Kontribusi Penelitian} & \textbf{Keterbatasan} \\
+  \hline
+  \endhead
 
-Dalam konteks platform layanan multi organisasi berskala nasional, pemilihan arsitektur SaaS yang
-tepat menjadi krusial. Arsitektur yang tidak dirancang untuk penggunaan bersama oleh banyak tenant
-akan meningkatkan kompleksitas pengelolaan sistem dan mengurangi manfaat utama dari model SaaS
-itu sendiri.
+  \hline
+  \endfoot
 
-\section{Arsitektur Multitenant}
+  \hline
+  \endlastfoot
 
-Arsitektur multitenant merupakan pendekatan perancangan aplikasi di mana satu \textit{instance}
-aplikasi digunakan oleh banyak tenant secara bersamaan, dengan tetap menjaga isolasi data,
-konfigurasi, dan proses operasional antar tenant \cite{ref4}. Tenant dalam arsitektur multitenant
-didefinisikan sebagai entitas organisasi independen yang memiliki data, pengguna, dan alur kerja
-tersendiri dalam satu sistem bersama.
+  1 & Bezemer dan Zaidman \cite{ref3} & Karakteristik aplikasi \textit{SaaS} \textit{multitenant} & Menjelaskan konsep \textit{multitenancy} sebagai karakteristik utama aplikasi \textit{SaaS} serta manfaatnya terhadap efisiensi pemeliharaan dan penggunaan sumber daya. & Tidak membahas implementasi penyimpanan data dan mekanisme \textit{provisioning} \textit{tenant} secara rinci. \\
+  \hline
+  2 & Krebs et al. \cite{ref4} & Aspek arsitektural sistem \textit{multitenant} & Mengidentifikasi aspek penting dalam arsitektur \textit{multitenant} seperti \textit{tenant isolation}, \textit{scalability}, \textit{customization}, dan \textit{data management}. & Berfokus pada analisis arsitektur dan belum membahas implementasi teknis \textit{tenant provisioning}. \\
+  \hline
+  3 & Aulbach et al. \cite{ref6} & Teknik \textit{schema mapping} pada basis data \textit{multitenant} & Mengusulkan dan membandingkan beberapa teknik \textit{schema mapping} untuk mendukung konsolidasi \textit{tenant} dalam satu basis data. & Berfokus pada desain basis data dan belum membahas pengelolaan \textit{tenant} pada lapisan aplikasi. \\
+  \hline
+  4 & Mietzner et al. \cite{ref8} & Konfigurasi dan \textit{provisioning} \textit{tenant} pada aplikasi \textit{SaaS} & Mengusulkan pendekatan konfigurasi \textit{tenant} menggunakan \textit{variability descriptor} dan \textit{multi-tenancy pattern} untuk mendukung \textit{provisioning} \textit{tenant}. & Tidak membahas mekanisme isolasi data \textit{tenant} pada basis data bersama. \\
+  \hline
+  5 & Pippal et al. \cite{ref9} & Arsitektur basis data \textit{multitenant} & Mengembangkan arsitektur basis data \textit{multitenant} berbasis penyimpanan bersama untuk meningkatkan efisiensi penggunaan sumber daya. & Fokus pada efisiensi basis data dan belum membahas integrasi \textit{tenant identification} serta \textit{tenant scoping} pada lapisan aplikasi. \\
+  \hline
+  6 & Penelitian yang Diusulkan & Arsitektur \textit{multitenant} pada modul \textit{Asset Management}, \textit{Inventory}, dan \textit{Rental} & Mengintegrasikan mekanisme \textit{tenant identification}, \textit{tenant scoping}, \textit{shared database}, \textit{shared schema}, serta \textit{tenant provisioning} dalam satu rancangan arsitektur. & Difokuskan pada tahap perancangan dan implementasi pada ruang lingkup modul yang diteliti. \\
+\end{longtable}
 
-Berbagai penelitian mengidentifikasi beberapa pola utama dalam penerapan \textit{multitenancy},
-yaitu \textit{shared schema}, \textit{separated schema}, dan \textit{separate database}, yang
-masing-masing memiliki karakteristik dan \textit{trade-off} pada aspek isolasi data, biaya
-infrastruktur, dan skalabilitas sistem \cite{ref6}. Model \textit{separate database} menawarkan
-isolasi data yang tinggi, namun membutuhkan sumber daya dan biaya pengelolaan yang besar.
-Sebaliknya, model \textit{shared schema} menawarkan efisiensi infrastruktur dan kemudahan
-pengelolaan, tetapi memerlukan mekanisme isolasi data yang lebih ketat pada lapisan aplikasi.
+Berdasarkan Tabel \ref{tab:studi_terkait}, penelitian sebelumnya telah memberikan kontribusi pada berbagai aspek implementasi \textit{multitenancy}, seperti karakteristik arsitektur \textit{SaaS}, pengelolaan basis data \textit{multitenant}, dan konfigurasi \textit{tenant}. Namun, integrasi antara \textit{tenant identification}, \textit{tenant scoping}, dan \textit{tenant provisioning} pada lingkungan \textit{shared database} dan \textit{shared schema} masih menjadi perhatian dalam perancangan arsitektur \textit{multitenant}. Oleh karena itu, penelitian ini mengusulkan rancangan arsitektur yang mengintegrasikan aspek aspek tersebut pada modul \textit{Asset Management}, \textit{Inventory}, dan \textit{Rental} berbasis \textit{web}.
 
-Model \textit{shared database} dan \textit{shared schema} banyak direkomendasikan untuk platform
-SaaS tahap awal dan sistem berskala besar karena mampu mendukung pertumbuhan jumlah tenant dengan
-biaya infrastruktur yang relatif rendah serta menyederhanakan proses pemeliharaan sistem
-\cite{ref9,ref10}. Pemilihan model ini selaras dengan kebutuhan efisiensi infrastruktur dan
-pengelolaan data banyak organisasi dalam satu platform terpusat, sebagaimana menjadi fokus
-penelitian ini.
+\section{\textit{Software as a Service} (SaaS)}
 
-\section{Isolasi Data pada Sistem Multitenant}
+\textit{Software as a Service} (SaaS) merupakan salah satu model layanan dalam komputasi awan yang memungkinkan pengguna mengakses aplikasi melalui jaringan tanpa perlu melakukan instalasi maupun pengelolaan infrastruktur secara mandiri \cite{ref5} \cite{ref10}. Pada model ini, penyedia layanan bertanggung jawab terhadap pengelolaan aplikasi, pembaruan sistem, serta infrastruktur yang digunakan untuk menjalankan layanan.
 
-Isolasi data merupakan aspek kritis dalam arsitektur multitenant untuk memastikan bahwa setiap
-tenant hanya dapat mengakses data yang menjadi miliknya. Isolasi data dapat diterapkan pada
-beberapa lapisan sistem, yaitu lapisan basis data, lapisan aplikasi, dan lapisan infrastruktur
-\cite{ref5,ref8,ref9}.
+Penerapan \textit{SaaS} memberikan kemudahan bagi organisasi karena aplikasi dapat digunakan secara langsung tanpa memerlukan proses instalasi pada setiap perangkat maupun lingkungan kerja. Selain itu, proses pemeliharaan dan pembaruan aplikasi dapat dilakukan secara terpusat sehingga perubahan yang dilakukan penyedia layanan dapat langsung digunakan oleh seluruh pengguna \cite{ref5}.
 
-Pada lapisan basis data, isolasi dapat dilakukan melalui penggunaan atribut identitas tenant
-seperti \texttt{tenant\_id}, pemisahan skema, atau pemisahan basis data. Pada lapisan aplikasi,
-isolasi diwujudkan melalui mekanisme \textit{tenant aware middleware}, pengelolaan konteks tenant,
-serta pembatasan akses berbasis peran. Sementara itu, pada lapisan infrastruktur, isolasi
-dilakukan melalui segmentasi sumber daya dan pengendalian beban kerja per tenant.
+Perkembangan model \textit{SaaS} mendorong kebutuhan terhadap aplikasi yang mampu melayani banyak organisasi secara bersamaan. Kondisi tersebut menjadi salah satu faktor yang mendorong berkembangnya konsep \textit{multitenancy} pada aplikasi modern \cite{ref3}.
 
-Penelitian empiris menunjukkan bahwa pendekatan \textit{tenant shared} lebih efisien secara biaya
-dan sumber daya dibandingkan pendekatan \textit{tenant specific}, namun memerlukan desain isolasi
-logis yang ketat untuk menjaga keamanan dan konsistensi data \cite{ref9}. Oleh karena itu, dalam
-konteks arsitektur multitenant berbasis \textit{shared schema}, fokus isolasi data lebih diarahkan
-pada pengelolaan konteks tenant dan \textit{tenant scoping} pada lapisan aplikasi, yang menjadi
-salah satu fokus utama penelitian ini.
+\section{Arsitektur \textit{Multitenant}}
+
+\textit{Multitenancy} merupakan pendekatan yang memungkinkan banyak \textit{tenant} menggunakan satu aplikasi yang sama dengan tetap mempertahankan pemisahan data dan konfigurasi masing masing \textit{tenant} \cite{ref3}. Dalam konteks \textit{SaaS}, \textit{tenant} umumnya merepresentasikan organisasi atau pelanggan yang menggunakan layanan yang sama namun memiliki data dan kebutuhan operasional yang berbeda.
+
+Bezemer dan Zaidman \cite{ref3} menjelaskan bahwa penggunaan satu aplikasi untuk melayani banyak \textit{tenant} dapat meningkatkan efisiensi penggunaan sumber daya serta menyederhanakan proses pemeliharaan aplikasi. Namun, pendekatan tersebut juga menuntut adanya mekanisme yang mampu mengelola \textit{tenant} secara konsisten agar data dan konfigurasi antar \textit{tenant} tidak saling tercampur.
+
+Komponen utama pada arsitektur \textit{multitenant} ditunjukkan pada Gambar \ref{fig:arsitektur_dasar_multitenant}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/bab2/4.png}
+  \caption{Arsitektur Dasar \textit{Multitenant} (Sumber: Diadaptasi dari Bezemer dan Zaidman \cite{ref3})}
+  \label{fig:arsitektur_dasar_multitenant}
+\end{figure}
+
+Berdasarkan Gambar \ref{fig:arsitektur_dasar_multitenant}, setiap permintaan yang masuk ke sistem terlebih dahulu melalui proses identifikasi \textit{tenant} sebelum diteruskan ke lapisan aplikasi dan basis data. Informasi \textit{tenant} tersebut kemudian digunakan untuk menentukan konfigurasi dan ruang data yang dapat diakses oleh pengguna.
+
+Selain aspek pengelolaan data, Krebs et al. \cite{ref4} mengidentifikasi beberapa perhatian utama dalam implementasi \textit{multitenancy}, yaitu \textit{tenant isolation}, \textit{scalability}, \textit{configurability}, dan \textit{performance isolation}. Aspek aspek tersebut menjadi penting karena seluruh \textit{tenant} menggunakan sumber daya aplikasi yang sama.
+
+\section{\textit{Tenant Isolation}}
+
+\textit{Tenant isolation} merupakan mekanisme yang digunakan untuk memastikan bahwa data dan aktivitas suatu \textit{tenant} tidak dapat diakses oleh \textit{tenant} lain \cite{ref4}. Pada lingkungan komputasi awan, kegagalan dalam menerapkan isolasi \textit{tenant} dapat menyebabkan kebocoran data dan pelanggaran keamanan antar pelanggan yang menggunakan layanan yang sama \cite{ref11}.
+
+Pada arsitektur \textit{multitenant}, \textit{tenant isolation} dapat diterapkan pada lapisan aplikasi maupun basis data. Pada pendekatan \textit{shared database} dan \textit{shared schema}, seluruh \textit{tenant} menggunakan basis data dan struktur tabel yang sama \cite{ref6,ref9}. Oleh karena itu, identitas \textit{tenant} harus dikelola secara konsisten untuk memastikan setiap pengguna hanya dapat mengakses data yang sesuai dengan \textit{tenant}-nya.
+
+Pada penelitian ini, \textit{tenant isolation} diterapkan melalui mekanisme identifikasi \textit{tenant} dan pembatasan akses data pada lapisan aplikasi untuk menjaga pemisahan data antar organisasi yang menggunakan sistem.
+
+\section{\textit{Shared Database} dan \textit{Shared Schema}}
+
+Dalam implementasi aplikasi \textit{multitenant}, terdapat beberapa pendekatan penyimpanan data yang dapat digunakan untuk memisahkan data antar \textit{tenant}. Microsoft Azure Architecture Center \cite{ref7} mengelompokkan pendekatan tersebut menjadi \textit{separate database}, \textit{shared database with separate schema}, dan \textit{shared database with shared schema}. Setiap pendekatan memiliki karakteristik yang berbeda dalam aspek isolasi data, kompleksitas pengelolaan, dan penggunaan sumber daya.
+
+Pada penelitian ini digunakan pendekatan \textit{shared database} dan \textit{shared schema}, dimana seluruh \textit{tenant} menggunakan basis data dan struktur tabel yang sama. Identitas \textit{tenant} digunakan sebagai pembeda data sehingga setiap proses penyimpanan dan pengambilan data dapat dilakukan sesuai dengan \textit{tenant} yang sedang menggunakan sistem \cite{ref6,ref9}. Pendekatan ini dipilih karena mampu mendukung pengelolaan banyak \textit{tenant} dalam satu \textit{platform} dengan penggunaan sumber daya yang lebih efisien.
 
 \section{\textit{Tenant Provisioning}}
 
-\textit{Tenant provisioning} merupakan proses pembuatan dan inisialisasi tenant baru dalam sistem
-multitenant, yang meliputi konfigurasi awal, inisialisasi metadata, pembentukan entitas organisasi,
-serta penetapan peran pengguna awal \cite{ref7}. Dalam sistem non multitenant, proses ini umumnya
-dilakukan secara manual dan terpisah untuk setiap organisasi, sehingga meningkatkan kompleksitas
-operasional dan risiko ketidakkonsistenan konfigurasi.
+\textit{Tenant provisioning} merupakan proses pembuatan dan konfigurasi \textit{tenant} baru agar dapat menggunakan layanan yang tersedia. Mietzner et al. \cite{ref8} menjelaskan bahwa proses \textit{provisioning} diperlukan untuk mengelola konfigurasi \textit{tenant} secara konsisten tanpa memerlukan perubahan pada keseluruhan aplikasi.
 
-Pada arsitektur multitenant, \textit{provisioning} tenant yang terstandarisasi dan otomatis
-menjadi bagian penting dari efisiensi operasional sistem. Otomatisasi \textit{provisioning} tenant
-memungkinkan platform untuk menambahkan organisasi baru tanpa memerlukan konfigurasi manual
-tambahan, sekaligus memastikan konsistensi struktur data dan kebijakan akses antar tenant. Dengan
-demikian, mekanisme \textit{provisioning} tenant tidak hanya bersifat administratif, tetapi juga
-berperan sebagai komponen arsitektural yang mendukung skalabilitas dan efisiensi sistem secara
-keseluruhan.
+Pada penelitian ini, \textit{tenant provisioning} digunakan untuk mendukung proses \textit{onboarding} \textit{tenant} baru pada sistem.
+
+\section{\textit{Middleware} dan \textit{Tenant Context}}
+
+\textit{Middleware} merupakan komponen yang digunakan untuk memproses permintaan sebelum diteruskan ke logika aplikasi. Pada arsitektur \textit{multitenant}, \textit{middleware} dapat digunakan untuk mengidentifikasi \textit{tenant} yang sedang mengakses sistem berdasarkan informasi yang dikirimkan pada setiap permintaan \cite{ref7}.
+
+Identitas \textit{tenant} yang diperoleh kemudian disimpan sebagai \textit{tenant context} dan digunakan pada proses berikutnya untuk menentukan ruang lingkup data yang dapat diakses. Dengan pendekatan tersebut, mekanisme \textit{tenant identification} dan \textit{tenant isolation} dapat diterapkan secara konsisten pada seluruh lapisan aplikasi.
