@@ -1,0 +1,36 @@
+# Build output
+build/
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.blg
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.nav
+*.snm
+*.vrb
+*.idx
+*.ilg
+*.ind
+*.glo
+*.gls
+*.glg
+*.acn
+*.acr
+*.alg
+*.xdy
+
+# PDF (hapus baris ini jika ingin track PDF)
+*.pdf
+
+# Editor
+.DS_Store
+*.swp
+*.swo

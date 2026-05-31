@@ -1,0 +1,36 @@
+{
+  "latex-workshop.chktex.enabled": true,
+  "latex-workshop.chktex.path": "/Users/indramahesa/Library/TinyTeX/bin/universal-darwin/chktex",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.outDir": "%DIR%/build",
+  "latex-workshop.latex.recipe.default": "pdflatex × 2 + bibtex",
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "pdflatex × 2 + bibtex",
+      "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
+    },
+    {
+      "name": "pdflatex",
+      "tools": ["pdflatex"]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "pdflatex",
+      "command": "/Users/indramahesa/Library/TinyTeX/bin/universal-darwin/pdflatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-output-directory=%OUTDIR%",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "bibtex",
+      "command": "/Users/indramahesa/Library/TinyTeX/bin/universal-darwin/bibtex",
+      "args": ["%OUTDIR%/%DOCFILE%"]
+    }
+  ],
+  "latex-workshop.view.pdf.viewer": "tab"
+}

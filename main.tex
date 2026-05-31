@@ -1,0 +1,133 @@
+%==============================================================================
+% DOKUMEN UTAMA - SKRIPSI/TUGAS AKHIR
+%==============================================================================
+\documentclass[12pt, a4paper, oneside]{report}
+
+%------------------------------------------------------------------------------
+% PAKET-PAKET
+%------------------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{natbib}
+\usepackage{lipsum} % placeholder text, hapus saat selesai
+
+%------------------------------------------------------------------------------
+% PENGATURAN HALAMAN
+%------------------------------------------------------------------------------
+\geometry{
+  top    = 3cm,
+  bottom = 3cm,
+  left   = 4cm,
+  right  = 3cm
+}
+
+\doublespacing % spasi 2
+
+%------------------------------------------------------------------------------
+% PENGATURAN HYPERREF
+%------------------------------------------------------------------------------
+\hypersetup{
+  colorlinks = true,
+  linkcolor  = black,
+  citecolor  = black,
+  urlcolor   = blue,
+  pdftitle   = {Judul Skripsi},
+  pdfauthor  = {Nama Penulis},
+}
+
+%------------------------------------------------------------------------------
+% PENGATURAN HEADER/FOOTER
+%------------------------------------------------------------------------------
+\setlength{\headheight}{14.5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+%------------------------------------------------------------------------------
+% PENGATURAN LISTINGS (KODE PROGRAM)
+%------------------------------------------------------------------------------
+\lstset{
+  basicstyle    = \ttfamily\small,
+  keywordstyle  = \color{blue}\bfseries,
+  commentstyle  = \color{gray}\itshape,
+  stringstyle   = \color{red},
+  numbers       = left,
+  numberstyle   = \tiny\color{gray},
+  stepnumber    = 1,
+  breaklines    = true,
+  frame         = single,
+  captionpos    = b,
+}
+
+%==============================================================================
+% DOKUMEN MULAI
+%==============================================================================
+\begin{document}
+
+%------------------------------------------------------------------------------
+% HALAMAN JUDUL
+%------------------------------------------------------------------------------
+\input{chapters/cover}
+
+%------------------------------------------------------------------------------
+% HALAMAN ROMAWI (PRAKATA, ABSTRAK, DAFTAR ISI, DSB.)
+%------------------------------------------------------------------------------
+\pagenumbering{roman}
+\setcounter{page}{2}
+
+\input{chapters/lembar_pengesahan}
+\input{chapters/pernyataan_keaslian}
+\input{chapters/abstrak}
+\input{chapters/abstract}
+\input{chapters/kata_pengantar}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+%------------------------------------------------------------------------------
+% HALAMAN ISI (ARAB)
+%------------------------------------------------------------------------------
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{chapters/bab1_pendahuluan}
+\input{chapters/bab2_tinjauan_pustaka}
+\input{chapters/bab3_metodologi}
+\input{chapters/bab4_hasil_pembahasan}
+\input{chapters/bab5_penutup}
+
+%------------------------------------------------------------------------------
+% DAFTAR PUSTAKA
+%------------------------------------------------------------------------------
+\bibliographystyle{apalike}
+\nocite{*} % Tampilkan semua referensi meski belum dikutip; hapus saat selesai
+\bibliography{references/daftar_pustaka}
+
+%------------------------------------------------------------------------------
+% LAMPIRAN
+%------------------------------------------------------------------------------
+\appendix
+\input{chapters/lampiran}
+
+\end{document}
