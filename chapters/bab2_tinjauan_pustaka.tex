@@ -1,35 +1,157 @@
 \chapter{Tinjauan Pustaka}
 
-\section{Landasan Teori}
+\section{Penelitian Terkait}
 
-\subsection{Teori Pertama}
+Penelitian mengenai arsitektur multitenant pada platform berbasis web dan \textit{Software as a
+Service} telah banyak dilakukan seiring meningkatnya kebutuhan sistem yang melayani banyak
+organisasi dalam satu aplikasi terpusat. Fokus penelitian terdahulu umumnya mencakup perbandingan
+model \textit{multitenancy}, mekanisme isolasi data, serta implikasi pemilihan arsitektur terhadap
+skalabilitas dan efisiensi infrastruktur. Bagian ini merangkum beberapa penelitian relevan yang
+menjadi landasan dalam perancangan arsitektur multitenant pada sistem manajemen aset, inventori,
+dan rental.
 
-\lipsum[1]
+Mangwani et al. (2023) \cite{ref5} melakukan evaluasi terhadap penerapan arsitektur multitenant
+pada aplikasi SaaS dengan membandingkan pendekatan monolitik dan \textit{microservices}. Penelitian
+tersebut menunjukkan bahwa arsitektur multitenant mampu meningkatkan efisiensi penggunaan sumber
+daya dibandingkan pendekatan \textit{single tenant}, terutama ketika jumlah tenant meningkat.
+Namun, studi ini lebih menekankan aspek \textit{deployment} dan performa layanan secara umum,
+tanpa membahas secara spesifik implikasi pemilihan model penyimpanan data seperti \textit{shared
+schema} terhadap isolasi data dan pengelolaan tenant.
 
-\subsection{Teori Kedua}
+Penelitian oleh Mangwani dan Tokekar (2022) \cite{ref9} menganalisis perilaku sistem SaaS dengan
+pendekatan \textit{tenant shared} dan \textit{tenant specific}. Hasil penelitian menunjukkan bahwa
+model \textit{tenant shared} lebih efisien dari sisi infrastruktur, tetapi memiliki risiko yang
+lebih tinggi terhadap kebocoran data apabila mekanisme isolasi tidak dirancang dengan baik. Studi
+ini menegaskan pentingnya pengelolaan konteks tenant dan pengendalian akses pada lapisan aplikasi,
+namun tidak membahas bagaimana mekanisme tersebut dirancang secara terintegrasi dalam konteks
+sistem manajemen aset dan inventori.
 
-\lipsum[2]
+Levchenko dan Taratukhin (2021) \cite{ref7} mengusulkan metode adaptasi arsitektur multitenant
+berbasis proses bisnis untuk mendukung fleksibilitas penggunaan sistem oleh berbagai organisasi.
+Penelitian ini menyoroti pentingnya desain proses \textit{onboarding} dan pengelolaan tenant yang
+terstandarisasi agar sistem dapat digunakan oleh tenant dengan karakteristik operasional yang
+berbeda. Meskipun relevan, penelitian ini lebih berfokus pada adaptasi proses bisnis, bukan pada
+perancangan arsitektur penyimpanan data berbasis \textit{shared database} dan \textit{shared
+schema}.
 
-\section{Penelitian Terdahulu}
+Sementara itu, Pahl dan Lee (2020) \cite{ref10} membahas pola arsitektur \textit{multitenancy}
+pada sistem SaaS dan mengidentifikasi \textit{trade-off} antara model \textit{separate database},
+\textit{separated schema}, dan \textit{shared schema}. Penelitian ini memberikan landasan teoritis
+mengenai implikasi masing-masing model terhadap isolasi data dan efisiensi infrastruktur. Namun,
+kajian tersebut bersifat konseptual dan belum mengaitkan secara langsung penerapan \textit{shared
+schema} dengan konteks sistem manajemen aset, inventori, dan rental pada platform multi organisasi.
 
-\lipsum[3]
+Berdasarkan penelitian terdahulu tersebut, dapat disimpulkan bahwa sebagian besar studi berfokus
+pada evaluasi umum arsitektur multitenant, perbandingan model \textit{deployment}, atau adaptasi
+proses bisnis. Masih terbatas penelitian yang secara spesifik membahas perancangan arsitektur
+multitenant berbasis \textit{shared database} dan \textit{shared schema} dengan fokus pada
+efisiensi infrastruktur serta mekanisme isolasi data dalam sistem manajemen aset, inventori, dan
+rental. Oleh karena itu, penelitian ini diarahkan untuk mengisi celah tersebut dengan merancang
+arsitektur multitenant yang secara eksplisit mengintegrasikan pemilihan model penyimpanan data,
+mekanisme isolasi tenant, dan kebutuhan pengelolaan sistem multi organisasi dalam satu platform
+terpusat.
 
-Tabel \ref{tab:penelitian_terdahulu} merangkum penelitian-penelitian terdahulu yang relevan.
+\section{Sistem Informasi Manajemen Aset dan Inventori}
 
-\begin{table}[h!]
-  \centering
-  \caption{Penelitian Terdahulu}
-  \label{tab:penelitian_terdahulu}
-  \begin{tabular}{clll}
-    \toprule
-    No. & Peneliti (Tahun) & Judul & Metode \\
-    \midrule
-    1 & Nama et al. (2020) & Judul penelitian & Metode A \\
-    2 & Nama et al. (2022) & Judul penelitian & Metode B \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+Sistem informasi manajemen aset dan inventori merupakan perangkat lunak yang digunakan untuk
+melakukan pencatatan, pemantauan, pengendalian, dan pelaporan aset serta barang milik organisasi
+secara terstruktur. Penerapan sistem informasi pada pengelolaan aset terbukti mampu meningkatkan
+akurasi data, transparansi operasional, serta efisiensi pemanfaatan sumber daya dibandingkan
+pendekatan manual atau pencatatan terpisah \cite{ref1,ref3}. Dalam sistem yang terintegrasi,
+informasi mengenai kepemilikan aset, kondisi barang, serta riwayat penggunaan dapat diakses
+secara konsisten dan \textit{real time}.
 
-\section{Kerangka Berpikir}
+Pada platform yang digunakan oleh banyak organisasi secara bersamaan, sistem manajemen aset dan
+inventori menghadapi kompleksitas tambahan dibandingkan sistem satu organisasi. Setiap organisasi
+memiliki struktur data, pengguna, dan alur operasional yang berbeda, sehingga pengelolaan data
+aset tidak hanya berkaitan dengan fungsi pencatatan, tetapi juga dengan mekanisme pemisahan data
+dan pengendalian akses. Tanpa dukungan arsitektur yang tepat, pengelolaan aset pada platform multi
+organisasi berpotensi menimbulkan duplikasi data, inkonsistensi informasi, serta kesulitan dalam
+pengelolaan sistem secara terpusat.
 
-\lipsum[4]
+Oleh karena itu, integrasi sistem manajemen aset, inventori, dan layanan rental pada platform
+multi organisasi tidak dapat dipisahkan dari perancangan arsitektur perangkat lunak yang mampu
+mendukung pengelolaan data lintas organisasi secara efisien dan terisolasi. Aspek ini menjadikan
+sistem manajemen aset dan inventori relevan untuk dikaji tidak hanya dari sisi fungsional, tetapi
+juga dari perspektif arsitektur sistem.
+
+\section{Konsep \textit{Cloud Computing} dan SaaS}
+
+\textit{Cloud computing} menyediakan infrastruktur komputasi yang elastis, terdistribusi, dan
+dapat diakses secara \textit{on demand}, sehingga memungkinkan pengembangan dan pengelolaan
+aplikasi berskala besar dengan efisiensi sumber daya yang lebih baik \cite{ref2}. Dalam konteks
+\textit{Software as a Service}, aplikasi disediakan sebagai layanan yang dapat diakses melalui
+jaringan tanpa memerlukan instalasi lokal, dengan model penggunaan yang mendukung banyak pengguna
+dan organisasi secara bersamaan.
+
+Arsitektur SaaS memungkinkan satu aplikasi digunakan oleh banyak organisasi melalui satu sistem
+terpusat, sehingga mengurangi biaya operasional, menyederhanakan proses pemeliharaan, dan
+mempermudah pembaruan sistem \cite{ref5}. Namun, implementasi SaaS tidak selalu identik dengan
+arsitektur multitenant. Banyak sistem SaaS masih dibangun menggunakan pendekatan non multitenant
+atau \textit{single tenant}, di mana setiap organisasi memiliki konfigurasi atau \textit{instance}
+sistem tersendiri. Pendekatan tersebut berpotensi menimbulkan keterbatasan skalabilitas dan
+efisiensi ketika jumlah organisasi pengguna meningkat.
+
+Dalam konteks platform layanan multi organisasi berskala nasional, pemilihan arsitektur SaaS yang
+tepat menjadi krusial. Arsitektur yang tidak dirancang untuk penggunaan bersama oleh banyak tenant
+akan meningkatkan kompleksitas pengelolaan sistem dan mengurangi manfaat utama dari model SaaS
+itu sendiri.
+
+\section{Arsitektur Multitenant}
+
+Arsitektur multitenant merupakan pendekatan perancangan aplikasi di mana satu \textit{instance}
+aplikasi digunakan oleh banyak tenant secara bersamaan, dengan tetap menjaga isolasi data,
+konfigurasi, dan proses operasional antar tenant \cite{ref4}. Tenant dalam arsitektur multitenant
+didefinisikan sebagai entitas organisasi independen yang memiliki data, pengguna, dan alur kerja
+tersendiri dalam satu sistem bersama.
+
+Berbagai penelitian mengidentifikasi beberapa pola utama dalam penerapan \textit{multitenancy},
+yaitu \textit{shared schema}, \textit{separated schema}, dan \textit{separate database}, yang
+masing-masing memiliki karakteristik dan \textit{trade-off} pada aspek isolasi data, biaya
+infrastruktur, dan skalabilitas sistem \cite{ref6}. Model \textit{separate database} menawarkan
+isolasi data yang tinggi, namun membutuhkan sumber daya dan biaya pengelolaan yang besar.
+Sebaliknya, model \textit{shared schema} menawarkan efisiensi infrastruktur dan kemudahan
+pengelolaan, tetapi memerlukan mekanisme isolasi data yang lebih ketat pada lapisan aplikasi.
+
+Model \textit{shared database} dan \textit{shared schema} banyak direkomendasikan untuk platform
+SaaS tahap awal dan sistem berskala besar karena mampu mendukung pertumbuhan jumlah tenant dengan
+biaya infrastruktur yang relatif rendah serta menyederhanakan proses pemeliharaan sistem
+\cite{ref9,ref10}. Pemilihan model ini selaras dengan kebutuhan efisiensi infrastruktur dan
+pengelolaan data banyak organisasi dalam satu platform terpusat, sebagaimana menjadi fokus
+penelitian ini.
+
+\section{Isolasi Data pada Sistem Multitenant}
+
+Isolasi data merupakan aspek kritis dalam arsitektur multitenant untuk memastikan bahwa setiap
+tenant hanya dapat mengakses data yang menjadi miliknya. Isolasi data dapat diterapkan pada
+beberapa lapisan sistem, yaitu lapisan basis data, lapisan aplikasi, dan lapisan infrastruktur
+\cite{ref5,ref8,ref9}.
+
+Pada lapisan basis data, isolasi dapat dilakukan melalui penggunaan atribut identitas tenant
+seperti \texttt{tenant\_id}, pemisahan skema, atau pemisahan basis data. Pada lapisan aplikasi,
+isolasi diwujudkan melalui mekanisme \textit{tenant aware middleware}, pengelolaan konteks tenant,
+serta pembatasan akses berbasis peran. Sementara itu, pada lapisan infrastruktur, isolasi
+dilakukan melalui segmentasi sumber daya dan pengendalian beban kerja per tenant.
+
+Penelitian empiris menunjukkan bahwa pendekatan \textit{tenant shared} lebih efisien secara biaya
+dan sumber daya dibandingkan pendekatan \textit{tenant specific}, namun memerlukan desain isolasi
+logis yang ketat untuk menjaga keamanan dan konsistensi data \cite{ref9}. Oleh karena itu, dalam
+konteks arsitektur multitenant berbasis \textit{shared schema}, fokus isolasi data lebih diarahkan
+pada pengelolaan konteks tenant dan \textit{tenant scoping} pada lapisan aplikasi, yang menjadi
+salah satu fokus utama penelitian ini.
+
+\section{\textit{Tenant Provisioning}}
+
+\textit{Tenant provisioning} merupakan proses pembuatan dan inisialisasi tenant baru dalam sistem
+multitenant, yang meliputi konfigurasi awal, inisialisasi metadata, pembentukan entitas organisasi,
+serta penetapan peran pengguna awal \cite{ref7}. Dalam sistem non multitenant, proses ini umumnya
+dilakukan secara manual dan terpisah untuk setiap organisasi, sehingga meningkatkan kompleksitas
+operasional dan risiko ketidakkonsistenan konfigurasi.
+
+Pada arsitektur multitenant, \textit{provisioning} tenant yang terstandarisasi dan otomatis
+menjadi bagian penting dari efisiensi operasional sistem. Otomatisasi \textit{provisioning} tenant
+memungkinkan platform untuk menambahkan organisasi baru tanpa memerlukan konfigurasi manual
+tambahan, sekaligus memastikan konsistensi struktur data dan kebijakan akses antar tenant. Dengan
+demikian, mekanisme \textit{provisioning} tenant tidak hanya bersifat administratif, tetapi juga
+berperan sebagai komponen arsitektural yang mendukung skalabilitas dan efisiensi sistem secara
+keseluruhan.

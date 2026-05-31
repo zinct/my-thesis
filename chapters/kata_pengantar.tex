@@ -1,27 +1,65 @@
-\chapter*{Kata Pengantar}
-\addcontentsline{toc}{chapter}{Kata Pengantar}
+\chapter*{KATA PENGANTAR}
+\addcontentsline{toc}{chapter}{KATA PENGANTAR}
 
-Puji syukur penulis panjatkan kepada Tuhan Yang Maha Esa atas segala rahmat dan
-karunia-Nya sehingga penulis dapat menyelesaikan skripsi yang berjudul
-\textbf{``Judul Skripsi Ditulis di Sini''} dengan baik.
+Puji dan syukur penulis panjatkan ke hadirat Tuhan Yang Maha Esa, karena atas rahmat dan
+karunia-Nya penulis dapat menyelesaikan laporan tugas akhir ini dengan baik.
 
-Skripsi ini disusun sebagai salah satu syarat untuk memperoleh gelar Sarjana \ldots{}
-pada Program Studi \ldots{}, Fakultas \ldots{}, Universitas \ldots{}.
+Laporan tugas akhir ini disusun dengan tujuan untuk merancang arsitektur multitenant berbasis
+\textit{shared database} dan \textit{shared schema} sebagai solusi dalam meningkatkan efisiensi
+infrastruktur serta mendukung proses \textit{provisioning} tenant pada platform manajemen aset,
+inventori, dan rental. Latar belakang penelitian ini didasarkan pada permasalahan pengelolaan
+sistem multi organisasi yang masih banyak menggunakan pendekatan non multitenant, sehingga
+menimbulkan keterbatasan dalam skalabilitas, kompleksitas operasional, serta efisiensi penggunaan
+sumber daya.
 
-Penulis mengucapkan terima kasih kepada:
+Dalam proses penyusunan tugas akhir ini, penulis memperoleh banyak bantuan, bimbingan, dan
+dukungan dari berbagai pihak. Oleh karena itu, penulis mengucapkan terima kasih kepada:
+
 \begin{enumerate}
-  \item Bapak/Ibu \ldots{} selaku Pembimbing I atas bimbingan dan arahannya.
-  \item Bapak/Ibu \ldots{} selaku Pembimbing II atas bimbingan dan arahannya.
-  \item Kedua orang tua dan keluarga atas dukungan dan doa yang selalu diberikan.
-  \item Seluruh teman-teman yang telah memberikan semangat dan bantuan.
+  \item Dr.~Eng.~Jati H.~Husen, S.T., M.Eng. selaku pembimbing yang telah memberikan arahan,
+    masukan, dan bimbingan selama proses penyusunan tugas akhir.
+  \item Muhammad, S.T. selaku pembimbing yang telah memberikan arahan, masukan, dan bimbingan
+    selama proses penyusunan tugas akhir.
+  \item Pihak Program Studi dan Fakultas yang telah memberikan fasilitas dan dukungan akademik.
+  \item Keluarga dan orang terdekat yang senantiasa memberikan doa dan dukungan moral.
+  \item Rekan-rekan yang telah membantu baik secara langsung maupun tidak langsung dalam proses
+    penyusunan laporan ini.
 \end{enumerate}
 
-Penulis menyadari bahwa skripsi ini masih jauh dari sempurna. Oleh karena itu,
-kritik dan saran yang membangun sangat penulis harapkan demi perbaikan di masa mendatang.
+Penulis berharap laporan tugas akhir ini dapat memberikan manfaat, baik sebagai referensi akademik
+maupun sebagai dasar pengembangan sistem multitenant pada platform multi organisasi di masa
+mendatang.
+
+Penulis menyadari bahwa laporan tugas akhir ini masih memiliki berbagai kekurangan. Oleh karena
+itu, penulis memohon maaf atas segala keterbatasan yang terdapat dalam penulisan ini serta
+mengharapkan kritik dan saran yang membangun untuk perbaikan di masa yang akan datang.
 
 \vspace{1cm}
 
 \begin{flushright}
-  Kota, \today \\[1cm]
-  Penulis
+  Bandung, 07 April 2026 \\[1cm]
+  \textbf{Indra Mahesa}
 \end{flushright}
+
+\chapter*{UCAPAN TERIMA KASIH}
+\addcontentsline{toc}{chapter}{UCAPAN TERIMA KASIH}
+
+Penulis mengucapkan terima kasih yang sebesar-besarnya kepada seluruh pihak yang telah memberikan
+bantuan, dukungan, serta kontribusi dalam proses penyusunan tugas akhir ini.
+
+\begin{enumerate}
+  \item Dr.~Eng.~Jati H.~Husen, S.T., M.Eng. selaku dosen pembimbing yang telah memberikan
+    arahan, bimbingan, serta masukan yang konstruktif selama proses penelitian dan penyusunan
+    tugas akhir.
+  \item Muhammad, S.T. selaku dosen pembimbing yang telah memberikan bimbingan, dukungan, dan
+    saran dalam penyusunan tugas akhir ini.
+  \item Pihak Program Studi Sarjana Rekayasa Perangkat Lunak, Fakultas Informatika, Universitas
+    Telkom yang telah memberikan dukungan akademik dan fasilitas selama masa studi.
+  \item Keluarga penulis yang selalu memberikan doa, dukungan, dan motivasi sehingga penulis
+    dapat menyelesaikan tugas akhir ini.
+  \item Rekan-rekan yang telah memberikan bantuan, diskusi, serta dukungan selama proses
+    penyusunan tugas akhir.
+\end{enumerate}
+
+Penulis menyadari bahwa penyusunan tugas akhir ini tidak terlepas dari bantuan berbagai pihak.
+Oleh karena itu, penulis sangat menghargai segala bentuk dukungan yang telah diberikan.

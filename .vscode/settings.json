@@ -3,28 +3,22 @@
   "latex-workshop.chktex.path": "/Users/indramahesa/Library/TinyTeX/bin/universal-darwin/chktex",
   "latex-workshop.latex.autoBuild.run": "onSave",
   "latex-workshop.latex.outDir": "%DIR%/build",
-  "latex-workshop.latex.recipe.default": "pdflatex × 2 + bibtex",
+  "latex-workshop.latex.recipe.default": "xelatex × 2 + bibtex",
   "latex-workshop.latex.recipes": [
     {
-      "name": "pdflatex × 2 + bibtex",
-      "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
+      "name": "xelatex × 2 + bibtex",
+      "tools": ["xelatex", "bibtex", "xelatex", "xelatex"]
     },
     {
-      "name": "pdflatex",
-      "tools": ["pdflatex"]
+      "name": "xelatex",
+      "tools": ["xelatex"]
     }
   ],
   "latex-workshop.latex.tools": [
     {
-      "name": "pdflatex",
-      "command": "/Users/indramahesa/Library/TinyTeX/bin/universal-darwin/pdflatex",
-      "args": [
-        "-synctex=1",
-        "-interaction=nonstopmode",
-        "-file-line-error",
-        "-output-directory=%OUTDIR%",
-        "%DOC%"
-      ]
+      "name": "xelatex",
+      "command": "/Users/indramahesa/Library/TinyTeX/bin/universal-darwin/xelatex",
+      "args": ["-synctex=1", "-interaction=nonstopmode", "-file-line-error", "-output-directory=%OUTDIR%", "%DOC%"]
     },
     {
       "name": "bibtex",

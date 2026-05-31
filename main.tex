@@ -6,9 +6,11 @@
 %------------------------------------------------------------------------------
 % PAKET-PAKET
 %------------------------------------------------------------------------------
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
+\usepackage{fontspec}
 \usepackage[indonesian]{babel}
+\setmainfont{Aptos}
+\setsansfont{Aptos}
+\setmonofont{Aptos Mono}
 \usepackage{geometry}
 \usepackage{graphicx}
 \usepackage{amsmath, amssymb, amsthm}
@@ -18,30 +20,39 @@
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{tocloft}
+\usepackage{etoolbox}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{multirow}
+\usepackage{array} % m{} column type for vertical centering
 \usepackage{xcolor}
+\usepackage{colortbl} % colored table cells
+\usepackage{float}    % [H] placement
+
 \usepackage{listings}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage{natbib}
-\usepackage{lipsum} % placeholder text, hapus saat selesai
+\usepackage[numbers,square,sort&compress]{natbib}
+% \usepackage{lipsum} % sudah tidak digunakan
 
 %------------------------------------------------------------------------------
 % PENGATURAN HALAMAN
 %------------------------------------------------------------------------------
 \geometry{
-  top    = 3cm,
+  top    = 2cm,
   bottom = 3cm,
   left   = 4cm,
   right  = 3cm
 }
 
 \doublespacing % spasi 2
-
+% Nonaktifkan hyphenation sepenuhnya (tidak ada pemotongan kata dengan strip)
+\tolerance=9999
+\emergencystretch=3em
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
 %------------------------------------------------------------------------------
 % PENGATURAN HYPERREF
 %------------------------------------------------------------------------------
@@ -50,18 +61,83 @@
   linkcolor  = black,
   citecolor  = black,
   urlcolor   = blue,
-  pdftitle   = {Judul Skripsi},
-  pdfauthor  = {Nama Penulis},
+  pdftitle   = {Perancangan Arsitektur Multitenant Berbasis Shared Database dan Shared Schema},
+  pdfauthor  = {Indra Mahesa},
 }
 
 %------------------------------------------------------------------------------
 % PENGATURAN HEADER/FOOTER
 %------------------------------------------------------------------------------
+%------------------------------------------------------------------------------
+% PENGATURAN FORMAT BAB DAN SEKSI
+%------------------------------------------------------------------------------
+% Format chapter: "BAB X JUDUL" inline, 14pt bold centered
+\titleformat{\chapter}
+  {\normalfont\bfseries\fontsize{14}{16}\selectfont\centering}
+  {BAB \thechapter\space}
+  {0pt}
+  {\MakeUppercase}
+\titlespacing*{\chapter}{0pt}{-20pt}{20pt}
+
+% Format section: bold, 12pt, Pascal Case (no MakeUppercase)
+\titleformat{\section}
+  {\normalfont\bfseries\fontsize{12}{14}\selectfont}
+  {\thesection.}
+  {0.5em}
+  {}
+\titlespacing*{\section}{0pt}{16pt}{8pt}
+
+% Format subsection: bold, 12pt, Pascal Case (no MakeUppercase)
+\titleformat{\subsection}
+  {\normalfont\bfseries\fontsize{12}{14}\selectfont}
+  {\thesubsection.}
+  {0.5em}
+  {}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+
+%------------------------------------------------------------------------------
+% PENGATURAN DAFTAR ISI
+%------------------------------------------------------------------------------
+% Chapter entries in TOC: "BAB X" format
+\renewcommand{\cftchappresnum}{BAB }
+\renewcommand{\cftchapaftersnum}{}
+\setlength{\cftchapnumwidth}{3em}
+% TOC: kurangi margin atas/bawah antar entry
+\setlength{\cftbeforechapskip}{4pt}
+\setlength{\cftbeforesecskip}{2pt}
+\setlength{\cftbeforesubsecskip}{1pt}
+% TOC title spacing
+\setlength{\cftbeforetoctitleskip}{0pt}
+\setlength{\cftaftertoctitleskip}{12pt}
+\setlength{\cftbeforeloftitleskip}{0pt}
+\setlength{\cftafterloftitleskip}{12pt}
+\setlength{\cftbeforelottitleskip}{0pt}
+\setlength{\cftafterlottitleskip}{12pt}
+% TOC/LOF/LOT title format: uppercase bold centered like chapter headings
+\renewcommand{\cfttoctitlefont}{\hfill\normalfont\bfseries\fontsize{14}{16}\selectfont}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftloftitlefont}{\hfill\normalfont\bfseries\fontsize{14}{16}\selectfont}
+\renewcommand{\cftafterloftitle}{\hfill}
+\renewcommand{\cftlottitlefont}{\hfill\normalfont\bfseries\fontsize{14}{16}\selectfont}
+\renewcommand{\cftafterlottitle}{\hfill}
+% Rename list titles to uppercase
+\renewcommand{\contentsname}{DAFTAR ISI}
+\renewcommand{\listfigurename}{DAFTAR GAMBAR}
+\renewcommand{\listtablename}{DAFTAR TABEL}
+
 \setlength{\headheight}{14.5pt}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[R]{\thepage}
+\fancyfoot[R]{\thepage}
 \renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+% Override plain style (used by chapter* pages) to also put page number bottom-right
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[R]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
 
 %------------------------------------------------------------------------------
 % PENGATURAN LISTINGS (KODE PROGRAM)
@@ -101,9 +177,15 @@
 \input{chapters/abstract}
 \input{chapters/kata_pengantar}
 
+\clearpage
 \tableofcontents
+\clearpage
+\addcontentsline{toc}{chapter}{DAFTAR GAMBAR}
 \listoffigures
+\clearpage
+\addcontentsline{toc}{chapter}{DAFTAR TABEL}
 \listoftables
+\clearpage
 
 %------------------------------------------------------------------------------
 % HALAMAN ISI (ARAB)
@@ -120,14 +202,21 @@
 %------------------------------------------------------------------------------
 % DAFTAR PUSTAKA
 %------------------------------------------------------------------------------
-\bibliographystyle{apalike}
+\renewcommand{\bibname}{DAFTAR PUSTAKA}
+\bibliographystyle{unsrtnat}
 \nocite{*} % Tampilkan semua referensi meski belum dikutip; hapus saat selesai
 \bibliography{references/daftar_pustaka}
 
 %------------------------------------------------------------------------------
 % LAMPIRAN
 %------------------------------------------------------------------------------
+% Redefine appendix chapter format: no "BAB A", just "LAMPIRAN", uppercase
 \appendix
+\titleformat{\chapter}
+  {\normalfont\bfseries\fontsize{14}{16}\selectfont\centering}
+  {}
+  {0pt}
+  {\MakeUppercase}
 \input{chapters/lampiran}
 
 \end{document}

@@ -1,17 +1,28 @@
-\chapter*{Abstrak}
-\addcontentsline{toc}{chapter}{Abstrak}
+\chapter*{ABSTRAK}
+\addcontentsline{toc}{chapter}{ABSTRAK}
 
-\noindent\textbf{JUDUL SKRIPSI DITULIS DI SINI}
-
-\vspace{0.5cm}
-
-\noindent\textbf{Nama Lengkap}\\
-NIM. 1302220067
+Pengelolaan aset, inventori, dan layanan rental pada banyak organisasi yang beroperasi dalam satu
+platform digital masih sering menggunakan pendekatan non multitenant, di mana setiap organisasi
+dikelola melalui konfigurasi sistem yang terpisah sehingga menimbulkan keterbatasan skalabilitas,
+tingginya kompleksitas operasional, serta potensi inkonsistensi pengelolaan data ketika jumlah
+pengguna dan organisasi meningkat pada skala nasional. Permasalahan ini penting dibahas karena
+platform layanan multi organisasi berbasis web dirancang untuk melayani banyak entitas secara
+terpusat, sehingga pendekatan arsitektur konvensional tidak lagi memadai. Tenant dalam penelitian
+ini didefinisikan sebagai satu entitas organisasi independen yang memiliki data, pengguna, dan
+proses operasional tersendiri yang harus terisolasi secara logis dalam satu sistem bersama.
+Penelitian ini mengusulkan perancangan arsitektur multitenant berbasis \textit{shared database} dan
+\textit{shared schema} sebagai solusi untuk meningkatkan efisiensi infrastruktur, menjaga isolasi
+data antar tenant, serta mendukung pertumbuhan jumlah organisasi secara nasional. Metodologi
+penelitian meliputi analisis kebutuhan sistem, perancangan mekanisme \textit{tenant scoping} pada
+lapisan aplikasi, serta perancangan proses \textit{provisioning} tenant otomatis. Evaluasi
+rancangan dilakukan melalui parameter kemampuan isolasi data, efektivitas \textit{provisioning}
+tenant tanpa konfigurasi manual, serta konsistensi fungsi pengelolaan aset, inventori, dan rental
+pada berbagai tenant. Hasil yang diharapkan adalah rancangan arsitektur multitenant yang relevan
+dan layak untuk platform layanan multi organisasi berskala nasional serta mampu mengatasi
+keterbatasan pendekatan non multitenant pada sistem sejenis.
 
 \vspace{1cm}
 
-\lipsum[1] % Ganti dengan abstrak Bahasa Indonesia (150--250 kata)
-
-\vspace{1cm}
-
-\noindent\textbf{Kata kunci:} kata kunci satu, kata kunci dua, kata kunci tiga
+\noindent\textbf{Kata Kunci:} \textit{multitenant architecture}, \textit{shared schema},
+\textit{tenant scoping}, \textit{tenant provisioning}, \textit{multi organization platform},
+\textit{asset and rental management system}

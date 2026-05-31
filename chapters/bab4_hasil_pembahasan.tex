@@ -1,38 +1,104 @@
-\chapter{Hasil dan Pembahasan}
+\chapter{Hasil Percobaan dan Analisis}
 
-\section{Hasil Penelitian}
+\section{Hasil Implementasi Sistem}
 
-\lipsum[1]
+Pada tahap implementasi, rancangan arsitektur multitenant berbasis \textit{shared database} dan
+\textit{shared schema} diterapkan pada platform manajemen aset, inventori, dan rental berbasis web
+yang dikembangkan dalam proyek \textit{capstone}. Implementasi dilakukan untuk mendukung
+pengelolaan banyak tenant dalam satu sistem terpusat dengan tetap menjaga isolasi data antar
+organisasi.
 
-\subsection{Hasil Bagian Pertama}
+Sistem yang dikembangkan terdiri dari beberapa komponen utama, yaitu \textit{frontend application},
+\textit{backend service}, dan basis data multitenant. Seluruh tenant menggunakan aplikasi dan basis
+data yang sama, sedangkan pemisahan data dilakukan menggunakan mekanisme \textit{tenant scoping}
+pada \textit{application layer}. Selain itu, sistem juga mendukung proses \textit{provisioning}
+tenant otomatis untuk mempermudah \textit{onboarding} tenant baru tanpa memerlukan konfigurasi
+infrastruktur yang terpisah.
 
-\lipsum[2]
-
-Contoh persamaan matematika:
-\begin{equation}
-  \label{eq:contoh}
-  f(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
-\end{equation}
-
-\subsection{Hasil Bagian Kedua}
-
-\lipsum[3]
-
-\begin{table}[h!]
+\begin{figure}[h]
   \centering
-  \caption{Hasil Pengujian}
-  \label{tab:hasil}
-  \begin{tabular}{clcc}
-    \toprule
-    No. & Nama & Nilai & Keterangan \\
-    \midrule
-    1 & Item A & 95.2\% & Baik \\
-    2 & Item B & 87.4\% & Baik \\
-    3 & Item C & 72.1\% & Cukup \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+  \includegraphics[width=0.9\textwidth]{assets/image7.png}
+  \caption{Arsitektur Implementasi Sistem}
+  \label{fig:arsitektur_implementasi}
+\end{figure}
 
-\section{Pembahasan}
+Gambar \ref{fig:arsitektur_implementasi} menunjukkan arsitektur implementasi sistem yang digunakan pada platform
+\textit{multi organization} berbasis web. Seluruh tenant menggunakan aplikasi dan basis data yang
+sama dalam satu sistem terpusat dengan mekanisme \textit{tenant scoping} untuk menjaga isolasi
+data antar tenant.
 
-\lipsum[4-5]
+\section{Implementasi Platform \textit{Multi Organization}}
+
+Platform yang dikembangkan mendukung pengelolaan banyak organisasi dalam satu aplikasi bersama.
+Setiap tenant memiliki pengguna, data aset, data inventori, serta data rental masing-masing yang
+dikelola dalam satu sistem terpusat. Pada implementasinya, tenant tidak memerlukan
+\textit{instance} aplikasi atau basis data yang terpisah sehingga pengelolaan sistem dapat
+dilakukan secara lebih efisien.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/image8.png}
+  \caption{Implementasi Dashboard \textit{Multi Organization}}
+  \label{fig:dashboard_multi_org}
+\end{figure}
+
+Pada sistem yang diimplementasikan, setiap pengguna akan melakukan autentikasi sebelum mengakses
+platform. Setelah proses autentikasi berhasil, sistem akan menyesuaikan akses data berdasarkan
+konteks tenant pengguna yang sedang \textit{login}.
+
+\section{Implementasi Arsitektur Multitenant}
+
+Implementasi arsitektur multitenant dilakukan menggunakan pendekatan \textit{shared database} dan
+\textit{shared schema}. Seluruh tenant menggunakan tabel dan struktur basis data yang sama dengan
+tetap mempertahankan pemisahan data menggunakan atribut \texttt{tenant\_id}.
+
+Pendekatan tersebut memungkinkan sistem mendukung pengelolaan tenant secara terpusat tanpa
+memerlukan pembuatan basis data baru untuk setiap tenant. Selain itu, pendekatan \textit{shared
+schema} juga membantu meningkatkan efisiensi penggunaan \textit{resource} infrastruktur dan
+mempermudah proses \textit{maintenance} sistem.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/image9.png}
+  \caption{Struktur \textit{Shared Database} dan \textit{Shared Schema}}
+  \label{fig:shared_db_schema}
+\end{figure}
+
+Gambar \ref{fig:shared_db_schema} menunjukkan contoh implementasi struktur basis data multitenant menggunakan atribut
+\texttt{tenant\_id} untuk membedakan data antar tenant dalam satu skema basis data bersama.
+
+\section{Implementasi \textit{Tenant Context}}
+
+Implementasi \textit{tenant context} dilakukan pada \textit{application layer} untuk memastikan
+setiap tenant hanya dapat mengakses data miliknya sendiri. Sistem menggunakan konteks autentikasi
+pengguna untuk menentukan tenant aktif pada setiap proses \textit{request} yang dilakukan ke dalam
+sistem.
+
+Pada implementasinya, \textit{tenant context} digunakan pada proses \textit{filtering} data
+sehingga seluruh \textit{query} yang dijalankan akan disesuaikan dengan tenant pengguna yang
+sedang \textit{login}. Pendekatan ini membantu menjaga konsistensi isolasi data antar tenant dalam
+satu platform bersama.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/image10.png}
+  \caption{Alur Pengelolaan \textit{Tenant Context} pada \textit{Application Layer}}
+  \label{fig:tenant_context}
+\end{figure}
+
+Gambar \ref{fig:tenant_context} menunjukkan alur pengelolaan \textit{tenant context} pada \textit{application layer}
+untuk mendukung mekanisme isolasi data antar tenant pada platform multitenant.
+
+\section{Analisis Hasil Implementasi}
+
+Implementasi arsitektur multitenant dilakukan untuk mendukung pengelolaan banyak tenant dalam satu
+platform terpusat dengan tetap menjaga isolasi data antar organisasi. Pada penelitian ini,
+implementasi dilakukan menggunakan pendekatan \textit{shared database} dan \textit{shared schema},
+di mana seluruh tenant menggunakan aplikasi dan basis data yang sama dalam satu lingkungan sistem
+bersama.
+
+Pendekatan multitenant dipilih karena mampu mendukung efisiensi penggunaan \textit{resource}
+infrastruktur, mempermudah proses \textit{maintenance} sistem, serta mendukung \textit{scalability}
+ketika jumlah tenant terus bertambah. Selain itu, pendekatan ini juga mendukung pengelolaan tenant
+secara terpusat tanpa memerlukan \textit{instance} aplikasi maupun basis data yang terpisah untuk
+setiap organisasi.

@@ -2,49 +2,230 @@
 
 \section{Latar Belakang}
 
-\lipsum[1-2] % Ganti dengan latar belakang penelitian
+Pengelolaan aset dan inventori merupakan bagian penting dalam mendukung aktivitas operasional
+organisasi karena berkaitan dengan proses pencatatan, pemantauan, dan pengendalian sumber daya
+perusahaan \cite{ref1}. Seiring meningkatnya digitalisasi sistem informasi, berbagai organisasi
+mulai memanfaatkan platform berbasis web untuk mendukung proses pengelolaan aset dan inventori
+secara terpusat \cite{ref2}.
+
+Perkembangan teknologi informasi juga mendorong pertumbuhan platform digital berbasis
+\textit{Software as a Service} (SaaS) yang memungkinkan satu aplikasi digunakan oleh banyak
+organisasi dalam satu layanan terpusat \cite{ref3}. Model layanan SaaS memberikan kemudahan bagi
+organisasi dalam menggunakan aplikasi tanpa harus membangun dan mengelola infrastruktur sistem
+secara mandiri. Selain itu, kebutuhan terhadap sistem yang \textit{scalable} dan mampu mendukung
+banyak organisasi menyebabkan pendekatan \textit{multitenancy} semakin banyak diterapkan pada
+pengembangan aplikasi SaaS modern \cite{ref4}.
+
+Pendekatan \textit{multitenancy} memungkinkan satu aplikasi digunakan secara bersama oleh banyak
+tenant dengan tetap mempertahankan isolasi data masing-masing organisasi \cite{ref3,ref5}. Dalam
+implementasinya, setiap tenant dapat memiliki pengguna, data, dan proses operasional yang
+berbeda-beda sehingga sistem membutuhkan arsitektur yang mampu mengelola banyak tenant tanpa
+mencampurkan data antar organisasi. Kondisi tersebut menyebabkan aspek pengelolaan tenant dan
+isolasi data menjadi bagian penting dalam pengembangan aplikasi berbasis SaaS.
+
+Penelitian ini dilakukan pada pengembangan modul Asset Management, Inventory, dan Rental berbasis
+web yang terintegrasi dengan platform RTPintar. Modul yang dikembangkan dirancang untuk dapat
+digunakan oleh banyak organisasi dalam satu sistem dengan kebutuhan pengelolaan data dan proses
+operasional yang berbeda pada setiap tenant.
+
+Dalam implementasi aplikasi SaaS, terdapat beberapa pendekatan arsitektur tenant yang umum
+digunakan, seperti \textit{separate database}, \textit{separate schema}, maupun \textit{shared
+schema} \cite{ref6}. Pendekatan \textit{separate database} menawarkan tingkat isolasi data yang
+tinggi karena setiap tenant menggunakan basis data yang terpisah. Namun, pendekatan tersebut
+menyebabkan setiap tenant memerlukan pengelolaan dan konfigurasi basis data tersendiri sehingga
+meningkatkan kompleksitas operasional ketika jumlah tenant terus bertambah \cite{ref7}. Selain
+itu, pendekatan \textit{database-per-tenant} juga meningkatkan kebutuhan \textit{resource}
+infrastruktur dan proses \textit{maintenance} karena setiap tenant memiliki lingkungan penyimpanan
+data yang terpisah \cite{ref7}.
+
+Sebagai solusi terhadap permasalahan tersebut, arsitektur multitenant dengan pendekatan
+\textit{shared database} dan \textit{shared schema} memungkinkan seluruh tenant menggunakan basis
+data dan struktur tabel yang sama \cite{ref6}. Dengan pendekatan tersebut, tenant baru dapat
+ditambahkan tanpa perlu membuat basis data baru untuk setiap tenant sehingga proses
+\textit{provisioning} dapat dilakukan lebih cepat \cite{ref8}. Selain itu, penggunaan
+\textit{shared database} dan \textit{shared schema} lebih sesuai untuk aplikasi SaaS dengan
+jumlah tenant yang dapat terus bertambah karena pengelolaan tenant dan \textit{resource} sistem
+dapat dilakukan secara lebih terpusat \cite{ref7}.
+
+Meskipun memiliki kelebihan dalam penggunaan \textit{resource} yang lebih efektif, implementasi
+\textit{shared database} dan \textit{shared schema} memiliki tantangan pada aspek isolasi data
+antar tenant \cite{ref9}. Penggunaan struktur tabel yang sama menyebabkan seluruh data tenant
+berada dalam basis data yang sama sehingga kesalahan dalam pengelolaan \textit{tenant context}
+maupun kontrol akses dapat menyebabkan terjadinya akses lintas tenant yang tidak sesuai
+\cite{ref6}. Kondisi tersebut berpotensi menimbulkan kebocoran data dan ketidaksesuaian akses
+informasi antar tenant apabila mekanisme isolasi tenant tidak diterapkan secara konsisten pada
+lapisan aplikasi maupun basis data \cite{ref10}.
+
+Berdasarkan kondisi tersebut, penelitian ini berfokus pada perancangan arsitektur multitenant
+berbasis \textit{shared database} dan \textit{shared schema} pada modul Asset Management,
+Inventory, dan Rental berbasis web yang terintegrasi dengan platform RTPintar. Penelitian mencakup
+perancangan mekanisme \textit{tenant identification} berbasis \textit{middleware}, implementasi
+\textit{tenant scoping} pada lapisan aplikasi, perancangan model penyimpanan data multitenant,
+serta proses \textit{provisioning} tenant otomatis untuk mendukung proses \textit{onboarding}
+tenant baru.
 
 \section{Rumusan Masalah}
 
-Berdasarkan latar belakang di atas, rumusan masalah dalam penelitian ini adalah:
+Berdasarkan latar belakang yang telah dipaparkan, maka rumusan masalah dalam penelitian ini
+adalah sebagai berikut:
+
 \begin{enumerate}
-  \item Pertanyaan penelitian pertama?
-  \item Pertanyaan penelitian kedua?
+  \item Bagaimana merancang arsitektur multitenant berbasis \textit{shared database} dan
+    \textit{shared schema} yang mampu meningkatkan efisiensi infrastruktur serta mendukung
+    pengelolaan banyak organisasi dalam satu platform?
+  \item Bagaimana merancang mekanisme isolasi data dan \textit{provisioning} tenant otomatis
+    pada arsitektur multitenant agar proses \textit{onboarding} organisasi baru dapat dilakukan
+    secara konsisten, aman, dan tanpa konfigurasi manual tambahan?
 \end{enumerate}
 
-\section{Tujuan Penelitian}
+\section{Tujuan dan Manfaat}
 
-Tujuan dari penelitian ini adalah:
-\begin{enumerate}
-  \item Tujuan pertama.
-  \item Tujuan kedua.
-\end{enumerate}
+Penelitian ini bertujuan untuk merancang arsitektur multitenant berbasis \textit{shared database}
+dan \textit{shared schema} yang mampu mendukung pengelolaan banyak organisasi dalam satu platform
+secara efisien. Perancangan arsitektur dilakukan untuk mengatasi keterbatasan pendekatan non
+multitenant yang menyebabkan kompleksitas pengelolaan sistem dan peningkatan kebutuhan
+infrastruktur ketika jumlah tenant bertambah. Selain itu, penelitian ini juga bertujuan merancang
+mekanisme isolasi data antar tenant melalui \textit{tenant scoping} pada lapisan aplikasi serta
+merancang proses \textit{provisioning} tenant otomatis agar \textit{onboarding} organisasi baru
+dapat dilakukan secara konsisten, aman, dan tanpa konfigurasi manual tambahan.
 
-\section{Manfaat Penelitian}
+Melalui penelitian ini diharapkan rancangan arsitektur yang dihasilkan dapat memberikan manfaat
+praktis dalam mendukung pengembangan platform \textit{multi organization} berbasis web, khususnya
+pada sistem manajemen aset, inventori, dan rental. Pendekatan multitenant berbasis
+\textit{shared database} dan \textit{shared schema} diharapkan mampu meningkatkan efisiensi
+penggunaan \textit{resource} infrastruktur, menyederhanakan pengelolaan tenant, serta mendukung
+proses \textit{onboarding} tenant secara lebih cepat dan terstandarisasi. Selain manfaat praktis,
+penelitian ini juga diharapkan dapat menjadi referensi akademik dalam pengembangan penelitian
+terkait arsitektur multitenant, \textit{tenant isolation}, dan \textit{provisioning} tenant pada
+sistem \textit{Software as a Service} (SaaS).
 
-\subsection{Manfaat Teoritis}
-\lipsum[3]
+Keterkaitan antara tujuan penelitian, pengujian yang dilakukan, dan kesimpulan yang diharapkan
+disajikan pada Tabel \ref{tab:tujuan_pengujian}.
 
-\subsection{Manfaat Praktis}
-\lipsum[4]
+\begin{table}[H]
+  \caption{Tabel keterkaitan antara tujuan, pengujian dan kesimpulan.}
+  \label{tab:tujuan_pengujian}
+  \centering
+  \fontsize{10}{12}\selectfont
+  \setlength{\arrayrulewidth}{0.5pt}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|>{\raggedright\arraybackslash}p{4.3cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{4.3cm}|}
+    \hline
+    \multicolumn{1}{|>{\centering\arraybackslash}m{0.5cm}|}{\cellcolor{black}\color{white}\textbf{No.}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{4.3cm}|}{\cellcolor{black}\color{white}\textbf{Tujuan}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{3.5cm}|}{\cellcolor{black}\color{white}\textbf{Pengujian}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{4.3cm}|}{\cellcolor{black}\color{white}\textbf{Kesimpulan}} \\
+    \hline
+    1 &
+    Merancang arsitektur multitenant berbasis \textit{shared database} dan \textit{shared schema} untuk mendukung pengelolaan banyak organisasi dalam satu platform secara efisien &
+    Evaluasi efisiensi infrastruktur dan struktur arsitektur multitenant &
+    Sistem mampu menggunakan satu basis data dan satu skema bersama untuk banyak tenant tanpa memerlukan \textit{instance} terpisah \\
+    \hline
+    2 &
+    Merancang mekanisme isolasi data antar tenant pada arsitektur multitenant &
+    Pengujian \textit{tenant isolation} dan \textit{tenant scoping} pada lapisan aplikasi &
+    Data antar tenant tetap terisolasi dan tenant tidak dapat mengakses data milik tenant lain \\
+    \hline
+    3 &
+    Merancang mekanisme \textit{provisioning} tenant otomatis untuk mendukung \textit{onboarding} tenant baru secara lebih efisien &
+    Pengujian proses \textit{provisioning} tenant otomatis &
+    Tenant baru dapat dibuat beserta konfigurasi awalnya tanpa proses konfigurasi manual tambahan \\
+    \hline
+    4 &
+    Merancang arsitektur yang mendukung konsistensi pengelolaan sistem \textit{multi organization} &
+    Evaluasi konsistensi struktur data dan pengelolaan tenant &
+    Setiap tenant memiliki struktur pengelolaan data dan konfigurasi yang konsisten dalam satu platform terpusat \\
+    \hline
+  \end{tabular}
+\end{table}
 
 \section{Batasan Masalah}
 
-Penelitian ini dibatasi pada:
+Penelitian ini difokuskan pada perancangan arsitektur multitenant berbasis \textit{shared database}
+dan \textit{shared schema} pada platform manajemen aset, inventori, dan rental berbasis web. Agar
+penelitian lebih terarah dan sesuai dengan ruang lingkup tugas akhir, maka ditetapkan beberapa
+batasan masalah sebagai berikut:
+
 \begin{enumerate}
-  \item Batasan pertama.
-  \item Batasan kedua.
+  \item Penelitian difokuskan pada perancangan arsitektur sistem multitenant dan tidak membahas
+    implementasi penuh seluruh fitur aplikasi pada platform manajemen aset, inventori, dan rental.
+  \item Model \textit{multitenancy} yang digunakan dibatasi pada pendekatan \textit{shared
+    database} dan \textit{shared schema} tanpa membandingkan implementasi secara mendalam dengan
+    model \textit{separate database} atau \textit{separated schema}.
+  \item Mekanisme isolasi data tenant difokuskan pada penerapan \textit{tenant scoping} pada
+    lapisan aplikasi dan penggunaan \textit{tenant identifier} pada basis data.
+  \item Penelitian tidak membahas mekanisme keamanan lanjutan seperti enkripsi tingkat lanjut,
+    \textit{distributed security architecture}, maupun audit keamanan infrastruktur secara
+    menyeluruh.
+  \item Proses \textit{provisioning} tenant dibatasi pada pembuatan tenant baru, inisialisasi
+    konfigurasi awal tenant, serta pengelolaan data dasar yang diperlukan dalam sistem.
+  \item Evaluasi penelitian difokuskan pada aspek efisiensi infrastruktur, konsistensi isolasi
+    data antar tenant, dan efektivitas \textit{provisioning} tenant otomatis.
+  \item Penelitian difokuskan pada konteks platform \textit{multi organization} berbasis web dan
+    tidak membahas implementasi pada arsitektur \textit{distributed system} atau
+    \textit{multi region infrastructure}.
+  \item Rancangan arsitektur yang dihasilkan ditujukan sebagai dasar implementasi pada proyek
+    \textit{capstone} dan tidak membahas \textit{deployment} sistem pada lingkungan produksi
+    berskala besar secara penuh.
 \end{enumerate}
 
-\section{Sistematika Penulisan}
+\section{Metode Penelitian}
 
-Sistematika penulisan skripsi ini adalah sebagai berikut:
+Pendekatan yang digunakan dalam penelitian ini mencakup studi literatur, perancangan sistem,
+implementasi, serta pengujian sistem. Pendekatan tersebut digunakan untuk mendukung proses
+perancangan arsitektur multitenant berbasis \textit{shared database} dan \textit{shared schema}
+pada modul Asset Management, Inventory, dan Rental berbasis web.
 
-\begin{description}
-  \item[BAB I Pendahuluan] Berisi latar belakang, rumusan masalah, tujuan, manfaat,
-    batasan masalah, dan sistematika penulisan.
-  \item[BAB II Tinjauan Pustaka] Berisi teori-teori yang mendukung penelitian.
-  \item[BAB III Metodologi Penelitian] Berisi metode dan langkah-langkah penelitian.
-  \item[BAB IV Hasil dan Pembahasan] Berisi hasil penelitian dan pembahasannya.
-  \item[BAB V Penutup] Berisi kesimpulan dan saran.
-\end{description}
+Tahapan penelitian dilakukan melalui proses analisis kebutuhan sistem, perancangan arsitektur
+multitenant, implementasi mekanisme \textit{tenant isolation} dan \textit{provisioning} tenant,
+serta pengujian sistem untuk memastikan pengelolaan data antar tenant berjalan sesuai dengan
+rancangan yang telah dibuat.
+
+\section{Jadwal Pelaksanaan}
+
+Jadwal pelaksanaan penelitian disusun berdasarkan tahapan perancangan arsitektur multitenant yang
+meliputi studi literatur, analisis kebutuhan sistem dan identifikasi permasalahan arsitektural
+pada pendekatan non multitenant, perancangan arsitektur multitenant berbasis \textit{shared
+database} dan \textit{shared schema}, perancangan mekanisme isolasi data dan \textit{provisioning}
+tenant otomatis, implementasi prototipe arsitektur sebagai pembuktian konsep, evaluasi kesesuaian
+arsitektur terhadap parameter yang telah ditetapkan, serta penyusunan laporan akhir penelitian.
+Rincian waktu dan tahapan pelaksanaan penelitian disajikan pada Tabel \ref{tab:jadwal}.
+
+\begin{table}[H]
+  \caption{Jadwal Pelaksanaan Tugas Akhir.}
+  \label{tab:jadwal}
+  \centering
+  \fontsize{10}{12}\selectfont
+  \setlength{\arrayrulewidth}{0.5pt}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{|>{\centering\arraybackslash}p{0.4cm}|>{\raggedright\arraybackslash}p{4.8cm}|>{\centering\arraybackslash}p{1.0cm}|>{\centering\arraybackslash}p{1.0cm}|>{\centering\arraybackslash}p{1.0cm}|>{\centering\arraybackslash}p{1.0cm}|>{\centering\arraybackslash}p{1.0cm}|>{\centering\arraybackslash}p{1.0cm}|}
+    \hline
+    \multicolumn{1}{|>{\centering\arraybackslash}m{0.4cm}|}{\cellcolor{black}\color{white}\textbf{No.}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{4.8cm}|}{\cellcolor{black}\color{white}\textbf{Deskripsi Tahapan}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{1.0cm}|}{\cellcolor{black}\color{white}\textbf{\shortstack{Bulan\\1}}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{1.0cm}|}{\cellcolor{black}\color{white}\textbf{\shortstack{Bulan\\2}}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{1.0cm}|}{\cellcolor{black}\color{white}\textbf{\shortstack{Bulan\\3}}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{1.0cm}|}{\cellcolor{black}\color{white}\textbf{\shortstack{Bulan\\4}}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{1.0cm}|}{\cellcolor{black}\color{white}\textbf{\shortstack{Bulan\\5}}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{1.0cm}|}{\cellcolor{black}\color{white}\textbf{\shortstack{Bulan\\6}}} \\
+    \hline
+    1 & Studi Literatur dan Pengumpulan Referensi & \cellcolor{black} & & & & & \tabularnewline
+    \hline
+    2 & Analisis Kebutuhan Sistem dan Identifikasi Permasalahan & \cellcolor{black} & \cellcolor{black} & & & & \tabularnewline
+    \hline
+    3 & Perancangan Arsitektur Multitenant & & \cellcolor{black} & \cellcolor{black} & & & \tabularnewline
+    \hline
+    4 & Perancangan Mekanisme Tenant Isolation dan Provisioning Tenant & & & \cellcolor{black} & \cellcolor{black} & & \tabularnewline
+    \hline
+    5 & Implementasi Arsitektur dan Fitur Multitenancy & & & & \cellcolor{black} & \cellcolor{black} & \tabularnewline
+    \hline
+    6 & Evaluasi dan Pengujian Sistem & & & & & \cellcolor{black} & \tabularnewline
+    \hline
+    7 & Analisis Hasil Pengujian & & & & & \cellcolor{black} & \cellcolor{black} \tabularnewline
+    \hline
+    8 & Penyusunan dan Revisi Laporan Tugas Akhir & & & & & & \cellcolor{black} \tabularnewline
+    \hline
+    9 & Persiapan Presentasi dan Sidang Tugas Akhir & & & & & & \cellcolor{black} \tabularnewline
+    \hline
+  \end{tabular}
+\end{table}
