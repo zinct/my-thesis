@@ -1,104 +1,218 @@
 \chapter{Hasil Percobaan dan Analisis}
 
-\section{Hasil Implementasi Sistem}
+\section{Lingkungan Pengujian}
 
-Pada tahap implementasi, rancangan arsitektur multitenant berbasis \textit{shared database} dan
-\textit{shared schema} diterapkan pada platform manajemen aset, inventori, dan rental berbasis web
-yang dikembangkan dalam proyek \textit{capstone}. Implementasi dilakukan untuk mendukung
-pengelolaan banyak tenant dalam satu sistem terpusat dengan tetap menjaga isolasi data antar
-organisasi.
+Pengujian dilakukan untuk memverifikasi implementasi arsitektur \textit{multitenant} yang telah dirancang pada penelitian ini. Fokus pengujian meliputi mekanisme \textit{tenant isolation}, \textit{tenant provisioning}, serta penerapan \textit{shared database} dan \textit{shared schema}. Seluruh pengujian dilakukan pada lingkungan pengembangan (\textit{development environment}) menggunakan aplikasi yang telah diimplementasikan berdasarkan rancangan pada Bab 3.
 
-Sistem yang dikembangkan terdiri dari beberapa komponen utama, yaitu \textit{frontend application},
-\textit{backend service}, dan basis data multitenant. Seluruh tenant menggunakan aplikasi dan basis
-data yang sama, sedangkan pemisahan data dilakukan menggunakan mekanisme \textit{tenant scoping}
-pada \textit{application layer}. Selain itu, sistem juga mendukung proses \textit{provisioning}
-tenant otomatis untuk mempermudah \textit{onboarding} tenant baru tanpa memerlukan konfigurasi
-infrastruktur yang terpisah.
+Pengujian dilakukan melalui antarmuka aplikasi, layanan API, serta verifikasi langsung pada basis data. Penggunaan beberapa metode verifikasi tersebut bertujuan untuk memastikan bahwa hasil pengujian tidak hanya terlihat pada tampilan aplikasi, tetapi juga sesuai dengan data yang tersimpan pada basis data.
 
-\begin{figure}[h]
+\begin{table}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{assets/image7.png}
-  \caption{Arsitektur Implementasi Sistem}
-  \label{fig:arsitektur_implementasi}
+  \caption{Lingkungan Pengujian}
+  \label{tab:lingkungan_pengujian}
+  \begin{tabular}{|p{5cm}|p{8cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{Komponen} & \textbf{Spesifikasi} \\
+    \hline
+    Sistem Operasi & macOS Sequoia 15.4.1 \\
+    \hline
+    Bahasa Pemrograman & Go 1.24.3 darwin/arm64 \\
+    \hline
+    Framework HTTP & Gin \\
+    \hline
+    Basis Data & PostgreSQL 17 \\
+    \hline
+    API Testing Tool & Postman \\
+    \hline
+    Database Client & TablePlus \\
+    \hline
+    Web Browser & Microsoft Edge \\
+    \hline
+    Arsitektur Basis Data & \textit{Shared Database} dan \textit{Shared Schema} \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Berdasarkan lingkungan pengujian pada Tabel \ref{tab:lingkungan_pengujian}, seluruh skenario pengujian dilakukan menggunakan konfigurasi yang sama untuk menjaga konsistensi hasil pengujian. Lingkungan tersebut digunakan untuk menjalankan seluruh fitur pada platform manajemen aset, inventori, dan \textit{rental}.
+
+Skenario pengujian yang digunakan pada penelitian ini dijelaskan pada subbab berikutnya.
+
+\section{Skenario Percobaan}
+
+Pengujian dilakukan berdasarkan rancangan pengujian yang telah dijelaskan pada Bab 3. Fokus pengujian meliputi mekanisme \textit{tenant isolation}, \textit{tenant provisioning}, serta implementasi \textit{shared database} dan \textit{shared schema}. Setiap pengujian dilakukan untuk memverifikasi bahwa arsitektur \textit{multitenant} yang diusulkan telah berjalan sesuai dengan kebutuhan sistem dan indikator keberhasilan yang telah ditetapkan.
+
+\subsection{Skenario Pengujian Tenant Isolation}
+
+Pengujian \textit{tenant isolation} dilakukan untuk memastikan bahwa setiap \textit{tenant} hanya dapat mengakses data yang berada dalam ruang lingkup \textit{tenant} yang sesuai. Pengujian menggunakan dua \textit{tenant} yang berbeda, yaitu Tenant A dan Tenant B, yang masing-masing memiliki data operasional tersendiri.
+
+\begin{table}[H]
+  \centering
+  \caption{Skenario Pengujian \textit{Tenant Isolation}}
+  \label{tab:skenario_pengujian_tenant_isolation}
+  \footnotesize
+  \begin{tabular}{|c|p{6cm}|p{6.5cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{No} & \textbf{Langkah Pengujian} & \textbf{Hasil yang Diharapkan} \\
+    \hline
+    1 & Login sebagai pengguna Tenant A & Pengguna berhasil masuk ke sistem \\
+    \hline
+    2 & Mengakses data aset Tenant A & Data aset Tenant A berhasil ditampilkan \\
+    \hline
+    3 & Login sebagai pengguna Tenant B & Pengguna berhasil masuk ke sistem \\
+    \hline
+    4 & Mengakses data aset Tenant B & Data aset Tenant B berhasil ditampilkan \\
+    \hline
+    5 & Mencoba mengakses data \textit{tenant} lain & Akses ditolak atau data tidak ditampilkan \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Pengujian dilakukan melalui antarmuka aplikasi, respons API, dan verifikasi data pada basis data untuk memastikan mekanisme isolasi data berjalan dengan baik.
+
+\subsection{Skenario Pengujian Tenant Provisioning}
+
+Pengujian \textit{tenant provisioning} dilakukan untuk memverifikasi proses pembuatan \textit{tenant} baru beserta konfigurasi awal yang dibutuhkan agar \textit{tenant} dapat langsung menggunakan sistem.
+
+\begin{table}[H]
+  \centering
+  \caption{Skenario Pengujian \textit{Tenant Provisioning}}
+  \label{tab:skenario_pengujian_tenant_provisioning}
+  \footnotesize
+  \begin{tabular}{|c|p{6cm}|p{6.5cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{No} & \textbf{Langkah Pengujian} & \textbf{Hasil yang Diharapkan} \\
+    \hline
+    1 & Mengisi formulir registrasi \textit{tenant} & Data registrasi diterima sistem \\
+    \hline
+    2 & Mengirim permintaan registrasi & Data \textit{tenant} berhasil dibuat \\
+    \hline
+    3 & Memeriksa data \textit{role} & \textit{Role} administrator berhasil dibuat \\
+    \hline
+    4 & Memeriksa data \textit{permission} & \textit{Permission} berhasil dikaitkan dengan \textit{role} administrator \\
+    \hline
+    5 & Memeriksa data pengguna & Akun administrator berhasil dibuat \\
+    \hline
+    6 & Login menggunakan akun administrator & Pengguna berhasil masuk ke sistem \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Pengujian ini bertujuan untuk memastikan seluruh proses \textit{onboarding} \textit{tenant} berjalan secara otomatis tanpa memerlukan konfigurasi manual tambahan.
+
+\subsection{Skenario Pengujian Shared Database dan Shared Schema}
+
+Pengujian \textit{shared database} dan \textit{shared schema} dilakukan untuk memastikan bahwa beberapa \textit{tenant} dapat menggunakan basis data dan struktur tabel yang sama tanpa menyebabkan pencampuran data antar \textit{tenant}.
+
+\begin{table}[H]
+  \centering
+  \caption{Skenario Pengujian \textit{Shared Database} dan \textit{Shared Schema}}
+  \label{tab:skenario_pengujian_shared_database}
+  \footnotesize
+  \begin{tabular}{|c|p{6cm}|p{6.5cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{No} & \textbf{Langkah Pengujian} & \textbf{Hasil yang Diharapkan} \\
+    \hline
+    1 & Tenant A menambahkan data aset & Data berhasil tersimpan \\
+    \hline
+    2 & Tenant B menambahkan data aset & Data berhasil tersimpan \\
+    \hline
+    3 & Memeriksa tabel aset pada basis data & Data kedua \textit{tenant} berada pada tabel yang sama \\
+    \hline
+    4 & Memeriksa atribut \textit{tenant\_id} & Setiap data memiliki identitas \textit{tenant} yang sesuai \\
+    \hline
+    5 & Mengakses data melalui aplikasi & Data tetap ditampilkan sesuai \textit{tenant} yang aktif \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Melalui skenario tersebut, dapat diverifikasi bahwa pendekatan \textit{shared database} dan \textit{shared schema} mampu mendukung penggunaan oleh banyak \textit{tenant} tanpa mengurangi kemampuan sistem dalam memisahkan data antar \textit{tenant}.
+
+\section{Hasil Pengujian}
+
+\subsection{Hasil Pengujian Tenant Isolation}
+
+Pengujian \textit{tenant isolation} dilakukan untuk memverifikasi bahwa setiap \textit{tenant} hanya dapat mengakses data yang berada dalam ruang lingkup \textit{tenant} yang sesuai. Pengujian ini merupakan salah satu aspek penting dalam penelitian karena arsitektur yang diusulkan menggunakan pendekatan \textit{shared database} dan \textit{shared schema}. Pada pendekatan tersebut, seluruh \textit{tenant} menggunakan basis data dan struktur tabel yang sama sehingga diperlukan mekanisme yang mampu menjaga pemisahan data antar \textit{tenant}.
+
+Pengujian dilakukan menggunakan dua \textit{tenant} yang berbeda, yaitu Tenant A dengan akun administrator \textbf{gab@test.com} dan Tenant B dengan akun administrator \textbf{indramahesa128@gmail.com}. Kedua \textit{tenant} memiliki data aset yang tersimpan pada tabel yang sama, namun dibedakan menggunakan atribut \textit{tenant\_id}. Pengujian dilakukan melalui antarmuka aplikasi, layanan API, dan pemeriksaan langsung pada basis data.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test1/web1.png}
+  \caption{Data Aset Tenant A pada Aplikasi}
+  \label{fig:data_aset_tenant_a}
 \end{figure}
 
-Gambar \ref{fig:arsitektur_implementasi} menunjukkan arsitektur implementasi sistem yang digunakan pada platform
-\textit{multi organization} berbasis web. Seluruh tenant menggunakan aplikasi dan basis data yang
-sama dalam satu sistem terpusat dengan mekanisme \textit{tenant scoping} untuk menjaga isolasi
-data antar tenant.
+Berdasarkan Gambar \ref{fig:data_aset_tenant_a}, pengguna dengan akun \textbf{gab@test.com} hanya dapat melihat data aset yang dimiliki oleh Tenant A. Seluruh data yang ditampilkan pada halaman pengelolaan aset berasal dari \textit{tenant} yang sama dengan akun yang digunakan untuk login. Data milik \textit{tenant} lain tidak ditampilkan pada halaman tersebut meskipun tersimpan pada basis data yang sama.
 
-\section{Implementasi Platform \textit{Multi Organization}}
-
-Platform yang dikembangkan mendukung pengelolaan banyak organisasi dalam satu aplikasi bersama.
-Setiap tenant memiliki pengguna, data aset, data inventori, serta data rental masing-masing yang
-dikelola dalam satu sistem terpusat. Pada implementasinya, tenant tidak memerlukan
-\textit{instance} aplikasi atau basis data yang terpisah sehingga pengelolaan sistem dapat
-dilakukan secara lebih efisien.
-
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{assets/image8.png}
-  \caption{Implementasi Dashboard \textit{Multi Organization}}
-  \label{fig:dashboard_multi_org}
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test1/web2.png}
+  \caption{Data Aset Tenant B pada Aplikasi}
+  \label{fig:data_aset_tenant_b}
 \end{figure}
 
-Pada sistem yang diimplementasikan, setiap pengguna akan melakukan autentikasi sebelum mengakses
-platform. Setelah proses autentikasi berhasil, sistem akan menyesuaikan akses data berdasarkan
-konteks tenant pengguna yang sedang \textit{login}.
+Hasil pengujian pada Gambar \ref{fig:data_aset_tenant_b} menunjukkan bahwa pengguna dengan akun \textbf{indramahesa128@gmail.com} hanya dapat mengakses data aset yang dimiliki oleh Tenant B. Data yang ditampilkan berbeda dengan data yang diperoleh oleh Tenant A. Hal tersebut menunjukkan bahwa sistem berhasil menerapkan pemfilteran data berdasarkan identitas \textit{tenant} yang diperoleh pada saat proses autentikasi.
 
-\section{Implementasi Arsitektur Multitenant}
+Untuk memastikan bahwa data kedua \textit{tenant} memang tersimpan pada basis data yang sama, dilakukan pemeriksaan langsung pada tabel \textit{assets}. Hasil pemeriksaan ditunjukkan pada Gambar \ref{fig:data_aset_database}.
 
-Implementasi arsitektur multitenant dilakukan menggunakan pendekatan \textit{shared database} dan
-\textit{shared schema}. Seluruh tenant menggunakan tabel dan struktur basis data yang sama dengan
-tetap mempertahankan pemisahan data menggunakan atribut \texttt{tenant\_id}.
-
-Pendekatan tersebut memungkinkan sistem mendukung pengelolaan tenant secara terpusat tanpa
-memerlukan pembuatan basis data baru untuk setiap tenant. Selain itu, pendekatan \textit{shared
-schema} juga membantu meningkatkan efisiensi penggunaan \textit{resource} infrastruktur dan
-mempermudah proses \textit{maintenance} sistem.
-
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{assets/image9.png}
-  \caption{Struktur \textit{Shared Database} dan \textit{Shared Schema}}
-  \label{fig:shared_db_schema}
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test1/db.png}
+  \caption{Data Aset Beberapa \textit{Tenant} pada Tabel \textit{Assets}}
+  \label{fig:data_aset_database}
 \end{figure}
 
-Gambar \ref{fig:shared_db_schema} menunjukkan contoh implementasi struktur basis data multitenant menggunakan atribut
-\texttt{tenant\_id} untuk membedakan data antar tenant dalam satu skema basis data bersama.
+Berdasarkan Gambar \ref{fig:data_aset_database}, data aset dari Tenant A dan Tenant B tersimpan pada tabel \textit{assets} yang sama. Setiap data memiliki atribut \textit{tenant\_id} yang digunakan sebagai identitas kepemilikan data. Atribut tersebut menjadi dasar bagi sistem untuk menentukan data mana yang dapat diakses oleh \textit{tenant} yang sedang aktif. Dengan demikian, meskipun seluruh \textit{tenant} menggunakan tabel yang sama, sistem tetap mampu menjaga pemisahan data antar \textit{tenant}.
 
-\section{Implementasi \textit{Tenant Context}}
+Selain melalui antarmuka aplikasi, verifikasi juga dilakukan pada lapisan layanan API. Pengujian ini bertujuan untuk memastikan bahwa mekanisme \textit{tenant isolation} diterapkan secara konsisten pada seluruh lapisan sistem dan tidak hanya pada tampilan aplikasi.
 
-Implementasi \textit{tenant context} dilakukan pada \textit{application layer} untuk memastikan
-setiap tenant hanya dapat mengakses data miliknya sendiri. Sistem menggunakan konteks autentikasi
-pengguna untuk menentukan tenant aktif pada setiap proses \textit{request} yang dilakukan ke dalam
-sistem.
-
-Pada implementasinya, \textit{tenant context} digunakan pada proses \textit{filtering} data
-sehingga seluruh \textit{query} yang dijalankan akan disesuaikan dengan tenant pengguna yang
-sedang \textit{login}. Pendekatan ini membantu menjaga konsistensi isolasi data antar tenant dalam
-satu platform bersama.
-
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{assets/image10.png}
-  \caption{Alur Pengelolaan \textit{Tenant Context} pada \textit{Application Layer}}
-  \label{fig:tenant_context}
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test1/api1.png}
+  \caption{Respons API Pengambilan Data Aset Tenant A}
+  \label{fig:api_tenant_a}
 \end{figure}
 
-Gambar \ref{fig:tenant_context} menunjukkan alur pengelolaan \textit{tenant context} pada \textit{application layer}
-untuk mendukung mekanisme isolasi data antar tenant pada platform multitenant.
+Berdasarkan Gambar \ref{fig:api_tenant_a}, layanan API hanya mengembalikan data aset yang dimiliki Tenant A. Data yang berasal dari Tenant B tidak terdapat pada respons yang diterima pengguna. Hasil tersebut menunjukkan bahwa identitas \textit{tenant} yang tersimpan pada token autentikasi berhasil digunakan sebagai parameter pembatas akses data.
 
-\section{Analisis Hasil Implementasi}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test1/api2.png}
+  \caption{Respons API Pengambilan Data Aset Tenant B}
+  \label{fig:api_tenant_b}
+\end{figure}
 
-Implementasi arsitektur multitenant dilakukan untuk mendukung pengelolaan banyak tenant dalam satu
-platform terpusat dengan tetap menjaga isolasi data antar organisasi. Pada penelitian ini,
-implementasi dilakukan menggunakan pendekatan \textit{shared database} dan \textit{shared schema},
-di mana seluruh tenant menggunakan aplikasi dan basis data yang sama dalam satu lingkungan sistem
-bersama.
+Hasil yang ditunjukkan pada Gambar \ref{fig:api_tenant_b} memperlihatkan bahwa pengguna Tenant B memperoleh data yang berbeda dengan Tenant A. Sistem hanya mengembalikan data yang memiliki keterkaitan dengan \textit{tenant} yang sedang aktif. Dengan demikian, akses terhadap data \textit{tenant} lain dapat dicegah meskipun permintaan dilakukan melalui \textit{endpoint} API yang sama.
 
-Pendekatan multitenant dipilih karena mampu mendukung efisiensi penggunaan \textit{resource}
-infrastruktur, mempermudah proses \textit{maintenance} sistem, serta mendukung \textit{scalability}
-ketika jumlah tenant terus bertambah. Selain itu, pendekatan ini juga mendukung pengelolaan tenant
-secara terpusat tanpa memerlukan \textit{instance} aplikasi maupun basis data yang terpisah untuk
-setiap organisasi.
+Untuk mempermudah evaluasi hasil pengujian, ringkasan hasil pengujian \textit{tenant isolation} disajikan pada Tabel \ref{tab:hasil_pengujian_tenant_isolation}.
+
+\begin{table}[H]
+  \centering
+  \caption{Hasil Pengujian \textit{Tenant Isolation}}
+  \label{tab:hasil_pengujian_tenant_isolation}
+  \footnotesize
+  \begin{tabular}{|c|p{5cm}|p{4cm}|p{2.5cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Hasil yang Diharapkan} & \textbf{Hasil Pengujian} \\
+    \hline
+    1 & Tenant A mengakses data aset Tenant A & Data berhasil ditampilkan & Berhasil \\
+    \hline
+    2 & Tenant B mengakses data aset Tenant B & Data berhasil ditampilkan & Berhasil \\
+    \hline
+    3 & Tenant A mencoba mengakses data Tenant B & Data tidak ditampilkan & Berhasil \\
+    \hline
+    4 & Tenant B mencoba mengakses data Tenant A & Data tidak ditampilkan & Berhasil \\
+    \hline
+    5 & \textit{Tenant} melakukan perubahan data aset & Perubahan hanya berlaku pada data \textit{tenant} terkait & Berhasil \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Berdasarkan hasil pengujian pada Tabel \ref{tab:hasil_pengujian_tenant_isolation}, seluruh skenario pengujian berhasil dijalankan sesuai dengan hasil yang diharapkan. Pengguna hanya dapat mengakses data yang berada dalam ruang lingkup \textit{tenant} yang sesuai, baik melalui antarmuka aplikasi maupun layanan API. Selain itu, pemeriksaan pada basis data menunjukkan bahwa data dari beberapa \textit{tenant} dapat disimpan pada tabel yang sama tanpa menyebabkan pencampuran data.
+
+Hasil tersebut menunjukkan bahwa mekanisme \textit{tenant isolation} yang dirancang pada penelitian ini berhasil diterapkan pada lapisan aplikasi, layanan API, dan basis data. Dengan demikian, pendekatan \textit{shared database} dan \textit{shared schema} yang digunakan tetap mampu menjaga pemisahan data antar \textit{tenant} sesuai dengan tujuan penelitian yang telah ditetapkan.
