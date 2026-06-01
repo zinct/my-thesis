@@ -1,320 +1,434 @@
 \chapter{Perancangan Sistem}
 
-\section{Analisis Kebutuhan Sistem}
-
-Analisis kebutuhan sistem dilakukan untuk mengidentifikasi kebutuhan fungsional dan non fungsional
-pada platform manajemen aset, inventori, dan rental berbasis web yang dikembangkan dalam proyek
-\textit{capstone}. Tahap analisis kebutuhan dilakukan sebagai dasar dalam perancangan arsitektur
-multitenant agar sistem mampu mendukung pengelolaan banyak organisasi dalam satu platform secara
-efisien dan terpusat.
-
-Pada platform \textit{multi organization}, setiap organisasi memiliki pengguna, data, serta proses
-operasional yang berbeda sehingga sistem memerlukan mekanisme pengelolaan tenant yang mampu
-menjaga isolasi data antar organisasi. Selain itu, sistem juga memerlukan mekanisme
-\textit{provisioning} tenant yang mendukung proses \textit{onboarding} tenant baru secara lebih
-cepat dan konsisten tanpa meningkatkan kompleksitas pengelolaan sistem.
-
-Berdasarkan kebutuhan tersebut, analisis dilakukan terhadap kebutuhan pengelolaan tenant,
-kebutuhan isolasi data, kebutuhan \textit{scalability} sistem, serta efisiensi penggunaan
-\textit{resource} infrastruktur pada platform \textit{multi organization}. Hasil analisis
-kebutuhan ini digunakan sebagai dasar dalam perancangan arsitektur multitenant berbasis
-\textit{shared database} dan \textit{shared schema}.
-
 \section{Gambaran Umum Sistem}
 
-Sistem yang dikembangkan merupakan platform manajemen aset, inventori, dan rental berbasis web
-yang dirancang untuk mendukung banyak organisasi dalam satu layanan terpusat. Platform ini
-memungkinkan setiap organisasi memiliki pengguna, data, dan proses operasional masing-masing
-dalam satu aplikasi bersama.
+Penelitian ini berfokus pada perancangan arsitektur \textit{multitenant} pada modul pengelolaan aset, inventori, dan \textit{rental} dalam \textit{platform} RTPintar. Arsitektur yang dirancang bertujuan mendukung penggunaan sistem oleh banyak organisasi melalui satu aplikasi yang sama dengan tetap menjaga pemisahan data antar \textit{tenant}. Pendekatan tersebut diharapkan dapat meningkatkan efisiensi pengelolaan infrastruktur serta menyederhanakan proses penambahan \textit{tenant} baru.
 
-Dalam implementasinya, setiap tenant memiliki kebutuhan pengelolaan data yang terpisah sehingga
-sistem memerlukan mekanisme isolasi data untuk memastikan setiap organisasi hanya dapat mengakses
-data miliknya sendiri. Selain itu, sistem juga memerlukan mekanisme pengelolaan tenant yang mampu
-mendukung \textit{onboarding} tenant baru secara efisien tanpa memerlukan konfigurasi infrastruktur
-yang terpisah untuk setiap organisasi.
+Modul yang dikembangkan menyediakan layanan pengelolaan aset, inventori, dan \textit{rental} yang dapat digunakan oleh berbagai organisasi dengan kebutuhan operasional yang berbeda. Setiap organisasi direpresentasikan sebagai \textit{tenant} yang memiliki pengguna, data, dan aktivitas operasional masing masing. Meskipun menggunakan aplikasi yang sama, setiap \textit{tenant} hanya dapat mengakses data yang berada dalam ruang lingkup \textit{tenant} tersebut.
 
-Untuk mendukung kebutuhan tersebut, sistem dirancang menggunakan pendekatan arsitektur multitenant
-berbasis \textit{shared database} dan \textit{shared schema}. Pendekatan ini memungkinkan seluruh
-tenant menggunakan aplikasi dan basis data yang sama dengan tetap mempertahankan isolasi data antar
-tenant melalui mekanisme \textit{tenant scoping} pada \textit{application layer}.
-
-Pada sistem yang dirancang, pengguna akan melakukan autentikasi ke dalam platform dan setiap proses
-akses data akan disesuaikan dengan konteks tenant pengguna yang sedang \textit{login}. Dengan
-pendekatan tersebut, platform dapat mendukung pengelolaan banyak tenant secara lebih efisien,
-terpusat, dan \textit{scalable} dibandingkan pendekatan non multitenant yang menggunakan
-\textit{instance} terpisah untuk setiap organisasi.
-
-Ruang lingkup sistem dalam penelitian ini mencakup pengelolaan data aset, inventori, dan rental
-sebagai konteks penerapan arsitektur multitenant. Sistem dirancang untuk mendukung penggunaan oleh
-banyak tenant dalam satu platform, dengan mekanisme isolasi data, pengelolaan konteks tenant, dan
-\textit{provisioning} tenant otomatis. Penelitian ini tidak mencakup pengembangan antarmuka
-pengguna secara detail maupun optimalisasi performa tingkat rendah, melainkan berfokus pada
-rancangan arsitektur dan mekanisme pendukung yang memastikan efisiensi infrastruktur dan keamanan
-data pada platform multi organisasi.
-
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{assets/image2.png}
-  \caption{Diagram Konteks Sistem Manajemen Aset, Inventori, dan Rental}
-  \label{fig:diagram_konteks}
+  \includegraphics[width=0.8\textwidth]{assets/bab3/1.png}
+  \caption{Arsitektur Umum Sistem \textit{Multitenant} pada \textit{Platform} RTPintar}
+  \label{fig:arsitektur_umum_sistem}
 \end{figure}
 
-\section{Perancangan Arsitektur Multitenant}
+Berdasarkan Gambar \ref{fig:arsitektur_umum_sistem}, seluruh \textit{tenant} menggunakan layanan yang sama pada \textit{platform} RTPintar. Data dari setiap \textit{tenant} disimpan pada basis data yang sama menggunakan pendekatan \textit{shared database} dan \textit{shared schema}. Pemisahan data dilakukan melalui identitas \textit{tenant} yang digunakan pada setiap proses akses dan pengelolaan data.
 
-Perancangan arsitektur multitenant merupakan inti dari penelitian ini karena berfungsi sebagai
-solusi terhadap permasalahan efisiensi infrastruktur dan pengelolaan data multi organisasi dalam
-satu platform terpusat. Arsitektur yang dirancang harus mampu melayani banyak tenant secara
-bersamaan tanpa mencampurkan data antar tenant, serta tetap efisien dari sisi penggunaan sumber
-daya sistem.
+Selain mendukung penggunaan oleh banyak \textit{tenant}, sistem juga dirancang untuk mendukung proses \textit{tenant provisioning} secara terpusat. Ketika \textit{tenant} baru ditambahkan, sistem tidak memerlukan instansi aplikasi maupun basis data baru. \textit{Tenant} cukup didaftarkan ke dalam sistem dan dapat langsung menggunakan layanan yang tersedia sesuai hak akses yang diberikan.
 
-\subsection{Pemilihan Arsitektur Multitenant}
+Perancangan pada penelitian ini difokuskan pada tiga aspek utama, yaitu mekanisme identifikasi \textit{tenant}, penerapan \textit{tenant isolation}, serta pengelolaan \textit{tenant provisioning}. Ketiga aspek tersebut menjadi dasar dalam implementasi arsitektur \textit{multitenant} yang akan dijelaskan pada subbab berikutnya.
 
-Arsitektur yang dipilih dalam penelitian ini adalah arsitektur multitenant berbasis aplikasi
-terpusat, di mana satu \textit{instance} aplikasi digunakan oleh seluruh tenant. Setiap permintaan
-yang masuk ke sistem diproses dalam konteks tenant tertentu yang ditentukan secara otomatis oleh
-sistem pada sisi \textit{server}. Pendekatan ini dipilih untuk menghindari duplikasi aplikasi dan
-konfigurasi sistem yang umum terjadi pada pendekatan non multitenant.
+\section{Analisis Permasalahan dan Kebutuhan Sistem}
 
-Dalam arsitektur ini, tenant diperlakukan sebagai entitas logis, bukan sebagai unit fisik berupa
-\textit{instance} aplikasi atau basis data terpisah. Dengan demikian, sistem dapat melayani
-pertumbuhan jumlah tenant tanpa perlu menambah \textit{instance} aplikasi baru, sehingga mendukung
-skalabilitas dan efisiensi infrastruktur.
+Modul pengelolaan aset, inventori, dan \textit{rental} pada \textit{platform} RTPintar dirancang untuk mendukung kebutuhan banyak organisasi dalam satu lingkungan aplikasi. Setiap organisasi memiliki pengguna, data, dan aktivitas operasional yang berbeda. Kondisi tersebut menimbulkan kebutuhan akan mekanisme yang mampu menjaga pemisahan data antar organisasi tanpa mengurangi kemudahan pengelolaan sistem.
 
-\subsection{Justifikasi Pemilihan \textit{Shared Database} dan \textit{Shared Schema}}
+Berdasarkan dokumen \textit{Software Requirements Specification} (SRS), sistem menyediakan layanan pengelolaan aset, inventori, penyewaan, pengguna, laporan, dan pengaturan \textit{tenant}. Seluruh layanan tersebut harus dapat digunakan oleh banyak \textit{tenant} secara bersamaan dalam satu aplikasi yang sama. Oleh karena itu, diperlukan pendekatan arsitektur yang mampu mendukung penggunaan bersama (\textit{resource sharing}) dengan tetap menjaga isolasi data setiap \textit{tenant}.
 
-Model penyimpanan data yang digunakan adalah \textit{shared database} dan \textit{shared schema},
-di mana seluruh tenant menggunakan satu basis data dan satu skema yang sama. Setiap data yang
-bersifat spesifik tenant dibedakan menggunakan atribut identitas tenant, seperti
-\texttt{tenant\_id}, yang secara konsisten diterapkan pada seluruh operasi basis data.
-
-Pemilihan model ini didasarkan pada beberapa pertimbangan utama. Pertama, \textit{shared schema}
-memungkinkan efisiensi penggunaan infrastruktur karena tidak diperlukan basis data atau skema
-terpisah untuk setiap tenant. Kedua, pengelolaan sistem menjadi lebih sederhana karena pemeliharaan
-dan pembaruan skema dilakukan secara terpusat. Ketiga, model ini mendukung proses
-\textit{provisioning} tenant otomatis, karena tenant baru dapat ditambahkan tanpa perlu membuat
-struktur basis data baru.
-
-Meskipun model \textit{shared schema} memiliki tantangan terkait isolasi data, risiko tersebut
-diatasi melalui mekanisme \textit{tenant scoping} pada lapisan aplikasi, di mana setiap permintaan
-dipastikan selalu membawa konteks tenant sebelum diproses lebih lanjut. Dengan pendekatan ini,
-isolasi data dijaga secara logis meskipun sumber daya fisik digunakan bersama.
-
-Pada pendekatan non multitenant, setiap organisasi biasanya dikelola melalui \textit{instance}
-aplikasi dan basis data terpisah. Pendekatan ini memberikan isolasi data secara fisik, namun
-menimbulkan beban infrastruktur yang tinggi, kompleksitas pengelolaan sistem, serta kesulitan
-dalam menjaga konsistensi konfigurasi ketika jumlah organisasi meningkat.
-
-Sebaliknya, arsitektur multitenant berbasis \textit{shared database} dan \textit{shared schema}
-memungkinkan satu sistem melayani banyak tenant secara bersamaan dengan penggunaan sumber daya
-yang lebih efisien. Isolasi data tidak lagi bergantung pada pemisahan fisik, melainkan pada
-pengendalian konteks tenant di dalam aplikasi. Perbandingan ini menunjukkan bahwa pendekatan
-multitenant lebih sesuai untuk platform layanan multi organisasi berskala nasional yang menuntut
-efisiensi dan kemudahan pengelolaan sistem.
-
-\begin{figure}[h]
+\begin{table}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{assets/image3.png}
-  \caption{Arsitektur Sistem Multitenant Berbasis \textit{Shared Database} dan \textit{Shared Schema}}
-  \label{fig:arsitektur_multitenant}
+  \caption{Ringkasan Kebutuhan Sistem}
+  \label{tab:kebutuhan_sistem}
+  \begin{tabular}{|c|p{11cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{Kode} & \textbf{Kebutuhan Sistem} \\
+    \hline
+    FR-1 & Sistem mampu mendukung banyak \textit{tenant} dalam satu aplikasi. \\
+    \hline
+    FR-2 & Sistem mampu mengidentifikasi \textit{tenant} pada setiap permintaan yang diterima. \\
+    \hline
+    FR-3 & Sistem mampu membatasi akses data sesuai \textit{tenant} yang sedang aktif. \\
+    \hline
+    FR-4 & Sistem mampu mendukung pengelolaan aset, inventori, dan \textit{rental} untuk setiap \textit{tenant}. \\
+    \hline
+    FR-5 & Sistem mampu menyediakan proses \textit{tenant provisioning} secara terpusat. \\
+    \hline
+    FR-6 & Sistem mampu menggunakan basis data bersama untuk meningkatkan efisiensi pengelolaan infrastruktur. \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Berdasarkan kebutuhan yang telah diidentifikasi, terdapat tiga aspek utama yang menjadi fokus penelitian. Aspek pertama adalah mekanisme \textit{tenant identification} untuk menentukan \textit{tenant} yang sedang mengakses sistem. Aspek kedua adalah penerapan \textit{tenant isolation} untuk menjaga pemisahan data antar \textit{tenant}. Aspek ketiga adalah \textit{tenant provisioning} untuk mendukung proses penambahan \textit{tenant} baru secara lebih sederhana dan terstandarisasi.
+
+Ketiga aspek tersebut menjadi dasar dalam perancangan arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema}. Perancangan arsitektur yang diusulkan dijelaskan pada subbab berikutnya.
+
+\section{Perancangan Arsitektur Sistem}
+
+\subsection{Gambaran Arsitektur Sistem}
+
+Arsitektur sistem yang diusulkan pada penelitian dirancang untuk mendukung penggunaan sistem oleh banyak \textit{tenant} dalam satu aplikasi yang sama dengan tetap menjaga pemisahan data pada setiap \textit{tenant}. Untuk mencapai tujuan tersebut, sistem dibangun menggunakan beberapa lapisan (\textit{layer}) yang memiliki tanggung jawab berbeda sehingga proses pengelolaan \textit{tenant} dapat dilakukan secara terstruktur.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+    node distance=1cm,
+    component/.style={rectangle, draw, rounded corners, minimum width=6cm, minimum height=1.2cm, align=center, thick},
+    client/.style={rectangle, draw, rounded corners, minimum width=4cm, minimum height=1cm, align=center, fill=blue!10, thick},
+    middleware/.style={rectangle, draw, rounded corners, minimum width=6cm, minimum height=1cm, align=center, fill=green!10, thick},
+    layer/.style={rectangle, draw, rounded corners, minimum width=6cm, minimum height=1cm, align=center, fill=orange!10, thick},
+    database/.style={cylinder, draw, shape border rotate=90, aspect=0.25, minimum width=4cm, minimum height=1cm, align=center, fill=purple!10, thick},
+    arrow/.style={->, >=Stealth, thick}
+  ]
+    % Client
+    \node[client] (client) {Client};
+    
+    % Middleware Layer
+    \node[middleware, below=of client] (middleware) {\textit{Middleware}\\\small(Tenant, Auth, RBAC)};
+    
+    % Handler Layer
+    \node[layer, below=of middleware] (handler) {\textit{Handler Layer}};
+    
+    % Service Layer
+    \node[layer, below=of handler] (service) {\textit{Service Layer}};
+    
+    % Repository Layer
+    \node[layer, below=of service] (repository) {\textit{Repository Layer}};
+    
+    % Database
+    \node[database, below=of repository] (database) {Database};
+    
+    % Arrows
+    \draw[arrow] (client) -- (middleware);
+    \draw[arrow] (middleware) -- (handler);
+    \draw[arrow] (handler) -- (service);
+    \draw[arrow] (service) -- (repository);
+    \draw[arrow] (repository) -- (database);
+  \end{tikzpicture}
+  \caption{Arsitektur Sistem \textit{Multitenant} yang Diusulkan}
+  \label{fig:arsitektur_sistem_multitenant}
 \end{figure}
 
-\section{Perancangan Model Penyimpanan Data}
+Berdasarkan Gambar \ref{fig:arsitektur_sistem_multitenant}, seluruh permintaan dari pengguna akan diterima melalui lapisan \textit{middleware}. Lapisan ini bertugas melakukan identifikasi \textit{tenant}, proses autentikasi pengguna, serta validasi hak akses berdasarkan peran pengguna. Permintaan yang telah lolos validasi kemudian diteruskan ke \textit{handler layer} untuk diproses lebih lanjut.
 
-Perancangan model penyimpanan data bertujuan untuk menjelaskan bagaimana pendekatan
-\textit{shared database} dan \textit{shared schema} diterapkan pada sistem multitenant yang
-dirancang. Model ini digunakan untuk mendukung efisiensi infrastruktur dengan tetap menjaga
-isolasi data antar tenant melalui mekanisme pemisahan logis pada tingkat skema dan aplikasi.
+\textit{Handler layer} berfungsi sebagai penghubung antara permintaan pengguna dan logika bisnis sistem. Selanjutnya, \textit{service layer} menjalankan aturan bisnis sesuai kebutuhan modul yang diakses. Lapisan ini bertanggung jawab untuk memastikan proses bisnis berjalan sesuai dengan ketentuan yang telah ditetapkan.
 
-\subsection{Struktur \textit{Shared Database}}
+Akses terhadap basis data dilakukan melalui \textit{repository layer}. Lapisan ini bertugas mengelola komunikasi dengan basis data serta memastikan data yang diakses sesuai dengan konteks \textit{tenant} yang sedang aktif. Seluruh data \textit{tenant} disimpan pada basis data yang sama menggunakan pendekatan \textit{shared database} dan \textit{shared schema} untuk meningkatkan efisiensi pengelolaan infrastruktur.
 
-Sistem menggunakan satu basis data terpusat yang dipakai bersama oleh seluruh tenant. Seluruh
-tabel disimpan dalam satu skema basis data yang sama, sehingga tidak terdapat pemisahan fisik
-basis data atau skema untuk masing-masing tenant. Pendekatan ini dipilih untuk menyederhanakan
-pengelolaan basis data, mengurangi duplikasi struktur data, serta mendukung proses
-\textit{provisioning} tenant secara otomatis tanpa memerlukan pembuatan skema baru.
+Pemisahan tanggung jawab pada setiap lapisan memungkinkan sistem menjadi lebih mudah dikembangkan dan dipelihara. Selain itu, pendekatan tersebut mendukung penerapan mekanisme \textit{tenant isolation} secara konsisten pada seluruh proses yang berlangsung di dalam sistem.
 
-Struktur basis data dibagi menjadi dua kategori utama, yaitu tabel global dan tabel
-\textit{tenant scoped}, yang masing-masing memiliki peran berbeda dalam mendukung arsitektur
-multitenant.
+\subsection{Perancangan Identifikasi Tenant}
 
-\subsection{Peran \texttt{tenant\_id} dalam Isolasi Data}
+Pada arsitektur \textit{multitenant} yang diusulkan, setiap permintaan yang dikirim oleh pengguna harus memiliki informasi \textit{tenant} yang valid. Informasi tersebut digunakan sebagai dasar untuk menentukan ruang lingkup data yang dapat diakses selama proses pengolahan permintaan berlangsung. Oleh karena itu, sistem menerapkan mekanisme identifikasi \textit{tenant} pada tahap awal pemrosesan permintaan.
 
-Atribut \texttt{tenant\_id} berfungsi sebagai penanda utama untuk membedakan data milik
-masing-masing tenant dalam tabel \textit{tenant scoped}. Setiap \textit{record} yang berkaitan
-dengan data operasional organisasi, seperti aset, inventori, dan rental, selalu memiliki nilai
-\texttt{tenant\_id} yang mengidentifikasi kepemilikan data tersebut.
+Identitas \textit{tenant} disimpan pada \textit{JSON Web Token} (JWT) yang diterima setelah proses autentikasi berhasil. Selain informasi pengguna, token juga memuat informasi \textit{tenant} sehingga sistem dapat mengidentifikasi \textit{tenant} yang sedang aktif tanpa memerlukan proses pencarian tambahan ke basis data pada setiap permintaan.
 
-Dalam setiap operasi basis data, \texttt{tenant\_id} disertakan secara implisit melalui mekanisme
-\textit{tenant scoping} pada lapisan aplikasi. Dengan demikian, seluruh operasi baca dan tulis
-data selalu dibatasi pada tenant yang sesuai, sehingga mencegah terjadinya akses data lintas
-tenant meskipun seluruh data disimpan dalam satu skema yang sama.
-
-\subsection{Pemisahan Tabel Global dan \textit{Tenant Scoped}}
-
-Tabel global digunakan untuk menyimpan data yang bersifat umum dan tidak terikat pada tenant
-tertentu, seperti data konfigurasi sistem global atau metadata yang berlaku untuk seluruh platform.
-Tabel global tidak memiliki atribut \texttt{tenant\_id} karena datanya memang dimaksudkan untuk
-digunakan bersama oleh seluruh tenant.
-
-Sebaliknya, tabel \textit{tenant scoped} digunakan untuk menyimpan data yang bersifat spesifik
-bagi masing-masing tenant. Seluruh tabel \textit{tenant scoped} wajib memiliki atribut
-\texttt{tenant\_id} sebagai bagian dari kunci logis data. Pemisahan ini memastikan bahwa hanya
-data yang relevan dengan konteks tenant yang dapat diakses dalam setiap operasi sistem.
-
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{assets/image4.png}
-  \caption{Diagram Konseptual Model Penyimpanan Data \textit{Shared Schema}}
-  \label{fig:model_penyimpanan}
+  \begin{tikzpicture}[
+    node distance=0.8cm,
+    startstop/.style={ellipse, draw, minimum width=2cm, minimum height=0.8cm, align=center, fill=green!20, thick},
+    process/.style={rectangle, draw, minimum width=3.5cm, minimum height=0.8cm, align=center, fill=blue!10, thick},
+    decision/.style={diamond, draw, aspect=2, minimum width=3cm, minimum height=1cm, align=center, fill=yellow!20, thick},
+    arrow/.style={->, >=Stealth, thick}
+  ]
+    % Start
+    \node[startstop] (start) {Start};
+    
+    % Request Masuk
+    \node[process, below=of start] (request) {Request Masuk};
+    
+    % Decision: JWT Valid?
+    \node[decision, below=1.2cm of request] (jwt) {JWT\\Valid?};
+    
+    % No: Return Unauthorized
+    \node[process, right=2.5cm of jwt] (unauthorized) {Return\\Unauthorized};
+    
+    % Yes: Extract User ID
+    \node[process, below=1.2cm of jwt] (extract) {Extract User ID\\Extract Tenant ID};
+    
+    % Simpan Tenant Context
+    \node[process, below=of extract] (context) {Simpan\\Tenant Context};
+    
+    % Teruskan Request
+    \node[process, below=of context] (forward) {Teruskan Request};
+    
+    % End
+    \node[startstop, below=of forward] (end) {End};
+    
+    % Arrows
+    \draw[arrow] (start) -- (request);
+    \draw[arrow] (request) -- (jwt);
+    \draw[arrow] (jwt) -- node[anchor=south] {No} (unauthorized);
+    \draw[arrow] (jwt) -- node[anchor=east] {Yes} (extract);
+    \draw[arrow] (extract) -- (context);
+    \draw[arrow] (context) -- (forward);
+    \draw[arrow] (forward) -- (end);
+    \draw[arrow] (unauthorized) |- (end);
+  \end{tikzpicture}
+  \caption{Alur Identifikasi \textit{Tenant} pada Sistem}
+  \label{fig:alur_identifikasi_tenant}
 \end{figure}
 
-\section{Perancangan Mekanisme Isolasi Data}
+Berdasarkan Gambar \ref{fig:alur_identifikasi_tenant}, sistem terlebih dahulu melakukan validasi token yang dikirimkan oleh pengguna. Apabila token tidak valid, sistem akan menolak permintaan dan mengembalikan respons \textit{unauthorized}. Sebaliknya, apabila token valid, sistem akan mengekstraksi informasi pengguna dan \textit{tenant} yang terdapat pada token.
 
-Perancangan mekanisme isolasi data bertujuan untuk memastikan bahwa setiap tenant hanya dapat
-mengakses data yang berada dalam konteks organisasinya masing-masing, meskipun seluruh tenant
-berbagi aplikasi dan basis data yang sama. Pada arsitektur multitenant berbasis \textit{shared
-database} dan \textit{shared schema}, isolasi data tidak dicapai melalui pemisahan fisik,
-melainkan melalui mekanisme pengendalian konteks tenant pada lapisan aplikasi.
+Informasi \textit{tenant} yang berhasil diperoleh kemudian disimpan sebagai \textit{tenant context} selama proses permintaan berlangsung. \textit{Tenant context} tersebut digunakan oleh lapisan berikutnya untuk memastikan seluruh proses bisnis dan akses data dilakukan dalam ruang lingkup \textit{tenant} yang sesuai.
 
-\subsection{\textit{Tenant Scoping} pada Lapisan Aplikasi}
+\subsection{Komponen Arsitektur Sistem}
 
-\textit{Tenant scoping} merupakan mekanisme yang digunakan untuk menentukan dan mengelola konteks
-tenant pada setiap permintaan yang masuk ke sistem. Dalam sistem yang dirancang, tenant tidak
-ditentukan oleh pilihan pengguna secara manual, melainkan diidentifikasi secara otomatis oleh
-sistem berdasarkan informasi yang dibawa pada permintaan, seperti token autentikasi atau metadata
-permintaan.
+Arsitektur sistem yang diusulkan terdiri atas beberapa komponen utama yang saling berinteraksi untuk mendukung proses pengelolaan \textit{tenant}, pengolahan logika bisnis, dan akses data. Setiap komponen memiliki tanggung jawab yang berbeda sehingga proses pengembangan dan pemeliharaan sistem dapat dilakukan secara lebih terstruktur.
 
-Setelah tenant berhasil diidentifikasi, sistem menyimpan informasi \texttt{tenant\_id} ke dalam
-konteks permintaan (\textit{request context}). Konteks ini kemudian digunakan secara konsisten
-pada seluruh lapisan aplikasi, khususnya pada saat pembentukan \textit{query} basis data. Dengan
-pendekatan ini, seluruh operasi data secara implisit dibatasi pada tenant yang sesuai tanpa
-memerlukan intervensi pengguna.
-
-\subsection{Alur \textit{Request Tenant Aware}}
-
-Alur \textit{request tenant aware} dirancang agar setiap permintaan yang diproses oleh sistem
-selalu berada dalam konteks tenant yang valid. Proses ini dimulai ketika pengguna mengirimkan
-permintaan ke \textit{backend} melalui antarmuka web. Permintaan tersebut terlebih dahulu diproses
-oleh komponen \textit{middleware tenant scoping} yang bertugas mengekstraksi identitas tenant dari
-permintaan dan memverifikasinya.
-
-Apabila identitas tenant valid, \textit{middleware} akan menambahkan \texttt{tenant\_id} ke dalam
-konteks permintaan sebelum diteruskan ke lapisan layanan aplikasi. Layanan aplikasi kemudian
-mengeksekusi logika bisnis dan operasi basis data dengan menyertakan \texttt{tenant\_id} sebagai
-pembatas akses data. Alur \textit{tenant scoping} ini ditunjukkan pada Gambar \ref{fig:alur_tenant_scoping}.
-
-\begin{figure}[h]
+\begin{table}[H]
   \centering
-  \includegraphics[width=0.45\textwidth]{assets/image5.png}
-  \caption{Diagram Alur \textit{Tenant Scoping} pada Lapisan Aplikasi}
-  \label{fig:alur_tenant_scoping}
+  \caption{Komponen Arsitektur Sistem}
+  \label{tab:komponen_arsitektur}
+  \begin{tabular}{|p{4cm}|p{9cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{Komponen} & \textbf{Fungsi} \\
+    \hline
+    Client & Mengirimkan permintaan dan menerima respons dari sistem melalui antarmuka \textit{web}. \\
+    \hline
+    \textit{Tenant Middleware} & Mengidentifikasi \textit{tenant} yang sedang mengakses sistem berdasarkan informasi yang terdapat pada token. \\
+    \hline
+    \textit{Authentication Middleware} & Memvalidasi identitas pengguna dan memastikan pengguna telah terautentikasi. \\
+    \hline
+    \textit{RBAC Middleware} & Memverifikasi hak akses pengguna berdasarkan peran dan izin yang dimiliki. \\
+    \hline
+    \textit{Handler Layer} & Menerima permintaan dari \textit{middleware} dan meneruskan proses ke lapisan layanan. \\
+    \hline
+    \textit{Service Layer} & Menjalankan logika bisnis sesuai kebutuhan modul yang diakses. \\
+    \hline
+    \textit{Repository Layer} & Mengelola proses akses data dan komunikasi dengan basis data. \\
+    \hline
+    Database & Menyimpan data \textit{tenant} menggunakan pendekatan \textit{shared database} dan \textit{shared schema}. \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Berdasarkan Tabel \ref{tab:komponen_arsitektur}, lapisan \textit{middleware} berperan sebagai gerbang utama sebelum permintaan diproses oleh sistem. Lapisan ini memastikan bahwa \textit{tenant}, identitas pengguna, dan hak akses telah tervalidasi sebelum permintaan diteruskan ke lapisan berikutnya.
+
+Setelah proses validasi berhasil, \textit{handler layer} dan \textit{service layer} bertanggung jawab menjalankan logika bisnis sesuai kebutuhan modul yang diakses. Selanjutnya, \textit{repository layer} melakukan proses pengambilan maupun penyimpanan data ke basis data dengan tetap memperhatikan konteks \textit{tenant} yang sedang aktif.
+
+Pemisahan tanggung jawab pada setiap komponen memungkinkan sistem menjadi lebih mudah dikembangkan, diuji, dan dipelihara. Selain itu, pendekatan tersebut membantu penerapan mekanisme \textit{tenant isolation} secara konsisten pada seluruh proses yang berlangsung di dalam sistem.
+
+\subsection{Alur Pengolahan Request}
+
+Pada arsitektur yang diusulkan, setiap permintaan yang dikirimkan pengguna diproses melalui beberapa lapisan sistem secara berurutan. Proses tersebut dimulai dari validasi identitas pengguna, identifikasi \textit{tenant}, pelaksanaan logika bisnis, hingga akses data pada basis data. Seluruh tahapan dirancang untuk memastikan bahwa pengguna hanya dapat mengakses data yang berada dalam ruang lingkup \textit{tenant} yang sesuai.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/bab3/2.png}
+  \caption{Alur Pengolahan Request pada Arsitektur \textit{Multitenant}}
+  \label{fig:alur_pengolahan_request}
 \end{figure}
 
-\subsection{Pembatasan Akses Data}
+Berdasarkan Gambar \ref{fig:alur_pengolahan_request}, pengguna terlebih dahulu mengirimkan permintaan yang disertai \textit{JSON Web Token} (JWT). Token tersebut kemudian divalidasi oleh \textit{authentication middleware} untuk memastikan identitas pengguna dan keabsahan token. Setelah proses validasi berhasil, sistem mengekstraksi informasi pengguna dan \textit{tenant} yang tersimpan pada token.
 
-Pembatasan akses data diterapkan dengan memastikan bahwa setiap \textit{query} basis data terhadap
-tabel \textit{tenant scoped} selalu menyertakan kondisi berdasarkan \texttt{tenant\_id}. Pendekatan
-ini mencegah kemungkinan akses lintas tenant, baik secara sengaja maupun tidak sengaja. Dengan
-menjadikan \texttt{tenant\_id} sebagai bagian wajib dalam seluruh operasi data, sistem dapat
-menjamin bahwa data yang diambil atau dimodifikasi selalu sesuai dengan konteks tenant yang aktif.
+Informasi \textit{tenant} yang diperoleh selanjutnya digunakan selama proses pengolahan permintaan berlangsung. \textit{Handler layer} meneruskan informasi \textit{tenant} ke \textit{service layer}, kemudian ke \textit{repository layer}. Dengan mekanisme tersebut, setiap proses bisnis dan akses data selalu memiliki konteks \textit{tenant} yang aktif.
 
-Selain itu, pembatasan akses juga didukung oleh pengaturan hak akses berbasis peran pada tingkat
-aplikasi, sehingga pengguna hanya dapat melakukan operasi yang sesuai dengan perannya dalam
-konteks tenant masing-masing. Kombinasi antara \textit{tenant scoping} dan kontrol akses berbasis
-peran membentuk mekanisme isolasi data yang konsisten dan terkontrol.
+Pada saat melakukan akses data, \textit{repository layer} menerapkan pembatasan berdasarkan identitas \textit{tenant}. Seluruh operasi pembacaan, penambahan, perubahan, maupun penghapusan data menggunakan identitas \textit{tenant} sebagai bagian dari proses validasi data. Pendekatan ini memastikan bahwa data milik suatu \textit{tenant} tidak dapat diakses atau dimodifikasi oleh \textit{tenant} lain meskipun seluruh \textit{tenant} menggunakan basis data yang sama.
 
-\section{Perancangan Proses \textit{Provisioning} Tenant}
+Selain digunakan pada proses akses data utama, identitas \textit{tenant} juga diterapkan pada proses pengelolaan hak akses pengguna. Setiap pengguna hanya dapat memperoleh peran dan izin yang berada dalam \textit{tenant} yang sama. Dengan demikian, mekanisme \textit{tenant isolation} tidak hanya diterapkan pada data bisnis, tetapi juga pada proses otorisasi dan pengelolaan hak akses sistem.
 
-Perancangan proses \textit{provisioning} tenant bertujuan untuk memastikan bahwa penambahan tenant
-baru pada sistem multitenant dapat dilakukan secara otomatis, konsisten, dan efisien tanpa
-memerlukan konfigurasi manual tambahan. Pada platform multi organisasi berskala nasional, proses
-\textit{onboarding} tenant yang tidak terstandarisasi akan meningkatkan kompleksitas operasional
-dan berpotensi menimbulkan ketidakkonsistenan konfigurasi sistem.
+Melalui alur tersebut, sistem mampu menjaga konsistensi pemisahan data antar \textit{tenant} tanpa memerlukan basis data terpisah untuk setiap organisasi. Pendekatan ini mendukung efisiensi penggunaan sumber daya sekaligus mempertahankan keamanan akses data pada lingkungan \textit{multitenant}.
 
-\subsection{Alur \textit{Provisioning} Tenant Otomatis}
+\section{Perancangan Tenant Isolation}
 
-\textit{Provisioning} tenant pada sistem yang dirancang dilakukan sepenuhnya oleh sistem di sisi
-\textit{server}. Proses ini dipicu ketika terdapat permintaan pendaftaran organisasi baru atau
-inisialisasi tenant melalui mekanisme yang telah ditentukan oleh platform. Sistem kemudian
-menjalankan serangkaian langkah terstruktur untuk membentuk tenant baru tanpa keterlibatan aktor
-administrator khusus.
+\textit{Tenant isolation} merupakan mekanisme yang digunakan untuk memastikan bahwa setiap \textit{tenant} hanya dapat mengakses data yang dimilikinya. Pada penelitian ini, \textit{tenant isolation} diterapkan pada lapisan aplikasi dan lapisan akses data. Pendekatan tersebut dipilih karena sistem menggunakan arsitektur \textit{shared database} dan \textit{shared schema}, sehingga seluruh \textit{tenant} berbagi basis data dan struktur tabel yang sama.
 
-Alur \textit{provisioning} dimulai dengan validasi data awal tenant, dilanjutkan dengan pembuatan
-identitas tenant pada tabel global, serta inisialisasi konfigurasi standar yang berlaku untuk
-seluruh tenant. Setelah proses ini selesai, tenant dinyatakan aktif dan siap digunakan oleh
-pengguna operasional. Alur \textit{provisioning} tenant otomatis ini ditunjukkan pada Gambar \ref{fig:provisioning_tenant}.
+Identitas \textit{tenant} diperoleh dari \textit{JSON Web Token} (JWT) yang telah divalidasi oleh \textit{middleware}. Informasi tersebut kemudian digunakan sebagai konteks \textit{tenant} selama proses pengolahan permintaan berlangsung. Dengan pendekatan ini, seluruh operasi yang dilakukan sistem selalu memiliki informasi \textit{tenant} yang aktif.
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.45\textwidth]{assets/image6.png}
-  \caption{Diagram Proses \textit{Provisioning} Tenant Otomatis}
-  \label{fig:provisioning_tenant}
+  \begin{tikzpicture}[
+    node distance=1.2cm,
+    user/.style={rectangle, draw, rounded corners, minimum width=3cm, minimum height=0.8cm, align=center, fill=blue!10, thick},
+    process/.style={rectangle, draw, minimum width=3cm, minimum height=0.8cm, align=center, fill=green!10, thick},
+    context/.style={rectangle, draw, minimum width=3cm, minimum height=0.8cm, align=center, fill=yellow!10, thick},
+    repo/.style={rectangle, draw, minimum width=3cm, minimum height=0.8cm, align=center, fill=orange!10, thick},
+    query/.style={rectangle, draw, minimum width=4.5cm, minimum height=1cm, align=left, fill=gray!10, thick, font=\small\ttfamily},
+    arrow/.style={->, >=Stealth, thick}
+  ]
+    % Left side - Tenant A
+    \node[user] (userA) {User Tenant A};
+    \node[process, below=of userA] (middlewareA) {Tenant Middleware};
+    \node[context, below=of middlewareA] (contextA) {Tenant Context\\(Tenant A)};
+    \node[repo, below=of contextA] (repoA) {Repository};
+    \node[query, below=of repoA] (queryA) {SELECT *\\FROM assets\\WHERE tenant\_id\\= 'Tenant A'};
+    
+    % Right side - Tenant B
+    \node[user, right=3cm of userA] (userB) {User Tenant B};
+    \node[process, below=of userB] (middlewareB) {Tenant Middleware};
+    \node[context, below=of middlewareB] (contextB) {Tenant Context\\(Tenant B)};
+    \node[repo, below=of contextB] (repoB) {Repository};
+    \node[query, below=of repoB] (queryB) {SELECT *\\FROM assets\\WHERE tenant\_id\\= 'Tenant B'};
+    
+    % Arrows - Left
+    \draw[arrow] (userA) -- (middlewareA);
+    \draw[arrow] (middlewareA) -- (contextA);
+    \draw[arrow] (contextA) -- (repoA);
+    \draw[arrow] (repoA) -- (queryA);
+    
+    % Arrows - Right
+    \draw[arrow] (userB) -- (middlewareB);
+    \draw[arrow] (middlewareB) -- (contextB);
+    \draw[arrow] (contextB) -- (repoB);
+    \draw[arrow] (repoB) -- (queryB);
+  \end{tikzpicture}
+  \caption{Mekanisme \textit{Tenant Isolation} pada Sistem}
+  \label{fig:mekanisme_tenant_isolation}
 \end{figure}
 
-\subsection{Data dan Konfigurasi yang Diinisialisasi}
+Berdasarkan Gambar \ref{fig:mekanisme_tenant_isolation}, \textit{tenant isolation} diterapkan dengan menambahkan identitas \textit{tenant} pada setiap proses akses data. Ketika pengguna melakukan operasi pembacaan data, sistem hanya mengambil data yang memiliki nilai \textit{tenant\_id} sesuai dengan \textit{tenant} yang sedang aktif. Dengan cara tersebut, data \textit{tenant} lain tidak akan ikut ditampilkan meskipun berada pada tabel yang sama.
 
-Pada saat \textit{provisioning} tenant dilakukan, sistem menginisialisasi sejumlah data dan
-konfigurasi dasar agar tenant dapat langsung beroperasi. Data dan konfigurasi tersebut meliputi
-identitas tenant, struktur akses dasar, serta metadata yang diperlukan untuk pengelolaan konteks
-tenant pada lapisan aplikasi. Seluruh data yang diinisialisasi mengikuti standar yang sama untuk
-setiap tenant, sehingga tidak terjadi perbedaan konfigurasi antar tenant yang disebabkan oleh
-intervensi manual.
+Selain operasi pembacaan data, mekanisme yang sama juga diterapkan pada proses penambahan, perubahan, dan penghapusan data. Setiap data baru yang disimpan akan memiliki identitas \textit{tenant} yang sesuai dengan \textit{tenant} aktif. Sementara itu, proses perubahan dan penghapusan data selalu menggunakan identitas \textit{tenant} sebagai bagian dari proses validasi data.
 
-Pendekatan ini memastikan bahwa setiap tenant memiliki struktur data dan konfigurasi awal yang
-konsisten, serta dapat langsung menggunakan sistem tanpa memerlukan penyesuaian tambahan pada
-tingkat aplikasi maupun basis data.
+\begin{table}[H]
+  \centering
+  \caption{Penerapan \textit{Tenant Isolation} pada Operasi Data}
+  \label{tab:penerapan_tenant_isolation}
+  \begin{tabular}{|p{3cm}|p{10cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{Operasi} & \textbf{Mekanisme} \\
+    \hline
+    Create & Menambahkan nilai \textit{tenant\_id} saat data dibuat \\
+    \hline
+    Read & Memfilter data berdasarkan \textit{tenant\_id} \\
+    \hline
+    Update & Memastikan data yang diubah memiliki \textit{tenant\_id} yang sesuai \\
+    \hline
+    Delete & Memastikan data yang dihapus memiliki \textit{tenant\_id} yang sesuai \\
+    \hline
+  \end{tabular}
+\end{table}
 
-\subsection{Perbandingan \textit{Provisioning} Manual dan Otomatis}
+Penerapan \textit{tenant isolation} pada lapisan aplikasi memungkinkan sistem menjaga pemisahan data antar \textit{tenant} tanpa memerlukan basis data terpisah untuk setiap organisasi. Pendekatan tersebut mendukung efisiensi penggunaan sumber daya sekaligus mempertahankan keamanan akses data dalam lingkungan \textit{multitenant}.
 
-Pada pendekatan \textit{provisioning} manual, penambahan tenant baru biasanya memerlukan pembuatan
-konfigurasi sistem secara terpisah, termasuk penyesuaian basis data, pengaturan akses, dan
-validasi konfigurasi. Pendekatan ini tidak efisien dan berisiko menimbulkan kesalahan konfigurasi,
-terutama ketika jumlah tenant meningkat.
+\section{Perancangan Shared Database dan Shared Schema}
 
-Sebaliknya, \textit{provisioning} tenant otomatis pada arsitektur multitenant berbasis
-\textit{shared database} dan \textit{shared schema} memungkinkan penambahan tenant baru tanpa
-perubahan struktur sistem. Seluruh proses dilakukan oleh sistem berdasarkan alur yang telah
-ditentukan, sehingga mengurangi beban operasional dan meningkatkan konsistensi konfigurasi.
+Pada penelitian ini, Seluruh \textit{tenant} menggunakan basis data dan struktur tabel yang sama untuk menyimpan data operasional. Pendekatan ini dipilih untuk mengurangi kompleksitas pengelolaan basis data serta meningkatkan efisiensi penggunaan sumber daya ketika jumlah \textit{tenant} bertambah.
 
-\section{Rancangan Evaluasi dan Parameter Pengujian}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/bab3/3.png}
+  \caption{Konsep Implementasi \textit{Shared Database} dan \textit{Shared Schema} pada Sistem}
+  \label{fig:konsep_shared_database}
+\end{figure}
 
-Rancangan evaluasi disusun untuk memastikan bahwa arsitektur multitenant yang dirancang
-benar-benar memenuhi tujuan penelitian serta mampu menjawab permasalahan yang telah dirumuskan.
-Evaluasi tidak difokuskan pada pengukuran performa sistem secara kuantitatif tingkat rendah,
-melainkan pada kesesuaian rancangan arsitektur terhadap aspek efisiensi infrastruktur, isolasi
-data antar tenant, dan efektivitas \textit{provisioning} tenant otomatis.
+Berdasarkan Gambar \ref{fig:konsep_shared_database}, tabel \textit{tenants} berperan sebagai entitas utama yang merepresentasikan organisasi pengguna sistem. Setiap \textit{tenant} dapat memiliki pengguna, aset, dan transaksi \textit{rental} yang berbeda. Hubungan tersebut direpresentasikan melalui atribut \textit{tenant\_id} yang terdapat pada tabel operasional seperti \textit{users}, \textit{assets}, dan \textit{rentals}.
 
-\subsection{Parameter Evaluasi Efisiensi Infrastruktur}
+Pada pendekatan ini, data dari seluruh \textit{tenant} disimpan pada tabel yang sama tanpa membuat skema atau basis data terpisah untuk setiap organisasi. Sebagai contoh, data aset milik beberapa \textit{tenant} akan tersimpan pada tabel \textit{assets} yang sama. Pemisahan data dilakukan menggunakan nilai \textit{tenant\_id} yang menjadi identitas kepemilikan data.
 
-Efisiensi infrastruktur dievaluasi dengan meninjau sejauh mana arsitektur multitenant berbasis
-\textit{shared database} dan \textit{shared schema} mampu mengurangi kebutuhan sumber daya sistem
-dibandingkan pendekatan non multitenant. Parameter evaluasi difokuskan pada kompleksitas
-konfigurasi sistem dan dependensi infrastruktur yang diperlukan untuk mendukung banyak tenant
-dalam satu platform.
+Penerapan \textit{shared database} dan \textit{shared schema} memberikan keuntungan dalam hal efisiensi penyimpanan, kemudahan pemeliharaan sistem, dan penyederhanaan proses \textit{provisioning} \textit{tenant} baru. Namun, pendekatan ini memerlukan mekanisme \textit{tenant isolation} yang konsisten untuk memastikan setiap \textit{tenant} hanya dapat mengakses data yang sesuai dengan ruang lingkup \textit{tenant} yang dimilikinya.
 
-Parameter yang digunakan antara lain jumlah konfigurasi sistem yang harus dikelola, jumlah
-komponen infrastruktur yang dibutuhkan, serta kebutuhan penyesuaian konfigurasi ketika tenant
-baru ditambahkan. Arsitektur dinilai efisien apabila penambahan tenant tidak memerlukan penambahan
-\textit{instance} aplikasi atau basis data baru.
+\section{Perancangan Tenant Provisioning}
 
-\subsection{Parameter Evaluasi Isolasi Data Antar Tenant}
+\textit{Tenant provisioning} merupakan proses pembuatan \textit{tenant} baru beserta konfigurasi awal yang diperlukan agar \textit{tenant} dapat langsung menggunakan sistem. Pada penelitian ini, proses \textit{tenant provisioning} dirancang secara otomatis untuk mengurangi konfigurasi manual dan memastikan setiap \textit{tenant} memiliki struktur data awal yang konsisten.
 
-Evaluasi isolasi data bertujuan memastikan bahwa mekanisme \textit{tenant scoping} dan penggunaan
-\texttt{tenant\_id} mampu mencegah akses data lintas tenant. Parameter evaluasi difokuskan pada
-konsistensi pembatasan data pada setiap operasi basis data dan kemampuan sistem menolak atau
-membatasi akses yang berada di luar konteks tenant.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/bab3/4.png}
+  \caption{Alur \textit{Tenant Provisioning} pada Sistem}
+  \label{fig:alur_tenant_provisioning}
+\end{figure}
 
-Pengujian dilakukan melalui simulasi permintaan dari tenant yang berbeda untuk memastikan bahwa
-data yang dikembalikan oleh sistem selalu sesuai dengan tenant yang aktif. Isolasi data dinyatakan
-terpenuhi apabila tidak ditemukan data milik tenant lain pada hasil pengujian.
+Berdasarkan Gambar \ref{fig:alur_tenant_provisioning}, proses dimulai ketika pengguna mengirimkan permintaan registrasi \textit{tenant} baru. Sistem kemudian menerima permintaan dan melakukan validasi data yang diberikan. Pada tahap ini, sistem memeriksa apakah akun administrator yang digunakan telah terdaftar sebelumnya. Apabila akun tersebut telah digunakan, sistem akan menghentikan proses registrasi dan mengembalikan pesan kesalahan kepada pengguna.
 
-\subsection{Parameter Evaluasi \textit{Provisioning} Tenant Otomatis}
+Apabila proses validasi berhasil, sistem akan membuat data \textit{tenant} baru pada tabel \textit{tenants} dan menghasilkan identitas \textit{tenant} (\textit{tenant\_id}). Identitas tersebut digunakan sebagai referensi pada proses berikutnya untuk menghubungkan seluruh data yang dimiliki \textit{tenant}.
 
-Evaluasi \textit{provisioning} tenant dilakukan untuk menilai efektivitas proses
-\textit{onboarding} tenant tanpa konfigurasi manual tambahan. Parameter evaluasi difokuskan pada
-konsistensi konfigurasi tenant baru, keseragaman struktur data awal, serta kemampuan tenant untuk
-langsung menggunakan sistem setelah proses \textit{provisioning} selesai.
+Setelah data \textit{tenant} berhasil dibuat, sistem secara otomatis membuat \textit{role} administrator yang terhubung dengan \textit{tenant} tersebut. \textit{Role} yang telah dibuat kemudian diberikan seluruh hak akses yang tersedia melalui proses pengaitan \textit{role} dengan data \textit{permission}. Dengan konfigurasi tersebut, administrator \textit{tenant} memiliki akses penuh terhadap fitur yang tersedia pada sistem.
 
-\textit{Provisioning} tenant dinyatakan berhasil apabila setiap tenant baru memiliki konfigurasi
-awal yang identik dan tidak memerlukan penyesuaian tambahan pada tingkat aplikasi maupun basis
-data.
+Tahap berikutnya adalah pembuatan akun administrator \textit{tenant}. Akun pengguna dibuat menggunakan \textit{tenant\_id} yang telah dihasilkan sebelumnya dan kemudian dikaitkan dengan \textit{role} administrator yang telah dibuat. Setelah seluruh proses berhasil dijalankan, sistem mengembalikan respons berhasil kepada pengguna dan \textit{tenant} dapat langsung menggunakan layanan yang tersedia.
+
+\begin{table}[H]
+  \centering
+  \caption{Tahapan \textit{Tenant Provisioning}}
+  \label{tab:tahapan_tenant_provisioning}
+  \footnotesize
+  \begin{tabular}{|c|p{5.5cm}|p{6cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{Tahap} & \textbf{Proses} & \textbf{Hasil} \\
+    \hline
+    1 & Validasi data registrasi \textit{tenant} & Memastikan data \textit{tenant} dan administrator valid \\
+    \hline
+    2 & Pemeriksaan akun administrator & Memastikan akun belum terdaftar pada sistem \\
+    \hline
+    3 & Pembuatan data \textit{tenant} & Sistem menghasilkan \textit{tenant\_id} baru \\
+    \hline
+    4 & Pembuatan \textit{role} administrator & \textit{Role} administrator dibuat dan dikaitkan dengan \textit{tenant} \\
+    \hline
+    5 & Pemberian hak akses & \textit{Role} administrator memperoleh seluruh \textit{permission} sistem \\
+    \hline
+    6 & Pembuatan akun administrator & Akun pengguna dibuat menggunakan \textit{tenant\_id} yang telah dihasilkan \\
+    \hline
+    7 & Relasi pengguna dan \textit{role} & Pengguna dikaitkan dengan \textit{role} administrator \\
+    \hline
+    8 & Penyelesaian proses \textit{provisioning} & \textit{Tenant} dapat langsung menggunakan sistem \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Ringkasan tahapan pada Tabel \ref{tab:tahapan_tenant_provisioning} menunjukkan bahwa seluruh konfigurasi awal \textit{tenant} dilakukan secara otomatis oleh sistem. Pendekatan tersebut memungkinkan \textit{tenant} baru memperoleh struktur pengguna dan hak akses yang siap digunakan tanpa memerlukan konfigurasi tambahan oleh administrator sistem. Selain meningkatkan efisiensi proses \textit{onboarding}, mekanisme ini juga membantu menjaga konsistensi konfigurasi pada seluruh \textit{tenant} yang menggunakan \textit{platform}.
+
+\section{Perancangan Pengujian}
+
+Pengujian dilakukan untuk mengevaluasi implementasi arsitektur \textit{multitenant} yang diusulkan pada penelitian ini. Fokus pengujian meliputi mekanisme \textit{tenant isolation}, proses \textit{tenant provisioning}, serta penerapan \textit{shared database} dan \textit{shared schema}. Pengujian dilakukan untuk memastikan bahwa sistem telah memenuhi kebutuhan yang telah ditetapkan pada tahap perancangan.
+
+\subsection{Rancangan Pengujian Sistem}
+
+Teknik pengujian yang digunakan adalah \textit{Black Box Testing}. Teknik ini digunakan untuk memverifikasi kesesuaian fungsi sistem berdasarkan masukan dan keluaran yang dihasilkan tanpa memperhatikan implementasi kode program. Selain itu, penelitian ini juga menerapkan \textit{scenario-based testing} untuk mengevaluasi perilaku sistem pada kondisi yang berkaitan dengan implementasi \textit{multitenancy}.
+
+\begin{table}[H]
+  \centering
+  \caption{Rancangan Pengujian Sistem}
+  \label{tab:rancangan_pengujian_sistem}
+  \footnotesize
+  \begin{tabular}{|c|p{3.5cm}|p{3.5cm}|p{5cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{No} & \textbf{Aspek Pengujian} & \textbf{Teknik Pengujian} & \textbf{Tujuan Pengujian} \\
+    \hline
+    1 & \textit{Tenant Isolation} & \textit{Black Box Testing} dan \textit{Scenario-Based Testing} & Memastikan setiap \textit{tenant} hanya dapat mengakses data yang dimilikinya. \\
+    \hline
+    2 & \textit{Tenant Provisioning} & \textit{Black Box Testing} & Memastikan proses pembuatan \textit{tenant} baru berjalan secara otomatis dan menghasilkan konfigurasi awal yang lengkap. \\
+    \hline
+    3 & \textit{Shared Database} dan \textit{Shared Schema} & \textit{Scenario-Based Testing} & Memastikan beberapa \textit{tenant} dapat menggunakan basis data dan struktur tabel yang sama tanpa menyebabkan pencampuran data. \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Pada pengujian \textit{tenant isolation}, sistem akan diuji menggunakan beberapa \textit{tenant} yang berbeda untuk memastikan bahwa proses pembacaan, penambahan, perubahan, dan penghapusan data hanya dapat dilakukan pada data yang berada dalam ruang lingkup \textit{tenant} yang sesuai. Hasil pengujian digunakan untuk memverifikasi efektivitas mekanisme isolasi data yang diterapkan pada sistem.
+
+Pengujian \textit{tenant provisioning} dilakukan dengan melakukan registrasi \textit{tenant} baru melalui aplikasi. Hasil pengujian kemudian diverifikasi dengan memeriksa data \textit{tenant}, \textit{role} administrator, \textit{permission}, dan akun administrator yang dihasilkan secara otomatis selama proses registrasi berlangsung.
+
+Pengujian \textit{shared database} dan \textit{shared schema} dilakukan dengan menyimpan data dari beberapa \textit{tenant} pada tabel yang sama. Hasil pengujian digunakan untuk memastikan bahwa data tetap dapat dipisahkan berdasarkan identitas \textit{tenant} meskipun seluruh \textit{tenant} menggunakan basis data dan struktur tabel yang sama.
+
+\subsection{Indikator Keberhasilan Pengujian}
+
+Indikator keberhasilan digunakan untuk mengevaluasi apakah implementasi arsitektur \textit{multitenant} yang diusulkan telah memenuhi tujuan penelitian. Pengujian dinyatakan berhasil apabila seluruh skenario pengujian menghasilkan keluaran yang sesuai dengan perilaku sistem yang diharapkan.
+
+\begin{table}[H]
+  \centering
+  \caption{Indikator Keberhasilan Pengujian}
+  \label{tab:indikator_keberhasilan_pengujian}
+  \footnotesize
+  \begin{tabular}{|p{4cm}|p{9cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{Aspek Pengujian} & \textbf{Indikator Keberhasilan} \\
+    \hline
+    \textit{Tenant Isolation} & Pengguna hanya dapat mengakses data yang memiliki \textit{tenant\_id} sesuai dengan \textit{tenant} aktif. \\
+    \hline
+    \textit{Tenant Isolation} & Pengguna tidak dapat melihat, mengubah, atau menghapus data milik \textit{tenant} lain. \\
+    \hline
+    \textit{Tenant Provisioning} & Data \textit{tenant} baru berhasil dibuat pada sistem. \\
+    \hline
+    \textit{Tenant Provisioning} & \textit{Role} administrator berhasil dibuat dan dikaitkan dengan \textit{tenant} yang baru terdaftar. \\
+    \hline
+    \textit{Tenant Provisioning} & Seluruh \textit{permission} berhasil diberikan kepada \textit{role} administrator. \\
+    \hline
+    \textit{Tenant Provisioning} & Akun administrator berhasil dibuat dan dikaitkan dengan \textit{role} administrator. \\
+    \hline
+    \textit{Shared Database} dan \textit{Shared Schema} & Data dari beberapa \textit{tenant} dapat tersimpan pada tabel yang sama. \\
+    \hline
+    \textit{Shared Database} dan \textit{Shared Schema} & Data \textit{tenant} tetap terisolasi meskipun menggunakan basis data dan struktur tabel yang sama. \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Pengujian dianggap berhasil apabila seluruh indikator pada Tabel \ref{tab:indikator_keberhasilan_pengujian} terpenuhi. Dengan demikian, arsitektur \textit{multitenant} yang diusulkan dapat dinyatakan mampu mendukung isolasi data, proses \textit{provisioning} \textit{tenant}, serta penggunaan \textit{shared database} dan \textit{shared schema} sesuai dengan tujuan penelitian.
+
+Hasil pelaksanaan pengujian berdasarkan rancangan yang telah disusun akan dibahas lebih lanjut pada Bab 4.
