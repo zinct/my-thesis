@@ -2,8 +2,19 @@
 
 \section{Kesimpulan}
 
-% TODO: Isi kesimpulan berdasarkan hasil penelitian
+Penelitian ini berhasil merancang dan mengimplementasikan arsitektur \textit{multitenant} pada sistem manajemen aset RTPintar menggunakan pendekatan \textit{shared database} dan \textit{shared schema}. Arsitektur yang dirancang memungkinkan beberapa \textit{tenant} menggunakan aplikasi dan basis data yang sama dengan tetap menjaga pemisahan data antar \textit{tenant}.
+
+Hasil pengujian menunjukkan bahwa mekanisme \textit{tenant isolation} berhasil diterapkan pada lapisan aplikasi, layanan API, dan basis data. Setiap \textit{tenant} hanya dapat mengakses data yang berada dalam ruang lingkup \textit{tenant} yang sesuai sehingga data antar \textit{tenant} tetap terpisah meskipun disimpan pada struktur tabel yang sama.
+
+Selain itu, mekanisme \textit{tenant provisioning} berhasil mengotomatisasi proses pendaftaran \textit{tenant} baru. Sistem mampu membuat data \textit{tenant}, \textit{role} administrator, relasi \textit{permission}, dan akun administrator secara otomatis setelah proses registrasi dan verifikasi email berhasil dilakukan. Berdasarkan seluruh hasil pengujian yang telah dilakukan, implementasi arsitektur \textit{multitenant} yang diusulkan berhasil memenuhi tujuan penelitian dan indikator keberhasilan yang telah ditetapkan.
 
 \section{Saran}
 
-% TODO: Isi saran untuk penelitian selanjutnya
+Berdasarkan hasil penelitian yang telah dilakukan, terdapat beberapa saran yang dapat dipertimbangkan untuk pengembangan sistem maupun penelitian selanjutnya, yaitu:
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Menambahkan mekanisme audit log untuk mencatat aktivitas pengguna pada setiap \textit{tenant} sehingga proses pemantauan dan pelacakan aktivitas dapat dilakukan dengan lebih baik.
+  \item Mengembangkan dukungan migrasi \textit{tenant} antar paket layanan atau konfigurasi \textit{tenant} yang lebih kompleks sesuai kebutuhan organisasi.
+  \item Melakukan pengujian performa dan skalabilitas untuk mengevaluasi kemampuan arsitektur \textit{multitenant} ketika digunakan oleh jumlah \textit{tenant} dan volume data yang lebih besar.
+\end{enumerate}
