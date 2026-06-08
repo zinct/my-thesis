@@ -1,6 +1,5 @@
 {
   "latex-workshop.chktex.enabled": true,
-  "latex-workshop.chktex.path": "/Users/indramahesa/Library/TinyTeX/bin/universal-darwin/chktex",
   "latex-workshop.latex.autoBuild.run": "onSave",
   "latex-workshop.latex.outDir": "%DIR%/build",
   "latex-workshop.latex.recipe.default": "xelatex × 2 + bibtex",
@@ -12,19 +11,54 @@
     {
       "name": "xelatex",
       "tools": ["xelatex"]
+    },
+    {
+      "name": "latexmk (xelatex)",
+      "tools": ["latexmk-xelatex"]
     }
   ],
   "latex-workshop.latex.tools": [
     {
       "name": "xelatex",
-      "command": "/Users/indramahesa/Library/TinyTeX/bin/universal-darwin/xelatex",
+      "command": "xelatex",
       "args": ["-synctex=1", "-interaction=nonstopmode", "-file-line-error", "-output-directory=%OUTDIR%", "%DOC%"]
     },
     {
       "name": "bibtex",
-      "command": "/Users/indramahesa/Library/TinyTeX/bin/universal-darwin/bibtex",
+      "command": "bibtex",
       "args": ["%OUTDIR%/%DOCFILE%"]
+    },
+    {
+      "name": "latexmk-xelatex",
+      "command": "latexmk",
+      "args": ["-synctex=1", "-interaction=nonstopmode", "-file-line-error", "-xelatex", "-outdir=%OUTDIR%", "%DOC%"]
     }
   ],
-  "latex-workshop.view.pdf.viewer": "tab"
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux",
+    "*.bbl",
+    "*.blg",
+    "*.idx",
+    "*.ind",
+    "*.lof",
+    "*.lot",
+    "*.out",
+    "*.toc",
+    "*.acn",
+    "*.acr",
+    "*.alg",
+    "*.glg",
+    "*.glo",
+    "*.gls",
+    "*.fls",
+    "*.log",
+    "*.fdb_latexmk",
+    "*.snm",
+    "*.synctex(busy)",
+    "*.synctex.gz(busy)",
+    "*.nav"
+  ],
+  "latex-workshop.latex.autoClean.run": "onFailed",
+  "latex-workshop.synctex.afterBuild.enabled": true
 }
