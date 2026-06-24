@@ -1,4 +1,4 @@
-\chapter{Hasil Percobaan dan Analisis}
+\chapter{Hasil Pengujian dan Analisis}
 
 \section{Lingkungan Pengujian}
 
@@ -38,11 +38,11 @@ Berdasarkan lingkungan pengujian pada Tabel \ref{tab:lingkungan_pengujian}, selu
 
 Skenario pengujian yang digunakan pada penelitian ini dijelaskan pada subbab berikutnya.
 
-\section{Skenario Percobaan}
+\section{Pengujian Fungsional Arsitektur Multitenant}
 
 Pengujian dilakukan berdasarkan rancangan pengujian yang telah dijelaskan pada Bab 3. Fokus pengujian meliputi mekanisme \textit{tenant isolation}, \textit{tenant provisioning}, serta implementasi \textit{shared database} dan \textit{shared schema}. Setiap pengujian dilakukan untuk memverifikasi bahwa arsitektur \textit{multitenant} yang diusulkan telah berjalan sesuai dengan kebutuhan sistem dan indikator keberhasilan yang telah ditetapkan.
 
-\subsection{Skenario Pengujian Tenant Isolation}
+\subsection{Pengujian Tenant Isolation}
 
 Pengujian \textit{tenant isolation} dilakukan untuk memastikan bahwa setiap \textit{tenant} hanya dapat mengakses data yang berada dalam ruang lingkup \textit{tenant} yang sesuai. Pengujian menggunakan dua \textit{tenant} yang berbeda, yaitu Tenant A dan Tenant B, yang masing-masing memiliki data operasional tersendiri.
 
@@ -70,70 +70,6 @@ Pengujian \textit{tenant isolation} dilakukan untuk memastikan bahwa setiap \tex
 \end{table}
 
 Pengujian dilakukan melalui antarmuka aplikasi, respons API, dan verifikasi data pada basis data untuk memastikan mekanisme isolasi data berjalan dengan baik.
-
-\subsection{Skenario Pengujian Tenant Provisioning}
-
-Pengujian \textit{tenant provisioning} dilakukan untuk memverifikasi proses pembuatan \textit{tenant} baru beserta konfigurasi awal yang dibutuhkan agar \textit{tenant} dapat langsung menggunakan sistem.
-
-\begin{table}[H]
-  \centering
-  \caption{Skenario Pengujian \textit{Tenant Provisioning}}
-  \label{tab:skenario_pengujian_tenant_provisioning}
-  \footnotesize
-  \begin{tabular}{|c|p{6cm}|p{6.5cm}|}
-    \hline
-    \rowcolor[HTML]{EFEFEF}
-    \textbf{No} & \textbf{Langkah Pengujian} & \textbf{Hasil yang Diharapkan} \\
-    \hline
-    1 & Mengisi formulir registrasi \textit{tenant} & Data registrasi diterima sistem \\
-    \hline
-    2 & Mengirim permintaan registrasi & Data \textit{tenant} berhasil dibuat \\
-    \hline
-    3 & Memeriksa data \textit{role} & \textit{Role} administrator berhasil dibuat \\
-    \hline
-    4 & Memeriksa data \textit{permission} & \textit{Permission} berhasil dikaitkan dengan \textit{role} administrator \\
-    \hline
-    5 & Memeriksa data pengguna & Akun administrator berhasil dibuat \\
-    \hline
-    6 & Login menggunakan akun administrator & Pengguna berhasil masuk ke sistem \\
-    \hline
-  \end{tabular}
-\end{table}
-
-Pengujian ini bertujuan untuk memastikan seluruh proses \textit{onboarding} \textit{tenant} berjalan secara otomatis tanpa memerlukan konfigurasi manual tambahan.
-
-\subsection{Skenario Pengujian Shared Database dan Shared Schema}
-
-Pengujian \textit{shared database} dan \textit{shared schema} dilakukan untuk memastikan bahwa beberapa \textit{tenant} dapat menggunakan basis data dan struktur tabel yang sama tanpa menyebabkan pencampuran data antar \textit{tenant}.
-
-\begin{table}[H]
-  \centering
-  \caption{Skenario Pengujian \textit{Shared Database} dan \textit{Shared Schema}}
-  \label{tab:skenario_pengujian_shared_database}
-  \footnotesize
-  \begin{tabular}{|c|p{6cm}|p{6.5cm}|}
-    \hline
-    \rowcolor[HTML]{EFEFEF}
-    \textbf{No} & \textbf{Langkah Pengujian} & \textbf{Hasil yang Diharapkan} \\
-    \hline
-    1 & Tenant A menambahkan data aset & Data berhasil tersimpan \\
-    \hline
-    2 & Tenant B menambahkan data aset & Data berhasil tersimpan \\
-    \hline
-    3 & Memeriksa tabel aset pada basis data & Data kedua \textit{tenant} berada pada tabel yang sama \\
-    \hline
-    4 & Memeriksa atribut \textit{tenant\_id} & Setiap data memiliki identitas \textit{tenant} yang sesuai \\
-    \hline
-    5 & Mengakses data melalui aplikasi & Data tetap ditampilkan sesuai \textit{tenant} yang aktif \\
-    \hline
-  \end{tabular}
-\end{table}
-
-Melalui skenario tersebut, dapat diverifikasi bahwa pendekatan \textit{shared database} dan \textit{shared schema} mampu mendukung penggunaan oleh banyak \textit{tenant} tanpa mengurangi kemampuan sistem dalam memisahkan data antar \textit{tenant}.
-
-\section{Hasil Pengujian}
-
-\subsection{Hasil Pengujian Tenant Isolation}
 
 Pengujian \textit{tenant isolation} dilakukan untuk memverifikasi bahwa setiap \textit{tenant} hanya dapat mengakses data yang berada dalam ruang lingkup \textit{tenant} yang sesuai. Pengujian ini merupakan salah satu aspek penting dalam penelitian karena arsitektur yang diusulkan menggunakan pendekatan \textit{shared database} dan \textit{shared schema}. Pada pendekatan tersebut, seluruh \textit{tenant} menggunakan basis data dan struktur tabel yang sama sehingga diperlukan mekanisme yang mampu menjaga pemisahan data antar \textit{tenant}.
 
@@ -217,7 +153,36 @@ Berdasarkan hasil pengujian pada Tabel \ref{tab:hasil_pengujian_tenant_isolation
 
 Hasil tersebut menunjukkan bahwa mekanisme \textit{tenant isolation} yang dirancang pada penelitian ini berhasil diterapkan pada lapisan aplikasi, layanan API, dan basis data. Dengan demikian, pendekatan \textit{shared database} dan \textit{shared schema} yang digunakan tetap mampu menjaga pemisahan data antar \textit{tenant} sesuai dengan tujuan penelitian yang telah ditetapkan.
 
-\subsection{Hasil Pengujian Tenant Provisioning}
+\subsection{Pengujian Tenant Provisioning}
+
+Pengujian \textit{tenant provisioning} dilakukan untuk memverifikasi proses pembuatan \textit{tenant} baru beserta konfigurasi awal yang dibutuhkan agar \textit{tenant} dapat langsung menggunakan sistem.
+
+\begin{table}[H]
+  \centering
+  \caption{Skenario Pengujian \textit{Tenant Provisioning}}
+  \label{tab:skenario_pengujian_tenant_provisioning}
+  \footnotesize
+  \begin{tabular}{|c|p{6cm}|p{6.5cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{No} & \textbf{Langkah Pengujian} & \textbf{Hasil yang Diharapkan} \\
+    \hline
+    1 & Mengisi formulir registrasi \textit{tenant} & Data registrasi diterima sistem \\
+    \hline
+    2 & Mengirim permintaan registrasi & Data \textit{tenant} berhasil dibuat \\
+    \hline
+    3 & Memeriksa data \textit{role} & \textit{Role} administrator berhasil dibuat \\
+    \hline
+    4 & Memeriksa data \textit{permission} & \textit{Permission} berhasil dikaitkan dengan \textit{role} administrator \\
+    \hline
+    5 & Memeriksa data pengguna & Akun administrator berhasil dibuat \\
+    \hline
+    6 & Login menggunakan akun administrator & Pengguna berhasil masuk ke sistem \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Pengujian ini bertujuan untuk memastikan seluruh proses \textit{onboarding} \textit{tenant} berjalan secara otomatis tanpa memerlukan konfigurasi manual tambahan.
 
 Pengujian \textit{tenant provisioning} dilakukan untuk memverifikasi bahwa proses registrasi \textit{tenant} baru dapat berjalan secara otomatis sesuai dengan rancangan yang telah dijelaskan pada Bab 3. Pengujian ini bertujuan untuk memastikan bahwa sistem mampu membuat \textit{tenant} baru beserta seluruh konfigurasi awal yang diperlukan, sehingga \textit{tenant} dapat langsung menggunakan sistem setelah proses registrasi selesai.
 
@@ -307,7 +272,34 @@ Berdasarkan hasil pengujian pada Tabel \ref{tab:hasil_pengujian_tenant_provision
 
 Hasil tersebut menunjukkan bahwa mekanisme \textit{tenant provisioning} yang diterapkan pada penelitian ini mampu mendukung proses \textit{onboarding} \textit{tenant} secara cepat dan konsisten.
 
-\subsection{Hasil Pengujian Shared Database dan Shared Schema}
+\subsection{Pengujian Shared Database dan Shared Schema}
+
+Pengujian \textit{shared database} dan \textit{shared schema} dilakukan untuk memastikan bahwa beberapa \textit{tenant} dapat menggunakan basis data dan struktur tabel yang sama tanpa menyebabkan pencampuran data antar \textit{tenant}.
+
+\begin{table}[H]
+  \centering
+  \caption{Skenario Pengujian \textit{Shared Database} dan \textit{Shared Schema}}
+  \label{tab:skenario_pengujian_shared_database}
+  \footnotesize
+  \begin{tabular}{|c|p{6cm}|p{6.5cm}|}
+    \hline
+    \rowcolor[HTML]{EFEFEF}
+    \textbf{No} & \textbf{Langkah Pengujian} & \textbf{Hasil yang Diharapkan} \\
+    \hline
+    1 & Tenant A menambahkan data aset & Data berhasil tersimpan \\
+    \hline
+    2 & Tenant B menambahkan data aset & Data berhasil tersimpan \\
+    \hline
+    3 & Memeriksa tabel aset pada basis data & Data kedua \textit{tenant} berada pada tabel yang sama \\
+    \hline
+    4 & Memeriksa atribut \textit{tenant\_id} & Setiap data memiliki identitas \textit{tenant} yang sesuai \\
+    \hline
+    5 & Mengakses data melalui aplikasi & Data tetap ditampilkan sesuai \textit{tenant} yang aktif \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Melalui skenario tersebut, dapat diverifikasi bahwa pendekatan \textit{shared database} dan \textit{shared schema} mampu mendukung penggunaan oleh banyak \textit{tenant} tanpa mengurangi kemampuan sistem dalam memisahkan data antar \textit{tenant}.
 
 Pengujian \textit{shared database} dan \textit{shared schema} dilakukan untuk memverifikasi bahwa beberapa \textit{tenant} dapat menggunakan basis data dan struktur tabel yang sama tanpa menyebabkan pencampuran data antar \textit{tenant}. Pengujian ini penting karena pendekatan yang digunakan pada penelitian ini menempatkan seluruh \textit{tenant} pada satu basis data dan satu struktur tabel yang sama. Oleh karena itu, diperlukan verifikasi untuk memastikan bahwa setiap data tetap dapat diidentifikasi berdasarkan \textit{tenant} yang memilikinya.
 
@@ -377,9 +369,109 @@ Berdasarkan hasil pengujian pada Tabel \ref{tab:hasil_pengujian_shared_database}
 
 Hasil tersebut menunjukkan bahwa implementasi \textit{shared database} dan \textit{shared schema} pada penelitian ini berhasil diterapkan sesuai dengan rancangan sistem. Pendekatan tersebut memungkinkan beberapa \textit{tenant} menggunakan basis data dan struktur tabel yang sama, namun tetap mendukung mekanisme pemisahan data melalui penggunaan atribut \textit{tenant\_id}.
 
-\section{Analisis}
+\section{Evaluasi Efisiensi Infrastruktur}
 
-\subsection{Analisis Tenant Isolation}
+Evaluasi efisiensi infrastruktur dilakukan untuk membandingkan penggunaan sumber daya pada tiga pendekatan arsitektur yang berbeda, yaitu arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema}, arsitektur \textit{multitenant} dengan \textit{separated database}, serta arsitektur \textit{non-multitenant}. Pengujian dilakukan untuk mengetahui dampak pertambahan jumlah \textit{tenant} terhadap kebutuhan sumber daya sistem, khususnya penggunaan memori (RAM) dan kapasitas penyimpanan (\textit{storage}).
+
+Pada penelitian ini, skenario pengujian dilakukan dengan empat variasi jumlah \textit{tenant}, yaitu 1 \textit{tenant}, 5 \textit{tenant}, 10 \textit{tenant}, dan 25 \textit{tenant}. Setiap arsitektur dijalankan menggunakan layanan yang sama yang terdiri atas PostgreSQL, Redis, MinIO, dan aplikasi \textit{backend}. Perbedaan utama terletak pada mekanisme penyimpanan data dan jumlah \textit{instance} yang digunakan oleh masing-masing \textit{tenant}.
+
+Pada pendekatan \textit{shared schema}, seluruh \textit{tenant} menggunakan satu basis data dan satu skema yang sama dengan pemisahan data menggunakan atribut \textit{tenant\_id}. Pada pendekatan \textit{separated database}, setiap \textit{tenant} menggunakan basis data yang berbeda namun masih berada dalam satu \textit{stack} aplikasi yang sama. Sementara itu, pada pendekatan \textit{non-multitenant} setiap \textit{tenant} dijalankan menggunakan \textit{stack} aplikasi dan basis data yang terpisah sehingga kebutuhan sumber daya akan bertambah seiring dengan jumlah \textit{tenant} yang dikelola.
+
+Pengukuran dilakukan setelah seluruh layanan berhasil dijalankan dan data \textit{tenant} berhasil dibuat sesuai dengan jumlah \textit{tenant} pada masing-masing skenario. Parameter yang diamati meliputi penggunaan RAM PostgreSQL, penggunaan RAM seluruh \textit{stack} aplikasi, ukuran penyimpanan PostgreSQL, serta ukuran \textit{volume} penyimpanan Docker yang digunakan oleh sistem.
+
+\subsection{Perbandingan Penggunaan RAM}
+
+Pengujian penggunaan RAM dilakukan untuk mengetahui pengaruh jumlah \textit{tenant} terhadap kebutuhan memori pada masing-masing pendekatan arsitektur. Pengukuran dilakukan terhadap penggunaan RAM PostgreSQL dan penggunaan RAM seluruh \textit{stack} aplikasi.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test4/triple-ram-postgres.png}
+  \caption{Perbandingan Penggunaan RAM PostgreSQL pada Tiga Arsitektur}
+  \label{fig:triple_ram_postgresql}
+\end{figure}
+
+Berdasarkan Gambar \ref{fig:triple_ram_postgresql}, penggunaan RAM PostgreSQL pada arsitektur \textit{shared schema} relatif stabil meskipun jumlah \textit{tenant} meningkat dari 1 \textit{tenant} hingga 25 \textit{tenant}. Nilai penggunaan RAM berada pada kisaran 27 hingga 28 MiB. Kondisi ini menunjukkan bahwa penambahan \textit{tenant} tidak menyebabkan kebutuhan \textit{instance} basis data tambahan karena seluruh \textit{tenant} memanfaatkan basis data yang sama.
+
+Berbeda dengan pendekatan \textit{shared schema}, pendekatan \textit{separated database} menunjukkan peningkatan penggunaan RAM secara bertahap. Kebutuhan memori meningkat seiring bertambahnya jumlah basis data yang harus dikelola. Pada skenario 25 \textit{tenant}, penggunaan RAM PostgreSQL mencapai sekitar 84 MiB.
+
+Sementara itu, pendekatan \textit{non-multitenant} menghasilkan penggunaan RAM paling tinggi. Pada skenario 25 \textit{tenant}, penggunaan RAM PostgreSQL mencapai lebih dari 660 MiB. Nilai tersebut menunjukkan bahwa penggunaan basis data yang terpisah untuk setiap \textit{tenant} menyebabkan konsumsi memori meningkat secara signifikan ketika jumlah \textit{tenant} bertambah.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test4/triple-ram-stack.png}
+  \caption{Perbandingan Penggunaan RAM Seluruh \textit{Stack} Aplikasi pada Tiga Arsitektur}
+  \label{fig:triple_ram_stack}
+\end{figure}
+
+Gambar \ref{fig:triple_ram_stack} menunjukkan perbandingan penggunaan RAM keseluruhan sistem yang mencakup PostgreSQL, Redis, MinIO, dan aplikasi \textit{backend}. Arsitektur \textit{shared schema} mempertahankan penggunaan RAM pada kisaran 144 hingga 145 MiB pada seluruh skenario \textit{tenant}. Hasil tersebut menunjukkan bahwa pertambahan \textit{tenant} tidak memberikan dampak yang signifikan terhadap kebutuhan memori sistem.
+
+Pada pendekatan \textit{separated database} terjadi peningkatan penggunaan RAM yang lebih besar dibandingkan \textit{shared schema}. Penggunaan RAM meningkat dari sekitar 144 MiB pada 1 \textit{tenant} menjadi lebih dari 200 MiB pada 25 \textit{tenant}. Peningkatan tersebut masih tergolong moderat karena seluruh \textit{tenant} tetap menggunakan \textit{stack} aplikasi yang sama.
+
+Sebaliknya, pendekatan \textit{non-multitenant} mengalami peningkatan yang sangat drastis. Pada skenario 25 \textit{tenant}, total penggunaan RAM mencapai lebih dari 3.300 MiB. Hasil ini menunjukkan bahwa kebutuhan memori bertambah hampir sebanding dengan jumlah \textit{tenant} karena setiap \textit{tenant} memerlukan \textit{stack} layanan yang berdiri sendiri.
+
+\subsection{Perbandingan Penggunaan Storage}
+
+Selain penggunaan memori, evaluasi juga dilakukan terhadap kapasitas penyimpanan yang digunakan oleh masing-masing arsitektur.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test4/triple-storage-pg.png}
+  \caption{Perbandingan Ukuran Penyimpanan PostgreSQL pada Tiga Arsitektur}
+  \label{fig:triple_storage_postgresql}
+\end{figure}
+
+Berdasarkan hasil pengukuran pada Gambar \ref{fig:triple_storage_postgresql}, ukuran penyimpanan PostgreSQL pada pendekatan \textit{shared schema} relatif stabil pada kisaran 8 hingga 9 MiB. Penambahan \textit{tenant} hanya menambah jumlah data tanpa menambah struktur basis data baru sehingga kebutuhan penyimpanan tidak mengalami peningkatan yang signifikan.
+
+Pada pendekatan \textit{separated database}, ukuran penyimpanan meningkat secara bertahap karena setiap \textit{tenant} memiliki basis data tersendiri. Pada skenario 25 \textit{tenant}, ukuran penyimpanan mencapai sekitar 200 MiB.
+
+Nilai yang hampir sama juga ditemukan pada pendekatan \textit{non-multitenant}. Hal ini terjadi karena setiap \textit{tenant} menggunakan basis data yang berbeda sehingga kebutuhan penyimpanan meningkat seiring pertambahan jumlah \textit{tenant}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test4/triple-storage-volume.png}
+  \caption{Perbandingan Ukuran \textit{Volume} Penyimpanan Docker pada Tiga Arsitektur}
+  \label{fig:triple_storage_volume}
+\end{figure}
+
+Gambar \ref{fig:triple_storage_volume} menunjukkan penggunaan \textit{volume} penyimpanan Docker pada masing-masing arsitektur. Pendekatan \textit{shared schema} mempertahankan ukuran \textit{volume} pada kisaran 46 hingga 48 MiB untuk seluruh skenario \textit{tenant}.
+
+Pada pendekatan \textit{separated database}, ukuran \textit{volume} meningkat menjadi sekitar 348 MiB pada skenario 25 \textit{tenant}. Peningkatan tersebut disebabkan oleh bertambahnya jumlah basis data yang harus disimpan dalam satu lingkungan aplikasi.
+
+Pendekatan \textit{non-multitenant} menghasilkan penggunaan ruang penyimpanan terbesar. Pada skenario 25 \textit{tenant}, ukuran \textit{volume} mencapai lebih dari 1.100 MiB. Nilai tersebut menunjukkan bahwa penggunaan \textit{stack} terpisah untuk setiap \textit{tenant} membutuhkan kapasitas penyimpanan yang jauh lebih besar dibandingkan kedua pendekatan \textit{multitenant}.
+
+\subsection{Analisis Efisiensi Infrastruktur}
+
+Untuk memperoleh gambaran yang lebih menyeluruh, seluruh hasil pengukuran dibandingkan dalam satu visualisasi.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test4/triple-all-scenarios.png}
+  \caption{Ringkasan Perbandingan Penggunaan Sumber Daya pada Seluruh Skenario \textit{Tenant}}
+  \label{fig:triple_all_scenarios}
+\end{figure}
+
+Berdasarkan Gambar \ref{fig:triple_all_scenarios}, arsitektur \textit{shared schema} secara konsisten menghasilkan penggunaan sumber daya yang paling rendah pada seluruh metrik pengujian. Kebutuhan RAM maupun \textit{storage} cenderung stabil meskipun jumlah \textit{tenant} meningkat hingga 25 \textit{tenant}.
+
+Pendekatan \textit{separated database} menempati posisi di antara \textit{shared schema} dan \textit{non-multitenant}. Arsitektur ini masih mampu memberikan efisiensi yang cukup baik karena menggunakan satu \textit{stack} aplikasi bersama. Akan tetapi, kebutuhan sumber daya tetap meningkat karena setiap \textit{tenant} memerlukan basis data yang berbeda.
+
+Sebaliknya, pendekatan \textit{non-multitenant} menunjukkan peningkatan penggunaan sumber daya yang paling besar pada seluruh parameter pengujian. Semakin banyak \textit{tenant} yang dikelola, semakin besar pula kebutuhan RAM dan \textit{storage} yang harus disediakan oleh sistem.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{assets/bab4/test4/triple-efficiency-index.png}
+  \caption{Indeks Efisiensi Penggunaan Sumber Daya pada Tiga Arsitektur}
+  \label{fig:triple_efficiency_index}
+\end{figure}
+
+Gambar \ref{fig:triple_efficiency_index} memperlihatkan indeks efisiensi sumber daya dengan pendekatan \textit{shared schema} sebagai \textit{baseline} sebesar 100\%. Hasil pengujian menunjukkan bahwa \textit{shared schema} mempertahankan tingkat efisiensi tertinggi pada seluruh skenario \textit{tenant}.
+
+Pada skenario 25 \textit{tenant}, pendekatan \textit{separated database} masih mampu mempertahankan efisiensi sekitar 72\% untuk penggunaan RAM \textit{stack} dan sekitar 34\% untuk RAM PostgreSQL dibandingkan \textit{baseline}. Sementara itu, pendekatan \textit{non-multitenant} hanya memiliki efisiensi sekitar 4\% pada beberapa metrik pengujian karena kebutuhan sumber daya meningkat secara signifikan.
+
+Hasil tersebut menunjukkan bahwa arsitektur \textit{shared database} dan \textit{shared schema} merupakan pendekatan yang paling efisien untuk mendukung pertumbuhan jumlah \textit{tenant} dalam platform manajemen aset, inventori, dan \textit{rental}. Pendekatan ini mampu mempertahankan penggunaan sumber daya yang relatif stabil sekaligus tetap menyediakan isolasi data antar \textit{tenant} melalui mekanisme \textit{tenant scoping} yang telah dirancang pada penelitian ini.
+
+\section{Analisis Hasil}
+
+\subsection{Analisis Implementasi Arsitektur}
 
 Berdasarkan hasil pengujian yang telah dilakukan pada Subbab 4.3.1, mekanisme \textit{tenant isolation} berhasil diterapkan pada sistem sesuai dengan rancangan yang telah dijelaskan pada Bab 3. Hasil pengujian menunjukkan bahwa pengguna hanya dapat mengakses data yang berada dalam ruang lingkup \textit{tenant} yang sesuai dengan identitas \textit{tenant} yang dimiliki pengguna tersebut.
 
@@ -389,8 +481,6 @@ Selain melalui antarmuka aplikasi, hasil pengujian pada layanan API juga menunju
 
 Berdasarkan indikator keberhasilan yang telah ditetapkan pada Bab 3, seluruh skenario pengujian \textit{tenant isolation} berhasil memenuhi kriteria yang diharapkan. Pengguna tidak dapat melihat, mengubah, maupun menghapus data yang dimiliki \textit{tenant} lain. Hasil tersebut menunjukkan bahwa mekanisme \textit{tenant isolation} yang diterapkan mampu menjaga pemisahan data antar \textit{tenant} secara konsisten pada lapisan aplikasi, layanan API, dan basis data.
 
-\subsection{Analisis Tenant Provisioning}
-
 Berdasarkan hasil pengujian pada Subbab 4.3.2, proses \textit{tenant provisioning} berhasil dijalankan sesuai dengan rancangan sistem yang telah dibuat. Seluruh tahapan yang dirancang, mulai dari registrasi \textit{tenant}, verifikasi email menggunakan kode OTP, hingga pembentukan data \textit{tenant} dan akun administrator, berhasil dilakukan secara otomatis oleh sistem.
 
 Hasil pengujian menunjukkan bahwa setelah pengguna menyelesaikan proses registrasi dan verifikasi email, sistem secara otomatis membentuk data \textit{tenant}, \textit{role} administrator, relasi \textit{permission}, dan akun administrator tanpa memerlukan konfigurasi manual tambahan. Pendekatan tersebut memungkinkan \textit{tenant} yang baru terdaftar dapat langsung menggunakan sistem setelah proses registrasi selesai dilakukan.
@@ -399,8 +489,6 @@ Selain meningkatkan efisiensi proses \textit{onboarding} \textit{tenant}, mekani
 
 Berdasarkan indikator keberhasilan yang telah ditetapkan pada Bab 3, seluruh kasus uji pada proses \textit{tenant provisioning} berhasil memenuhi hasil yang diharapkan. Dengan demikian, mekanisme yang diterapkan pada penelitian ini mampu mendukung proses pendaftaran \textit{tenant} baru secara otomatis dan mempersingkat proses aktivasi \textit{tenant} pada sistem \textit{multitenant}.
 
-\subsection{Analisis Shared Database dan Shared Schema}
-
 Berdasarkan hasil pengujian pada Subbab 4.3.3, implementasi \textit{shared database} dan \textit{shared schema} berhasil diterapkan sesuai dengan rancangan yang diusulkan. Hasil pemeriksaan basis data menunjukkan bahwa data dari beberapa \textit{tenant} dapat disimpan pada basis data dan struktur tabel yang sama tanpa menyebabkan pencampuran data antar \textit{tenant}.
 
 Penggunaan atribut \textit{tenant\_id} pada setiap data operasional memungkinkan sistem mengidentifikasi kepemilikan data dari masing-masing \textit{tenant}. Meskipun data aset dan pengguna berada pada tabel yang sama, setiap data tetap dapat dibedakan berdasarkan identitas \textit{tenant} yang dimiliki. Hasil tersebut menunjukkan bahwa pendekatan \textit{shared database} dan \textit{shared schema} dapat digunakan tanpa mengurangi kemampuan sistem dalam menjaga pemisahan data.
@@ -408,3 +496,21 @@ Penggunaan atribut \textit{tenant\_id} pada setiap data operasional memungkinkan
 Penerapan pendekatan ini juga memberikan keuntungan dalam pengelolaan basis data karena seluruh \textit{tenant} menggunakan struktur tabel yang sama. Dengan demikian, proses pengembangan dan pemeliharaan basis data dapat dilakukan secara lebih sederhana dibandingkan pendekatan yang menggunakan basis data atau tabel terpisah untuk setiap \textit{tenant}.
 
 Berdasarkan indikator keberhasilan yang telah ditetapkan pada Bab 3, seluruh skenario pengujian berhasil memenuhi kriteria yang diharapkan. Data dari beberapa \textit{tenant} berhasil disimpan pada tabel yang sama dan tetap dapat dipisahkan melalui atribut \textit{tenant\_id}. Hasil tersebut menunjukkan bahwa implementasi \textit{shared database} dan \textit{shared schema} yang digunakan pada penelitian ini berhasil mendukung kebutuhan arsitektur \textit{multitenant} yang diterapkan pada sistem.
+
+\subsection{Analisis Efisiensi Infrastruktur}
+
+Berdasarkan hasil evaluasi yang telah dilakukan pada empat skenario \textit{tenant}, yaitu 1 \textit{tenant}, 5 \textit{tenant}, 10 \textit{tenant}, dan 25 \textit{tenant}, dapat diamati bahwa setiap pendekatan arsitektur memiliki karakteristik penggunaan sumber daya yang berbeda. Perbedaan tersebut semakin terlihat ketika jumlah \textit{tenant} bertambah dan sistem harus mengelola lebih banyak organisasi secara bersamaan.
+
+Pada skenario 1 \textit{tenant}, ketiga pendekatan menunjukkan penggunaan sumber daya yang relatif serupa. Kondisi ini terjadi karena seluruh arsitektur masih melayani jumlah \textit{tenant} yang sama dan belum memerlukan alokasi \textit{resource} tambahan yang signifikan. Oleh karena itu, keuntungan penggunaan arsitektur \textit{multitenant} belum terlihat secara jelas pada tahap awal implementasi.
+
+Perbedaan mulai terlihat ketika jumlah \textit{tenant} meningkat menjadi 5 \textit{tenant} dan terus bertambah hingga 25 \textit{tenant}. Pendekatan \textit{non-multitenant} menunjukkan peningkatan penggunaan RAM dan \textit{storage} yang paling tinggi dibandingkan dua pendekatan lainnya. Hal tersebut terjadi karena setiap \textit{tenant} dijalankan menggunakan \textit{stack} aplikasi yang terpisah. Setiap penambahan \textit{tenant} menyebabkan sistem harus menyediakan \textit{instance} PostgreSQL, Redis, MinIO, dan aplikasi \textit{backend} baru sehingga kebutuhan \textit{resource} meningkat secara hampir linear terhadap jumlah \textit{tenant}.
+
+Pendekatan \textit{multitenant} dengan \textit{separated database} mampu mengurangi kebutuhan \textit{resource} dibandingkan pendekatan \textit{non-multitenant} karena seluruh \textit{tenant} masih menggunakan \textit{stack} aplikasi yang sama. Namun demikian, setiap \textit{tenant} tetap memerlukan basis data tersendiri. Akibatnya, penggunaan \textit{storage} dan memori pada PostgreSQL tetap mengalami peningkatan seiring bertambahnya jumlah \textit{tenant}. Hasil pengujian menunjukkan bahwa pendekatan ini memberikan efisiensi yang lebih baik dibandingkan \textit{non-multitenant}, tetapi masih belum optimal untuk mendukung pertumbuhan \textit{tenant} dalam jumlah besar.
+
+Arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} menghasilkan penggunaan \textit{resource} yang paling rendah pada seluruh skenario pengujian. Penggunaan RAM PostgreSQL, RAM seluruh \textit{stack}, \textit{storage} PostgreSQL, maupun \textit{volume} penyimpanan Docker cenderung stabil meskipun jumlah \textit{tenant} meningkat hingga 25 \textit{tenant}. Kondisi tersebut menunjukkan bahwa penambahan \textit{tenant} tidak memerlukan penambahan \textit{instance} layanan maupun struktur basis data baru. Seluruh \textit{tenant} dapat menggunakan infrastruktur yang sama dengan mekanisme pemisahan data melalui atribut \textit{tenant\_id} pada setiap data yang tersimpan.
+
+Hasil pengujian juga menunjukkan bahwa tingkat efisiensi \textit{shared schema} semakin tinggi ketika jumlah \textit{tenant} bertambah. Semakin banyak \textit{tenant} yang dikelola, semakin besar selisih kebutuhan \textit{resource} antara \textit{shared schema} dan dua pendekatan lainnya. Temuan ini menunjukkan bahwa manfaat utama arsitektur \textit{multitenant} tidak hanya terletak pada penghematan \textit{resource} saat ini, tetapi juga pada kemampuannya untuk mempertahankan penggunaan \textit{resource} yang relatif konstan ketika sistem berkembang.
+
+Dari sisi skalabilitas, pendekatan \textit{shared schema} memiliki karakteristik yang paling baik karena pertumbuhan jumlah \textit{tenant} tidak diikuti oleh pertumbuhan kebutuhan infrastruktur yang signifikan. Sebaliknya, pendekatan \textit{non-multitenant} memiliki keterbatasan skalabilitas karena setiap \textit{tenant} baru akan menambah beban infrastruktur secara langsung. Pendekatan \textit{separated database} berada di antara keduanya, di mana kebutuhan \textit{resource} masih bertambah namun dengan laju yang lebih rendah dibandingkan \textit{non-multitenant}.
+
+Berdasarkan seluruh hasil pengujian dan analisis yang dilakukan, dapat disimpulkan bahwa arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} merupakan pendekatan yang paling efisien untuk diterapkan pada platform manajemen aset, inventori, dan \textit{rental} yang melayani banyak organisasi dalam satu sistem terpusat. Pendekatan ini mampu meminimalkan penggunaan RAM dan \textit{storage}, mengurangi kebutuhan \textit{provisioning} infrastruktur baru, serta mendukung pertumbuhan jumlah \textit{tenant} dengan biaya operasional yang lebih rendah dibandingkan pendekatan \textit{separated database} maupun \textit{non-multitenant}.
