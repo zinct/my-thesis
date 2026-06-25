@@ -2,19 +2,32 @@
 
 \section{Kesimpulan}
 
-Penelitian ini berhasil merancang dan mengimplementasikan arsitektur \textit{multitenant} pada sistem manajemen aset RTPintar menggunakan pendekatan \textit{shared database} dan \textit{shared schema}. Arsitektur yang dirancang memungkinkan beberapa \textit{tenant} menggunakan aplikasi dan basis data yang sama dengan tetap menjaga pemisahan data antar \textit{tenant}.
+Berdasarkan hasil perancangan, implementasi, pengujian, dan analisis yang telah dilakukan, dapat diperoleh beberapa kesimpulan sebagai berikut.
 
-Hasil pengujian menunjukkan bahwa mekanisme \textit{tenant isolation} berhasil diterapkan pada lapisan aplikasi, layanan API, dan basis data. Setiap \textit{tenant} hanya dapat mengakses data yang berada dalam ruang lingkup \textit{tenant} yang sesuai sehingga data antar \textit{tenant} tetap terpisah meskipun disimpan pada struktur tabel yang sama.
+\begin{enumerate}
+  \item Penelitian ini berhasil merancang dan mengimplementasikan arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} pada platform manajemen aset, inventori, dan rental. Arsitektur yang diusulkan memungkinkan banyak organisasi menggunakan satu aplikasi, satu basis data, dan satu skema secara bersama tanpa mengurangi kemampuan sistem dalam mengelola data masing-masing \textit{tenant} secara terpisah.
 
-Selain itu, mekanisme \textit{tenant provisioning} berhasil mengotomatisasi proses pendaftaran \textit{tenant} baru. Sistem mampu membuat data \textit{tenant}, \textit{role} administrator, relasi \textit{permission}, dan akun administrator secara otomatis setelah proses registrasi dan verifikasi email berhasil dilakukan. Berdasarkan seluruh hasil pengujian yang telah dilakukan, implementasi arsitektur \textit{multitenant} yang diusulkan berhasil memenuhi tujuan penelitian dan indikator keberhasilan yang telah ditetapkan.
+  \item Mekanisme \textit{tenant isolation} berhasil diterapkan melalui penggunaan \textit{tenant context}, \textit{middleware}, dan atribut \textit{tenant\_id} pada setiap data operasional. Berdasarkan hasil pengujian, setiap \textit{tenant} hanya dapat mengakses data yang menjadi haknya sehingga tidak ditemukan pencampuran maupun akses lintas \textit{tenant}. Hasil tersebut menunjukkan bahwa pendekatan \textit{shared database} dan \textit{shared schema} tetap mampu menjaga isolasi data antar organisasi.
+
+  \item Mekanisme \textit{tenant provisioning} otomatis berhasil mendukung proses \textit{onboarding} \textit{tenant} baru secara konsisten. Setelah proses registrasi dan verifikasi berhasil dilakukan, sistem secara otomatis membuat data \textit{tenant}, akun administrator, peran, serta konfigurasi awal yang diperlukan tanpa memerlukan konfigurasi manual. Pendekatan ini mampu menyederhanakan proses penambahan organisasi baru dan mengurangi potensi kesalahan konfigurasi.
+
+  \item Hasil evaluasi menunjukkan bahwa arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} memberikan efisiensi penggunaan sumber daya infrastruktur dibandingkan pendekatan non-\textit{multitenant}. Penggunaan memori dan media penyimpanan meningkat lebih lambat seiring bertambahnya jumlah \textit{tenant} karena seluruh \textit{tenant} berbagi aplikasi dan struktur basis data yang sama. Tingkat efisiensi juga semakin meningkat ketika jumlah \textit{tenant} bertambah, sehingga pendekatan yang diusulkan lebih sesuai untuk \textit{platform} yang melayani banyak organisasi.
+
+  \item Secara keseluruhan, penelitian ini berhasil menjawab rumusan masalah dan memenuhi tujuan penelitian. Arsitektur yang diusulkan mampu mendukung pengelolaan banyak \textit{tenant} dalam satu \textit{platform} dengan tetap menjaga isolasi data, mengotomatisasi proses \textit{provisioning}, serta meningkatkan efisiensi penggunaan infrastruktur sehingga dapat menjadi alternatif rancangan arsitektur pada pengembangan aplikasi \textit{Software as a Service} (\textit{SaaS}) berbasis \textit{multitenant}.
+\end{enumerate}
 
 \section{Saran}
 
-Berdasarkan hasil penelitian yang telah dilakukan, terdapat beberapa saran yang dapat dipertimbangkan untuk pengembangan sistem maupun penelitian selanjutnya, yaitu:
+Berdasarkan hasil penelitian yang telah dilakukan, terdapat beberapa saran yang dapat dijadikan pengembangan pada penelitian selanjutnya.
 
 \begin{enumerate}
-  \renewcommand{\labelenumi}{\alph{enumi}.}
-  \item Menambahkan mekanisme audit log untuk mencatat aktivitas pengguna pada setiap \textit{tenant} sehingga proses pemantauan dan pelacakan aktivitas dapat dilakukan dengan lebih baik.
-  \item Mengembangkan dukungan migrasi \textit{tenant} antar paket layanan atau konfigurasi \textit{tenant} yang lebih kompleks sesuai kebutuhan organisasi.
-  \item Melakukan pengujian performa dan skalabilitas untuk mengevaluasi kemampuan arsitektur \textit{multitenant} ketika digunakan oleh jumlah \textit{tenant} dan volume data yang lebih besar.
+  \item Penelitian selanjutnya dapat melakukan pengujian performa dan skalabilitas menggunakan jumlah \textit{tenant} serta volume data yang lebih besar agar diperoleh gambaran mengenai kemampuan arsitektur dalam kondisi mendekati lingkungan produksi.
+
+  \item Penelitian selanjutnya dapat membandingkan pendekatan \textit{shared database} dan \textit{shared schema} dengan model \textit{separate database} maupun \textit{separate schema} menggunakan parameter pengujian yang sama, sehingga kelebihan dan keterbatasan masing-masing arsitektur dapat dianalisis secara lebih komprehensif.
+
+  \item Mekanisme keamanan dapat dikembangkan lebih lanjut dengan menambahkan \textit{audit log}, \textit{row level security}, enkripsi data sensitif, serta mekanisme pemantauan aktivitas \textit{tenant} untuk meningkatkan keamanan dan kemudahan proses audit.
+
+  \item Mekanisme \textit{tenant provisioning} dapat diperluas dengan mendukung konfigurasi \textit{tenant} yang lebih fleksibel, seperti pengaturan paket layanan, kustomisasi fitur, migrasi \textit{tenant}, maupun konfigurasi berdasarkan kebutuhan masing-masing organisasi.
+
+  \item Arsitektur yang diusulkan dapat diimplementasikan pada studi kasus atau domain aplikasi lain, seperti sistem akademik, rumah sakit, \textit{e-commerce}, maupun \textit{customer relationship management}, untuk mengevaluasi tingkat adaptabilitas pendekatan \textit{multitenant} pada berbagai kebutuhan bisnis.
 \end{enumerate}
