@@ -68,74 +68,63 @@ pada lapisan aplikasi, perancangan model penyimpanan data \textit{multitenant}, 
 \section{Rumusan Masalah}
 
 Berdasarkan latar belakang yang telah dipaparkan, maka rumusan masalah dalam penelitian ini
-adalah sebagai berikut:
+adalah sebagai berikut.
 
 \begin{enumerate}
   \item Bagaimana merancang arsitektur \textit{multitenant} berbasis \textit{shared database} dan
-    \textit{shared schema} yang mampu meningkatkan efisiensi infrastruktur serta mendukung
-    pengelolaan banyak organisasi dalam satu \textit{platform}?
-  \item Bagaimana merancang mekanisme isolasi data dan \textit{provisioning} \textit{tenant} otomatis
+    \textit{shared schema} yang mampu mendukung pengelolaan banyak organisasi dalam satu \textit{platform}
+    serta meningkatkan efisiensi penggunaan infrastruktur?
+  \item Bagaimana merancang mekanisme \textit{tenant isolation} dan \textit{tenant provisioning} otomatis
     pada arsitektur \textit{multitenant} agar proses \textit{onboarding} organisasi baru dapat dilakukan
-    secara konsisten, aman, dan tanpa konfigurasi manual tambahan?
+    secara konsisten, aman, dan tanpa konfigurasi manual?
+  \item Bagaimana hasil evaluasi efisiensi penggunaan sumber daya infrastruktur pada arsitektur
+    \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} dibandingkan dengan
+    pendekatan \textit{multitenant separated database} dan non-\textit{multitenant}?
 \end{enumerate}
 
 \section{Tujuan dan Manfaat}
 
-Penelitian ini bertujuan untuk merancang arsitektur \textit{multitenant} berbasis \textit{shared database}
-dan \textit{shared schema} yang mampu mendukung pengelolaan banyak organisasi dalam satu \textit{platform}
-secara efisien. Perancangan arsitektur dilakukan untuk mengatasi keterbatasan pendekatan non
-\textit{multitenant} yang menyebabkan kompleksitas pengelolaan sistem dan peningkatan kebutuhan
-infrastruktur ketika jumlah \textit{tenant} bertambah. Selain itu, penelitian ini juga bertujuan merancang
-mekanisme isolasi data antar \textit{tenant} melalui \textit{tenant scoping} pada lapisan aplikasi serta
-merancang proses \textit{provisioning} \textit{tenant} otomatis agar \textit{onboarding} organisasi baru
-dapat dilakukan secara konsisten, aman, dan tanpa konfigurasi manual tambahan.
+Penelitian ini bertujuan untuk merancang arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} yang mampu mendukung pengelolaan banyak organisasi dalam satu \textit{platform} secara efisien. Perancangan arsitektur dilakukan sebagai solusi terhadap keterbatasan pendekatan non-\textit{multitenant} yang menyebabkan peningkatan kebutuhan infrastruktur dan kompleksitas pengelolaan sistem seiring bertambahnya jumlah \textit{tenant}. Selain itu, penelitian ini bertujuan untuk merancang mekanisme \textit{tenant isolation} melalui penerapan \textit{tenant scoping} pada lapisan aplikasi sehingga setiap \textit{tenant} hanya dapat mengakses data yang dimilikinya. Penelitian ini juga merancang mekanisme \textit{tenant provisioning} otomatis untuk mendukung proses \textit{onboarding} organisasi baru secara konsisten tanpa memerlukan konfigurasi manual.
 
-Melalui penelitian ini diharapkan rancangan arsitektur yang dihasilkan dapat memberikan manfaat
-praktis dalam mendukung pengembangan \textit{platform} \textit{multi organization} berbasis \textit{web}, khususnya
-pada sistem manajemen aset, inventori, dan rental. Pendekatan \textit{multitenant} berbasis
-\textit{shared database} dan \textit{shared schema} diharapkan mampu meningkatkan efisiensi
-penggunaan \textit{resource} infrastruktur, menyederhanakan pengelolaan \textit{tenant}, serta mendukung
-proses \textit{onboarding} \textit{tenant} secara lebih cepat dan terstandarisasi. Selain manfaat praktis,
-penelitian ini juga diharapkan dapat menjadi referensi akademik dalam pengembangan penelitian
-terkait arsitektur \textit{multitenant}, \textit{tenant isolation}, dan \textit{provisioning} \textit{tenant} pada
-sistem \textit{Software as a Service} (\textit{SaaS}).
+Manfaat praktis dari penelitian ini adalah menghasilkan rancangan arsitektur yang dapat diterapkan pada platform manajemen aset, inventori, dan rental berbasis \textit{Software as a Service} (\textit{SaaS}) yang melayani banyak organisasi dalam satu sistem terpusat. Arsitektur yang diusulkan diharapkan mampu meningkatkan efisiensi penggunaan sumber daya infrastruktur, mempermudah pengelolaan \textit{tenant}, mempercepat proses \textit{provisioning} organisasi baru, serta tetap menjaga isolasi data antar \textit{tenant}.
 
-Keterkaitan antara tujuan penelitian, pengujian yang dilakukan, dan kesimpulan yang diharapkan
-disajikan pada Tabel \ref{tab:tujuan_pengujian}.
+Selain manfaat praktis, penelitian ini diharapkan memberikan kontribusi akademik sebagai referensi mengenai perancangan arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema}. Hasil penelitian juga diharapkan dapat menjadi bahan rujukan bagi penelitian selanjutnya yang membahas \textit{tenant isolation}, \textit{tenant provisioning}, maupun evaluasi efisiensi infrastruktur pada implementasi aplikasi \textit{Software as a Service} (\textit{SaaS}).
+
+Keterkaitan antara tujuan penelitian, pengujian yang dilakukan, dan kesimpulan yang diharapkan disajikan pada Tabel \ref{tab:tujuan_pengujian}.
 
 \begin{table}[H]
-  \caption{Tabel keterkaitan antara tujuan, pengujian dan kesimpulan.}
+  \caption{Keterkaitan Tujuan Penelitian, Pengujian, dan Kesimpulan yang Diharapkan}
   \label{tab:tujuan_pengujian}
   \centering
-  \fontsize{10}{12}\selectfont
+  \footnotesize
   \setlength{\arrayrulewidth}{0.5pt}
   \setlength{\tabcolsep}{4pt}
-  \begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|>{\raggedright\arraybackslash}p{4.3cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{4.3cm}|}
+  \begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|>{\raggedright\arraybackslash}p{4.2cm}|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}p{4.5cm}|}
     \hline
-    \multicolumn{1}{|>{\centering\arraybackslash}m{0.5cm}|}{\cellcolor{black}\color{white}\textbf{No.}} &
-    \multicolumn{1}{>{\centering\arraybackslash}m{4.3cm}|}{\cellcolor{black}\color{white}\textbf{Tujuan}} &
-    \multicolumn{1}{>{\centering\arraybackslash}m{3.5cm}|}{\cellcolor{black}\color{white}\textbf{Pengujian}} &
-    \multicolumn{1}{>{\centering\arraybackslash}m{4.3cm}|}{\cellcolor{black}\color{white}\textbf{Kesimpulan}} \\
+    \multicolumn{1}{|>{\centering\arraybackslash}m{0.5cm}|}{\cellcolor{black}\color{white}\textbf{No}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{4.2cm}|}{\cellcolor{black}\color{white}\textbf{Tujuan Penelitian}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{3.8cm}|}{\cellcolor{black}\color{white}\textbf{Pengujian}} &
+    \multicolumn{1}{>{\centering\arraybackslash}m{4.5cm}|}{\cellcolor{black}\color{white}\textbf{Kesimpulan yang Diharapkan}} \\
     \hline
     1 &
-    Merancang arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} untuk mendukung pengelolaan banyak organisasi dalam satu \textit{platform} secara efisien &
-    Evaluasi efisiensi infrastruktur dan struktur arsitektur \textit{multitenant} &
-    Sistem mampu menggunakan satu basis data dan satu skema bersama untuk banyak \textit{tenant} tanpa memerlukan \textit{instance} terpisah \\
+    Merancang arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} untuk meningkatkan efisiensi penggunaan infrastruktur pada platform manajemen aset, inventori, dan rental. &
+    Evaluasi efisiensi infrastruktur dengan membandingkan pendekatan \textit{shared schema}, \textit{separated database}, dan non-\textit{multitenant}. &
+    Arsitektur \textit{shared database} dan \textit{shared schema} menunjukkan penggunaan RAM dan \textit{storage} yang lebih efisien dibandingkan pendekatan lainnya ketika jumlah \textit{tenant} bertambah. \\
     \hline
     2 &
-    Merancang mekanisme isolasi data antar \textit{tenant} pada arsitektur \textit{multitenant} &
-    Pengujian \textit{tenant isolation} dan \textit{tenant scoping} pada lapisan aplikasi &
-    Data antar \textit{tenant} tetap terisolasi dan \textit{tenant} tidak dapat mengakses data milik \textit{tenant} lain \\
+    Merancang mekanisme \textit{tenant isolation} agar setiap \textit{tenant} hanya dapat mengakses data miliknya sendiri. &
+    Pengujian \textit{tenant isolation} dan \textit{tenant scoping}. &
+    Data setiap \textit{tenant} tetap terisolasi sehingga tidak dapat diakses oleh \textit{tenant} lain meskipun menggunakan basis data yang sama. \\
     \hline
     3 &
-    Merancang mekanisme \textit{provisioning} \textit{tenant} otomatis untuk mendukung \textit{onboarding} \textit{tenant} baru secara lebih efisien &
-    Pengujian proses \textit{provisioning} \textit{tenant} otomatis &
-    \textit{Tenant} baru dapat dibuat beserta konfigurasi awalnya tanpa proses konfigurasi manual tambahan \\
+    Merancang mekanisme \textit{tenant provisioning} otomatis untuk mendukung proses \textit{onboarding tenant}. &
+    Pengujian proses \textit{tenant provisioning}. &
+    Proses pembuatan \textit{tenant} baru beserta konfigurasi awal dapat dilakukan secara otomatis tanpa konfigurasi manual tambahan. \\
     \hline
     4 &
-    Merancang arsitektur yang mendukung konsistensi pengelolaan sistem \textit{multi organization} &
-    Evaluasi konsistensi struktur data dan pengelolaan \textit{tenant} &
-    Setiap \textit{tenant} memiliki struktur pengelolaan data dan konfigurasi yang konsisten dalam satu \textit{platform} terpusat \\
+    Mengevaluasi pengaruh pertambahan jumlah \textit{tenant} terhadap kebutuhan sumber daya pada setiap pendekatan arsitektur. &
+    Pengujian penggunaan RAM dan \textit{storage} pada skenario 1, 5, 10, dan 25 \textit{tenant}. &
+    Arsitektur \textit{shared database} dan \textit{shared schema} memiliki skalabilitas penggunaan sumber daya yang lebih baik dibandingkan pendekatan \textit{separated database} maupun non-\textit{multitenant}. \\
     \hline
   \end{tabular}
 \end{table}
