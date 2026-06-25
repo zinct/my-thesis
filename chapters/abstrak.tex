@@ -1,29 +1,8 @@
 \chapter*{ABSTRAK}
 \addcontentsline{toc}{chapter}{ABSTRAK}
 
-...
-% Pengelolaan aset, inventori, dan layanan rental pada banyak organisasi yang beroperasi dalam satu
-% platform digital masih sering menggunakan pendekatan non multitenant, di mana setiap organisasi
-% dikelola melalui konfigurasi sistem yang terpisah sehingga menimbulkan keterbatasan skalabilitas,
-% tingginya kompleksitas operasional, serta potensi inkonsistensi pengelolaan data ketika jumlah
-% pengguna dan organisasi meningkat pada skala nasional. Permasalahan ini penting dibahas karena
-% platform layanan multi organisasi berbasis web dirancang untuk melayani banyak entitas secara
-% terpusat, sehingga pendekatan arsitektur konvensional tidak lagi memadai. Tenant dalam penelitian
-% ini didefinisikan sebagai satu entitas organisasi independen yang memiliki data, pengguna, dan
-% proses operasional tersendiri yang harus terisolasi secara logis dalam satu sistem bersama.
-% Penelitian ini mengusulkan perancangan arsitektur multitenant berbasis \textit{shared database} dan
-% \textit{shared schema} sebagai solusi untuk meningkatkan efisiensi infrastruktur, menjaga isolasi
-% data antar tenant, serta mendukung pertumbuhan jumlah organisasi secara nasional. Metodologi
-% penelitian meliputi analisis kebutuhan sistem, perancangan mekanisme \textit{tenant scoping} pada
-% lapisan aplikasi, serta perancangan proses \textit{provisioning} tenant otomatis. Evaluasi
-% rancangan dilakukan melalui parameter kemampuan isolasi data, efektivitas \textit{provisioning}
-% tenant tanpa konfigurasi manual, serta konsistensi fungsi pengelolaan aset, inventori, dan rental
-% pada berbagai tenant. Hasil yang diharapkan adalah rancangan arsitektur multitenant yang relevan
-% dan layak untuk platform layanan multi organisasi berskala nasional serta mampu mengatasi
-% keterbatasan pendekatan non multitenant pada sistem sejenis.
+Pertumbuhan aplikasi \textit{Software as a Service} (\textit{SaaS}) yang melayani banyak organisasi menuntut arsitektur yang mampu mengelola \textit{tenant} secara efisien tanpa meningkatkan kompleksitas infrastruktur. Pendekatan \textit{shared database} dan \textit{shared schema} menjadi salah satu alternatif karena memungkinkan banyak \textit{tenant} berbagi basis data dan struktur tabel yang sama sehingga penggunaan sumber daya lebih efisien. Namun, pendekatan tersebut memiliki tantangan dalam menjaga isolasi data antar \textit{tenant} serta mendukung proses \textit{provisioning} \textit{tenant} secara otomatis. Penelitian ini bertujuan merancang arsitektur \textit{multitenant} berbasis \textit{shared database} dan \textit{shared schema} pada platform manajemen aset, inventori, dan rental yang terintegrasi dengan RTPintar. Perancangan dilakukan melalui penerapan mekanisme \textit{tenant identification} berbasis \textit{middleware}, \textit{tenant scoping} pada lapisan aplikasi, penggunaan atribut \textit{tenant\_id} sebagai pembatas akses data, serta mekanisme \textit{tenant provisioning} otomatis untuk mendukung proses \textit{onboarding} organisasi baru. Evaluasi dilakukan terhadap efisiensi penggunaan sumber daya infrastruktur, mekanisme \textit{tenant isolation}, dan proses \textit{tenant provisioning}. Hasil penelitian menunjukkan bahwa arsitektur yang diusulkan mampu mengelola banyak \textit{tenant} dalam satu basis data dan satu skema tanpa terjadi pencampuran data antar \textit{tenant}, menjaga isolasi data secara konsisten pada lapisan aplikasi maupun layanan API, serta mempercepat proses \textit{provisioning} \textit{tenant} baru tanpa konfigurasi manual. Selain itu, pendekatan \textit{shared database} dan \textit{shared schema} menunjukkan penggunaan sumber daya infrastruktur yang lebih efisien dibandingkan pendekatan non-\textit{multitenant} maupun \textit{separate database}. Dengan demikian, arsitektur yang diusulkan dapat menjadi alternatif dalam pengembangan aplikasi \textit{SaaS} yang melayani banyak organisasi dengan tetap menjaga efisiensi infrastruktur, isolasi data, dan kemudahan pengelolaan \textit{tenant}.
 
 \vspace{1cm}
 
-% \noindent\textbf{Kata Kunci:} \textit{multitenant architecture}, \textit{shared schema},
-% \textit{tenant scoping}, \textit{tenant provisioning}, \textit{multi organization platform},
-% \textit{asset and rental management system}
+\noindent\textbf{Kata kunci:} \textit{Software as a Service} (\textit{SaaS}), \textit{multitenant}, \textit{shared database}, \textit{shared schema}, \textit{tenant isolation}, \textit{tenant provisioning}.
